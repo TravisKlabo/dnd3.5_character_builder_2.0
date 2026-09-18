@@ -1,0 +1,39 @@
+{
+  "name": "dnd35-character-builder-2.0",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "desktop/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "start": "npm run build && electron .",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "dist:linux": "npm run build && electron-builder --linux AppImage deb",
+    "dist:windows": "npm run build && electron-builder --win nsis"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "electron": "^39.1.2",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.dnd35.characterbuilder20",
+    "productName": "D&D 3.5 Character Builder 2.0",
+    "asar": true,
+    "files": ["dist/**/*", "desktop/**/*"],
+    "linux": { "target": ["AppImage", "deb"], "category": "Game" },
+    "win": { "target": ["nsis"], "artifactName": "DND35-Character-Builder-2.0-${version}.${ext}" }
+  }
+}
