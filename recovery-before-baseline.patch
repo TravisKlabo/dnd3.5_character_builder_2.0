@@ -1,0 +1,1279 @@
+diff --git a/src/App.css b/src/App.css
+index df623ee..0aedaef 100644
+--- a/src/App.css
++++ b/src/App.css
+@@ -2,15 +2,29 @@
+ :root { font-family: 'DM Sans', sans-serif; color: #243447; background: #e7e3da; }
+ * { box-sizing: border-box; } body { margin: 0; min-width: 320px; } button, input, select { font: inherit; } button { cursor: pointer; }
+ .app-shell { max-width: 1440px; margin: 0 auto; padding: 34px 42px 70px; }
+-.app-header { display: flex; justify-content: space-between; align-items: end; gap: 24px; border-bottom: 1px solid #a8aaa1; padding-bottom: 24px; }
++.app-header { display: grid; gap: 16px 24px; border-bottom: 1px solid #a8aaa1; padding-bottom: 24px; }
++.app-title { grid-column: 1 / -1; min-width: 0; }
+ .eyebrow { margin: 0 0 8px; color: #98734d; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; } h1, h2 { font-family: 'Libre Baskerville', serif; } h1 { margin: 0; color: #182b3a; font-size: clamp(1.65rem, 3vw, 2.7rem); } h1 span { color: #b16d38; }
+-.header-actions, .level-actions { display: flex; gap: 10px; flex-wrap: wrap; } .quiet-button, .level-button, .sheet-tabs button { border: 1px solid #9da39e; padding: 10px 15px; background: #f4f0e8; color: #243447; } .level-button { border-color: #243447; background: #243447; color: #fff; }
++.app-title h1 { line-height: 1.15; letter-spacing: .01em; } .header-actions { grid-column: 1 / -1; } .header-actions, .level-actions { display: flex; flex-shrink: 0; justify-content: flex-end; gap: 10px; flex-wrap: wrap; } .quiet-button, .level-button, .sheet-tabs button { border: 1px solid #9da39e; padding: 10px 15px; background: #f4f0e8; color: #243447; } .level-button { border-color: #243447; background: #243447; color: #fff; }
+ .sheet-tabs { display: flex; gap: 4px; margin: 25px 0 18px; border-bottom: 3px solid #243447; } .sheet-tabs button { border-bottom: 0; color: #68736f; } .sheet-tabs button.active { background: #243447; color: #fff; }
+ .level-banner { display: flex; justify-content: space-between; align-items: center; gap: 18px; margin-top: 20px; padding: 16px 18px; border-left: 5px solid #b16d38; background: #f8f1df; } .level-banner strong, .level-banner span { display: block; } .level-banner span { margin-top: 3px; color: #68736f; font-size: .9rem; }
+ .sheet-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; } .single-column { grid-template-columns: 1fr; } .panel { min-width: 0; border: 1px solid #b9bbb4; background: #f8f7f2; box-shadow: 0 8px 24px #39444c12; } .panel-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 17px; border-bottom: 3px solid #243447; background: #fff; } .panel-title h2 { margin: 0; font-size: 1rem; color: #243447; } .rule-status { color: #738178; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; }
+ .creation-panel { margin-bottom: 18px; } .creation-intro { padding: 15px 18px 0; color: #68736f; } .creation-grid { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 1.2fr 1.2fr; gap: 12px; padding: 18px 18px 12px; } .creation-abilities { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; padding: 0 18px 16px; } .creation-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-top: 1px solid #d6d7d1; color: #68736f; font-size: .85rem; }
++.creation-validation-errors { flex: 1; margin: 0; padding-left: 18px; color: #914b3d; font-size: .75rem; }
++.sheet-value { display: block; min-height: 18px; padding: 9px 0; border-bottom: 1px solid #555; color: #202020; font-size: .82rem; font-weight: 400; text-transform: none; }
+ .creation-area { margin-bottom: 18px; border: 1px solid #b9bbb4; background: #f8f7f2; } .creation-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 17px 18px; } .creation-heading h2 { margin: 0 0 5px; color: #243447; font-size: 1.15rem; } .creation-heading span { color: #68736f; font-size: .86rem; } .creation-heading .eyebrow { margin-bottom: 5px; } .ruleset-control { min-width: 180px; margin-left: auto; } .ruleset-value { display: block; padding: 9px 10px; border: 1px solid #c6c9c2; background: #ebe9e1; color: #243447; font-size: .86rem; font-weight: 500; text-transform: none; } .creation-area > .creation-panel { margin: 0; border-width: 1px 0 0; box-shadow: none; } .ability-methods { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 15px 18px; border-top: 1px solid #d6d7d1; border-bottom: 1px solid #d6d7d1; } .ability-methods button { border: 1px solid #b9bbb4; padding: 8px 12px; background: #fff; color: #243447; } .ability-methods button.selected { border-color: #243447; background: #243447; color: #fff; } .ability-methods span { margin-left: auto; color: #68736f; font-size: .85rem; } .creation-locked { background: #ebe9e1; }
+ .identity-panel, .skills-panel, .feats-panel { grid-column: 1 / -1; } .identity-grid { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr .6fr 1.1fr; gap: 12px; padding: 18px; } label { display: grid; gap: 6px; color: #68736f; font-size: .76rem; font-weight: 700; text-transform: uppercase; } input, select { width: 100%; border: 1px solid #b9bbb4; padding: 9px 10px; color: #243447; background: #fff; }
++.prestige-identity-field { grid-column: span 2; }
++.prestige-creation-field { grid-column: span 2; }
++.prestige-creation-field .race-trigger { white-space: nowrap; }
++.high-sorcery-creation-field { grid-column: span 2; }
++.high-sorcery-creation-field select { white-space: nowrap; }
++.alignment-creation-field { grid-column: 1 / span 2; grid-row: 2; }
++.deity-creation-field { grid-column: 3 / span 2; grid-row: 2; }
++@media (max-width: 900px) { .alignment-creation-field, .deity-creation-field { grid-column: auto; grid-row: auto; } }
++@media (max-width: 900px) { .prestige-creation-field { grid-column: auto; } }
++@media (max-width: 900px) { .high-sorcery-creation-field { grid-column: auto; } }
++@media (max-width: 560px) { .prestige-identity-field { grid-column: auto; } }
+ .creation-abilities label { grid-template-rows: auto 38px 28px; align-content: start; }
+ .creation-grid > label { min-width: 0; }
+ .creation-grid > label > select, .creation-grid > label > .race-trigger { min-height: 38px; display: block; }
+@@ -113,6 +127,7 @@
+ .slot-box { width: 14px; height: 14px; margin: 0 3px; accent-color: #202020; }
+ .spell-level-table table { width: 100%; border-collapse: collapse; table-layout: fixed; background: #fff; font-size: .66rem; }
+ .spell-level-table th, .spell-level-table td { height: 25px; padding: 3px 4px; border: 1px solid #202020; }
++.spell-level-table tr.empty-spell-row td { height: 50px; }
+ .spell-level-table th { background: #202020; color: #fff; font-size: .48rem; font-weight: 700; line-height: 1.05; text-transform: uppercase; }
+ .spell-level-table th:nth-child(1), .spell-level-table td:nth-child(1) { width: 32px; text-align: center; }
+ .spell-level-table th:nth-child(2) { width: 130px; }
+@@ -143,6 +158,7 @@
+ .equipment-store-header h2 { margin: 0; color: #202020; font-family: 'Libre Baskerville', serif; font-size: 1.25rem; }
+ .equipment-store-header p { margin: 3px 0 0; color: #68736f; font-size: .78rem; }
+ .equipment-store-header > strong { color: #477454; font-size: .78rem; white-space: nowrap; }
++.store-toggle { white-space: nowrap; }
+ .store-size-row { display: grid; grid-template-columns: 180px auto; align-items: center; width: max-content; min-width: 180px; gap: 5px 8px; color: #243447; font-size: .72rem; font-weight: 700; text-align: left; }
+ .store-size-row > span { grid-column: 1 / -1; }
+ .store-size-row select { padding: 8px; border: 1px solid #b9bbb4; background: #fff; color: #243447; font: inherit; font-size: .72rem; font-weight: 400; }
+@@ -150,6 +166,7 @@
+ .equipment-store-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+ .store-category { display: grid; gap: 5px; color: #243447; font-size: .72rem; font-weight: 700; text-align: left; }
+ .store-category:nth-child(1), .store-category:nth-child(2) { grid-column: 1 / -1; }
++.shields-store-category { grid-column: 1 / -1; }
+ .store-category-controls { display: grid; grid-template-columns: 360px 92px 118px minmax(180px, max-content); width: max-content; max-width: 100%; gap: 8px; align-items: center; }
+ .store-category-controls > select:first-of-type { grid-column: 2; width: 92px; }
+ .store-category-controls > select:nth-of-type(2) { grid-column: 3; width: 118px; }
+@@ -193,6 +210,18 @@
+ @media (max-width: 900px) { .spell-sheet { overflow-x: auto; } .spell-sheet-header { grid-template-columns: 1fr 1fr; } .spell-sheet-brand { grid-column: 1 / -1; } }
+ @media (max-width: 700px) { .equipment-slot-grid { grid-template-columns: 1fr; min-height: 0; } .equipment-figure { display: none; } .equipment-footer, .equipment-summary, .equipment-store-grid { grid-template-columns: 1fr; } .equipment-store-header { align-items: start; flex-direction: column; } .store-category-controls { grid-template-columns: 1fr; width: 100%; } .store-category-controls > select:first-of-type, .store-category-controls > select:nth-of-type(2), .store-built-item { grid-column: auto; width: auto; } .equipment-inventory-row { grid-template-columns: 1fr 1fr; } .equipment-inventory-name { grid-column: 1 / -1; } .equipment-inventory-actions { grid-column: 1 / -1; justify-content: start; } }
+ .feat-no-results { display: block; padding: 10px; color: #68736f; font-size: .76rem; text-transform: none; }
++.print-preview-modal { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 20px; background: #20202099; }
++.print-preview-dialog { display: flex; flex-direction: column; width: min(1120px, 100%); max-height: 94vh; overflow: hidden; border: 1px solid #b9bbb4; background: #f5f2e9; box-shadow: 0 20px 60px #2020204d; }
++.print-preview-header, .print-preview-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; background: #fff; }
++.print-preview-header { border-bottom: 1px solid #b9bbb4; }
++.print-preview-header h2 { margin: 0; color: #243447; font-size: 1rem; }
++.print-preview-content { overflow: auto; padding: 24px; background: #d9d7d0; }
++.print-preview-content > .app-shell { max-width: 100%; padding: 0; }
++.print-preview-content .sheet-grid, .print-preview-content .equipment-sheet, .print-preview-content .spell-sheet { margin-bottom: 24px; padding: 22px; border: 1px solid #c6c9c2; background: #fff; box-shadow: 0 3px 12px #2020201f; }
++.print-preview-content .sheet-grid:last-child, .print-preview-content .equipment-sheet:last-child, .print-preview-content .spell-sheet:last-child { margin-bottom: 0; }
++.print-preview-actions { justify-content: flex-end; border-top: 1px solid #b9bbb4; }
++@media print { .app-shell { max-width: none; padding: 0; } .app-header, .sheet-tabs, .print-button, .header-actions, .creation-area, .equipment-store-header, .equipment-store-grid, .store-size-row, .equipment-inventory-actions { display: none !important; } .panel, .equipment-sheet, .spell-sheet, .equipment-store { border: 0; box-shadow: none; } .equipment-store { padding: 0; border-top: 0; background: transparent; } .equipment-inventory { padding-top: 0; border-top: 0; } }
++@media print { .print-preview-modal { display: none !important; } }
+ .feat-choices small { color: #68736f; font-size: .68rem; font-weight: 400; }
+ .chosen-feats { display: grid; gap: 8px; padding: 15px 17px 17px; }
+ .chosen-feat { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px; align-items: baseline; max-width: 100%; color: #243447; font-size: .75rem; text-align: left; }
+diff --git a/src/App.tsx b/src/App.tsx
+index 7bdb400..05645c2 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -8,6 +8,7 @@ import {
+   classDefinitions,
+   changeRace,
+   cloneCharacter,
++  deityDefinitions,
+   dragonlancePrestigeClasses,
+   hitPointGain,
+   initialCharacter,
+@@ -816,6 +817,21 @@ const abilityLabels: Record<AbilityName, string> = {
+   wis: "WIS",
+   cha: "CHA",
+ };
++const startingClassFeatures: Partial<Record<ClassId, string[]>> = {
++  barbarian: ["Rage", "Fast Movement"],
++  bard: ["Bardic Music", "Countersong", "Fascinate", "Inspire Courage"],
++  cleric: ["Turn or Rebuke Undead", "Domains"],
++  druid: ["Animal Companion", "Nature Sense", "Wild Empathy"],
++  fighter: ["Bonus Feat"],
++  monk: ["Flurry of Blows", "Improved Unarmed Strike", "Evasion"],
++  paladin: ["Aura of Good", "Detect Evil", "Smite Evil"],
++  ranger: ["Favored Enemy", "Track", "Wild Empathy"],
++  rogue: ["Sneak Attack", "Trapfinding"],
++  sorcerer: ["Spells"],
++  wizard: ["Spellbook", "Summon Familiar"],
++  mystic: ["Divine Spellcasting"],
++  noble: ["Coordinate"],
++};
+ type StoreCategory =
+   | "Weapons"
+   | "Armor"
+@@ -1016,6 +1032,22 @@ const armorCheckPenalties: Record<string, number> = {
+   "Mithral Breastplate": -1,
+   "Mithral Full Plate": -3,
+ };
++const armorClasses: Record<string, "Light" | "Medium" | "Heavy"> = {
++  "Padded Armor": "Light",
++  "Leather Armor": "Light",
++  "Studded Leather": "Light",
++  "Chain Shirt": "Light",
++  "Mithral Chain Shirt": "Light",
++  "Hide Armor": "Medium",
++  "Scale Mail": "Medium",
++  Chainmail: "Medium",
++  Breastplate: "Medium",
++  "Mithral Breastplate": "Medium",
++  "Splint Mail": "Heavy",
++  "Half-Plate": "Heavy",
++  "Full Plate": "Heavy",
++  "Mithral Full Plate": "Heavy",
++};
+ const shieldBonuses: Record<string, number> = {
+   Buckler: 1,
+   "Light Wooden Shield": 1,
+@@ -1059,21 +1091,23 @@ function getEquipmentArmorClass(character: Character) {
+ }
+ 
+ function getStoreItemDescription(item: StoreItem) {
+-  if (item.description) return item.description;
+-  if (item.category === "Weapons") {
+-    const profile = getWeaponProfile(item.name);
+-    const damageType = weaponDamageTypes[item.name] ?? "varies";
+-    const critical = profile.crit === "20/x2" ? "" : `; crit ${profile.crit}`;
+-    return `${damageType}; ${profile.damage} damage${critical}.`;
+-  }
+   if (item.category === "Armor") {
+     const name = Object.keys(armorBonuses)
+       .sort((left, right) => right.length - left.length)
+       .find((entry) => item.name.includes(entry));
+     const armorBonus = name ? armorBonuses[name] : 0;
++    const armorClass = name ? armorClasses[name] : "Unknown";
+     const maximumDexterity = name ? armorMaximumDexterity[name] : Infinity;
+     const checkPenalty = name ? armorCheckPenalties[name] : 0;
+-    return `Armor bonus +${armorBonus}; max Dex ${maximumDexterity === Infinity ? "—" : `+${maximumDexterity}`}; armor check penalty ${checkPenalty}.`;
++    const baseDescription = item.description ? `${item.description} ` : "";
++    return `${baseDescription}${armorClass} armor; armor bonus +${armorBonus}; max Dex ${maximumDexterity === Infinity ? "—" : `+${maximumDexterity}`}; armor check penalty ${checkPenalty}.`;
++  }
++  if (item.description) return item.description;
++  if (item.category === "Weapons") {
++    const profile = getWeaponProfile(item.name);
++    const damageType = weaponDamageTypes[item.name] ?? "varies";
++    const critical = profile.crit === "20/x2" ? "" : `; crit ${profile.crit}`;
++    return `${damageType}; ${profile.damage} damage${critical}.`;
+   }
+   if (item.category === "Shields") {
+     const name = Object.keys(shieldBonuses).find((entry) => item.name.includes(entry));
+@@ -1337,6 +1371,8 @@ function EquipmentItemPicker({
+           <br />
+           {hovered.category === "Weapons"
+             ? `${getWeaponProfile(hovered.name).damage} damage; crit ${getWeaponProfile(hovered.name).crit}; ${getWeaponSizeNote(size)}.`
++            : hovered.category === "Armor"
++              ? getStoreItemDescription(hovered)
+             : null}
+           <br />
+           {getSizedStoreWeight(hovered, size)} carried weight;{" "}
+@@ -1954,11 +1990,25 @@ function formatPrestigeClassDetails(
+           .map((classId) => classDefinitions[classId].name)
+           .join(" or ")
+       : "",
++    prerequisites.races?.length ? prerequisites.races.join(" or ") : "",
+     prerequisites.feats?.length ? prerequisites.feats.join(", ") : "",
+   ].filter(Boolean);
+   return `${requirements.length ? `Prerequisites: ${requirements.join("; ")}. ` : ""}Features: ${prestigeClass.features.join(", ")}.`;
+ }
+ 
++function isPrestigeClassEligible(
++  definition: (typeof dragonlancePrestigeClasses)[PrestigeClassId],
++  classId: ClassId,
++  race: string,
++) {
++  const prerequisites = definition.prerequisites;
++  const raceId = race.toLowerCase().replaceAll(" ", "-");
++  return (
++    (!prerequisites.classes?.length || prerequisites.classes.includes(classId)) &&
++    (!prerequisites.races?.length || prerequisites.races.includes(raceId))
++  );
++}
++
+ const alignmentDescriptions: Record<string, string> = {
+   "Lawful Good": "Upholds order and acts for the welfare of others.",
+   "Neutral Good": "Helps others while balancing order and freedom.",
+@@ -1976,6 +2026,43 @@ const alignmentDescriptions: Record<string, string> = {
+     "Acts through cruelty, destruction, and disregard for order or others.",
+ };
+ 
++function isNeutralAlignment(alignment: string) {
++  return alignment === "True Neutral" || alignment.startsWith("Neutral ") || alignment.endsWith(" Neutral");
++}
++
++function isClassAlignmentAllowed(classId: ClassId, alignment: string) {
++  if (classId === "barbarian" || classId === "bard")
++    return !alignment.startsWith("Lawful ");
++  if (classId === "monk") return alignment.startsWith("Lawful ");
++  if (classId === "paladin") return alignment === "Lawful Good";
++  if (classId === "druid") return isNeutralAlignment(alignment);
++  return true;
++}
++
++function getClassAlignmentRestriction(classId: ClassId) {
++  if (classId === "barbarian" || classId === "bard") return "must be non-lawful";
++  if (classId === "monk") return "must be lawful";
++  if (classId === "paladin") return "must be Lawful Good";
++  if (classId === "druid") return "must be neutral on at least one alignment axis";
++  return "";
++}
++
++function isHighSorceryAlignmentAllowed(order: Character["highSorceryOrder"], alignment: string) {
++  if (order === "white") return alignment.endsWith(" Good") || alignment === "Good";
++  if (order === "black") return alignment.endsWith(" Evil") || alignment === "Evil";
++  return order === "red" ? isNeutralAlignment(alignment) : true;
++}
++
++function alignmentDistance(first: string, second: string) {
++  const axes = (alignment: string) => ({
++    law: alignment.startsWith("Lawful ") ? -1 : alignment.startsWith("Chaotic ") ? 1 : 0,
++    moral: alignment.endsWith(" Good") ? 1 : alignment.endsWith(" Evil") ? -1 : 0,
++  });
++  const left = axes(first);
++  const right = axes(second);
++  return Math.max(Math.abs(left.law - right.law), Math.abs(left.moral - right.moral));
++}
++
+ function App() {
+   const [activeSheet, setActiveSheet] = useState("character");
+   const [character, setCharacter] = useState<Character>(initialCharacter);
+@@ -1984,6 +2071,7 @@ function App() {
+   );
+   const [creationOpen, setCreationOpen] = useState(true);
+   const [creationLocked, setCreationLocked] = useState(false);
++  const [printPreviewHtml, setPrintPreviewHtml] = useState<string | null>(null);
+   const [ruleset, setRuleset] = useState<
+     "core-35-srd" | "dragonlance-user-pack" | "dragonlance-monster-classes"
+   >("core-35-srd");
+@@ -2025,7 +2113,7 @@ function App() {
+   const updateCreationDraft = <Key extends keyof Character>(
+     key: Key,
+     value: Character[Key],
+-  ) => setCreationDraft({ ...creationDraft, [key]: value });
++  ) => setCreationDraft((current) => ({ ...current, [key]: value }));
+   const updateCreationAbility = (ability: AbilityName, value: number) =>
+     setCreationDraft((current) => ({
+       ...current,
+@@ -2156,12 +2244,39 @@ function App() {
+       resetCreationChoices({
+         ...creationDraft,
+         classLevels: [{ classId, level: 1 }],
++        alignment: "",
++        deity: undefined,
++        highSorceryOrder: undefined,
+       }),
+     );
++  const getCreationAbilities = () =>
++    abilityMethod === "roll" && rolledScores && rolledAssignments
++      ? (Object.fromEntries(
++          abilityNames.map((ability, index) => [
++            ability,
++            rolledScores[rolledAssignments[index]] +
++              (raceDefinitions[
++                creationDraft.race.toLowerCase().replaceAll(" ", "-")
++              ]?.abilityModifiers[ability] ?? 0),
++          ]),
++        ) as Character["abilities"])
++      : creationDraft.abilities;
++  useEffect(() => {
++    if (abilityMethod !== "roll" || !rolledScores || !rolledAssignments) return;
++    const nextAbilities = getCreationAbilities();
++    setCreationDraft((current) => {
++      const unchanged = abilityNames.every(
++        (ability) => current.abilities[ability] === nextAbilities[ability],
++      );
++      return unchanged ? current : { ...current, abilities: nextAbilities };
++    });
++  }, [abilityMethod, rolledScores, rolledAssignments]);
+   const createCharacter = () => {
+     const classId = creationDraft.classLevels[0].classId;
+     setCharacter({
+       ...cloneCharacter(creationDraft),
++      abilities: getCreationAbilities(),
++      classFeatures: startingClassFeatures[classId] ?? [],
+       hitPoints: Math.max(
+         1,
+         classDefinitions[classId].hitDie +
+@@ -2172,17 +2287,50 @@ function App() {
+     setCreationLocked(true);
+     setCreationOpen(false);
+   };
+-  const calculatedCharacter =
+-    creationOpen && !creationLocked
+-      ? {
+-          ...creationDraft,
+-          hitPoints: Math.max(
+-            1,
+-            classDefinitions[creationDraft.classLevels[0].classId].hitDie +
+-              abilityModifier(creationDraft.abilities.con),
+-          ),
+-        }
+-      : character;
++  const reopenCreation = () => {
++    setCreationDraft(cloneCharacter(character));
++    setCreationLocked(false);
++    setCreationOpen(true);
++    setLevelUpDraft(null);
++  };
++  const createNewCharacter = () => {
++    setCharacter(cloneCharacter(initialCharacter));
++    setCreationDraft(cloneCharacter(initialCharacter));
++    setCreationLocked(false);
++    setCreationOpen(true);
++    setLevelUpDraft(null);
++    setAbilityMethod("manual");
++    setRolledScores(null);
++    setRolledAssignments(null);
++  };
++  const showPrintPreview = () => {
++    const appShell = document.querySelector<HTMLElement>(".app-shell");
++    if (!appShell) return;
++    const preview = appShell.cloneNode(true) as HTMLElement;
++    preview
++      .querySelectorAll(
++        ".app-header, .sheet-tabs, .creation-area, .equipment-store-header, .equipment-store-grid, .store-size-row, .equipment-inventory-actions",
++      )
++      .forEach((element) => element.remove());
++    setPrintPreviewHtml(preview.innerHTML);
++  };
++  const discardCreation = () => {
++    if (creationLocked) return;
++    setCreationDraft(cloneCharacter(character));
++    setCreationOpen(false);
++    if (character.name === initialCharacter.name) setCreationOpen(true);
++  };
++  const calculatedCharacter = !creationLocked
++    ? {
++        ...creationDraft,
++        abilities: getCreationAbilities(),
++        hitPoints: Math.max(
++          1,
++          classDefinitions[creationDraft.classLevels[0].classId].hitDie +
++            abilityModifier(creationDraft.abilities.con),
++        ),
++      }
++    : character;
+   const displayedCharacter = levelUpDraft?.proposed ?? calculatedCharacter;
+   const hasSpellcasting = displayedCharacter.classLevels.some(
+     (level) => classDefinitions[level.classId].spellcasting,
+@@ -2193,28 +2341,91 @@ function App() {
+   return (
+     <main className="app-shell">
+       <header className="app-header">
+-        <div>
++        <div className="app-title">
+           <p className="eyebrow">D&D 3.5 rules workspace</p>
+           <h1>
+             D&D 3.5 Character Builder <span>2.0</span>
+           </h1>
+         </div>
+         <div className="header-actions">
++          <button
++            className="quiet-button print-button"
++            type="button"
++            onClick={showPrintPreview}
++          >
++            Print
++          </button>
+           <button className="quiet-button" type="button">
+             Save
+           </button>
+           <button className="quiet-button" type="button">
+             Export
+           </button>
+-          <button
+-            className="level-button"
+-            type="button"
+-            onClick={() => startLevelUp("fighter")}
+-          >
+-            Enter Level-Up Mode
+-          </button>
++          {creationLocked && (
++            <>
++              <button className="quiet-button" type="button" onClick={reopenCreation}>
++                Reopen Setup
++              </button>
++              <button className="quiet-button" type="button" onClick={createNewCharacter}>
++                Create New
++              </button>
++            </>
++          )}
++          {!creationLocked && (
++            <button className="quiet-button" type="button" onClick={discardCreation}>
++              Discard / Clear
++            </button>
++          )}
++          {creationLocked && (
++            <button
++              className="level-button"
++              type="button"
++              onClick={() => startLevelUp("fighter")}
++            >
++              Enter Level-Up Mode
++            </button>
++          )}
+         </div>
+       </header>
++      {printPreviewHtml && (
++        <div className="print-preview-modal" role="dialog" aria-modal="true">
++          <div className="print-preview-dialog">
++            <div className="print-preview-header">
++              <h2>Print Preview</h2>
++              <button
++                className="quiet-button"
++                type="button"
++                onClick={() => setPrintPreviewHtml(null)}
++              >
++                Close Preview
++              </button>
++            </div>
++            <div
++              className="print-preview-content"
++              dangerouslySetInnerHTML={{ __html: printPreviewHtml }}
++            />
++            <div className="print-preview-actions">
++              <button
++                className="quiet-button"
++                type="button"
++                onClick={() => setPrintPreviewHtml(null)}
++              >
++                Cancel
++              </button>
++              <button
++                className="level-button"
++                type="button"
++                onClick={() => {
++                  setPrintPreviewHtml(null);
++                  window.print();
++                }}
++              >
++                Print / Save PDF
++              </button>
++            </div>
++          </div>
++        </div>
++      )}
+       {levelUpMode && levelUpDraft && (
+         <section className="level-banner">
+           <div>
+@@ -2292,41 +2503,47 @@ function App() {
+       </nav>
+       {visibleSheet === "character" && (
+         <>
+-          <CreationPanel
+-            draft={creationDraft}
+-            open={creationOpen}
+-            locked={creationLocked}
+-            method={abilityMethod}
+-            rolledScores={rolledScores}
+-            onRolledScoresChange={setRolledScores}
+-            rolledAssignments={rolledAssignments}
+-            onRolledAssignmentsChange={setRolledAssignments}
+-            onToggle={() => setCreationOpen(!creationOpen)}
+-            onMethodChange={setAbilityMethod}
+-            onChange={updateCreationDraft}
+-            onClassChange={updateCreationClass}
+-            onRaceChange={updateCreationRace}
+-            ruleset={ruleset}
+-            onRulesetChange={(nextRuleset) => {
+-              setRuleset(nextRuleset);
+-              if (
+-                nextRuleset === "core-35-srd" &&
+-                raceDefinitions[
+-                  creationDraft.race.toLowerCase().replaceAll(" ", "-")
+-                ]?.source !== "core-35-srd"
+-              ) {
+-                updateCreationRace("Human");
+-              }
+-            }}
+-            onAbilityChange={updateCreationAbility}
+-            onCreate={createCharacter}
+-          />
++          {!creationLocked && (
++            <CreationPanel
++              draft={creationDraft}
++              open={creationOpen}
++              locked={creationLocked}
++              method={abilityMethod}
++              rolledScores={rolledScores}
++              onRolledScoresChange={setRolledScores}
++              rolledAssignments={rolledAssignments}
++              onRolledAssignmentsChange={setRolledAssignments}
++              onToggle={() => setCreationOpen(!creationOpen)}
++              onMethodChange={setAbilityMethod}
++              onChange={updateCreationDraft}
++              onClassChange={updateCreationClass}
++              onRaceChange={updateCreationRace}
++              ruleset={ruleset}
++              onRulesetChange={(nextRuleset) => {
++                setRuleset(nextRuleset);
++                if (
++                  nextRuleset === "core-35-srd" &&
++                  raceDefinitions[
++                    creationDraft.race.toLowerCase().replaceAll(" ", "-")
++                  ]?.source !== "core-35-srd"
++                ) {
++                  updateCreationRace("Human");
++                }
++              }}
++              onAbilityChange={updateCreationAbility}
++              onCreate={createCharacter}
++            />
++          )}
+           <CharacterSheet
+             character={displayedCharacter}
+             onSkillRankChange={updateSkillRanks}
+             onFeatChange={updateFeatSelection}
+             onLanguagesChange={updateLanguages}
+             allowFeatSelection={!creationLocked || levelUpMode}
++            finalized={creationLocked && !levelUpMode}
++            editable={!creationLocked && !levelUpMode}
++            onCharacterNameChange={(name) => updateCreationDraft("name", name)}
++            onPlayerNameChange={(player) => updateCreationDraft("player", player)}
+           />
+         </>
+       )}
+@@ -2343,6 +2560,7 @@ function App() {
+           character={displayedCharacter}
+           onKnownSpellsChange={updateKnownSpells}
+           onPreparedSpellsChange={updatePreparedSpells}
++          editable={!creationLocked || levelUpMode}
+         />
+       )}
+     </main>
+@@ -2457,7 +2675,29 @@ function CreationPanel({
+     raceDefinitions.human;
+   const availableClasses = Object.values(classDefinitions).filter(
+     (definition) =>
+-      definition.source === "core-35-srd" || ruleset !== "core-35-srd",
++      (definition.source === "core-35-srd" || ruleset !== "core-35-srd") &&
++      (!draft.alignment ||
++        isClassAlignmentAllowed(definition.id, draft.alignment) ||
++        definition.id === classId),
++  );
++  const availableAlignments = Object.keys(alignmentDescriptions).filter((alignment) =>
++    isClassAlignmentAllowed(classId, alignment),
++  );
++  const availableDeities = deityDefinitions.filter(
++    (deity) =>
++      (deity.source === "core-35-srd" || ruleset !== "core-35-srd") &&
++      (classId === "cleric"
++        ? alignmentDistance(draft.alignment, deity.alignment) <= 1
++        : classId === "paladin"
++          ? deity.alignment === "Lawful Good"
++          : true),
++  );
++  const dragonlanceRuleset = ruleset !== "core-35-srd";
++  const availablePrestigeClasses = Object.values(dragonlancePrestigeClasses).filter(
++    (definition) =>
++      !["white-robed-wizard", "red-robed-wizard", "black-robed-wizard"].includes(
++        definition.id,
++      ) && isPrestigeClassEligible(definition, classId, draft.race),
+   );
+   const raceOptions = Object.values(raceDefinitions).filter(
+     (race) =>
+@@ -2515,6 +2755,113 @@ function CreationPanel({
+       );
+     }
+   };
++  const creationErrors: string[] = [];
++  if (!draft.name.trim()) creationErrors.push("Enter a character name.");
++  if (!draft.player.trim()) creationErrors.push("Enter a player name.");
++  if (!draft.alignment) creationErrors.push("Choose an alignment.");
++  if (!isClassAlignmentAllowed(classId, draft.alignment))
++    creationErrors.push(
++      `${classDefinitions[classId].name} ${getClassAlignmentRestriction(classId)}.`,
++    );
++  const selectedDeity = deityDefinitions.find((deity) => deity.id === draft.deity);
++  if ((classId === "cleric" || classId === "paladin") && !selectedDeity)
++    creationErrors.push(`${classDefinitions[classId].name} characters must choose a deity.`);
++  if (selectedDeity && classId === "cleric" && alignmentDistance(draft.alignment, selectedDeity.alignment) > 1)
++    creationErrors.push(`Cleric alignment must be within one step of ${selectedDeity.name}.`);
++  if (selectedDeity && classId === "paladin" && selectedDeity.alignment !== "Lawful Good")
++    creationErrors.push("Paladins must choose a Lawful Good deity.");
++    if (dragonlanceRuleset && draft.highSorceryOrder &&
++      (classId === "wizard" || classId === "sorcerer") &&
++      !isHighSorceryAlignmentAllowed(draft.highSorceryOrder, draft.alignment))
++    creationErrors.push("That High Sorcery order is not legal for this alignment.");
++  if (method === "pointBuy" && pointBuyTotal !== 25)
++    creationErrors.push("Point buy must use exactly 25 points.");
++  if (
++    method === "roll" &&
++    (!rolledScores ||
++      rolledScores.length !== abilityNames.length ||
++      !rolledAssignments ||
++      rolledAssignments.length !== abilityNames.length ||
++      new Set(rolledAssignments).size !== abilityNames.length)
++  )
++    creationErrors.push("Roll and assign all six ability scores.");
++  if (
++    method === "manual" &&
++    abilityNames.some((ability) => {
++      const score = draft.abilities[ability];
++      return score < 3 || score > 18;
++    })
++  )
++    creationErrors.push("Set every manual ability score between 3 and 18.");
++  if (getSpentSkillPoints(draft) !== getAvailableSkillCount(draft))
++    creationErrors.push("Spend all available starting skill points.");
++  if (getFeatSlots(draft).some((slot) => !draft.featSelections?.[slot.id]))
++    creationErrors.push("Select every required starting feat.");
++  if (!(draft.languages ?? []).length)
++    creationErrors.push("Select at least one starting language.");
++  if (!Object.values(draft.inventory).some((quantity) => quantity > 0))
++    creationErrors.push("Select at least one piece of starting equipment.");
++  const spellcastingLevel = draft.classLevels.find(
++    (level) => classDefinitions[level.classId].spellcasting,
++  );
++  if (spellcastingLevel) {
++    const spellcastingClass = classDefinitions[spellcastingLevel.classId];
++    const castingAbility: Partial<Record<ClassId, AbilityName>> = {
++      bard: "cha",
++      cleric: "wis",
++      druid: "wis",
++      paladin: "cha",
++      ranger: "wis",
++      sorcerer: "cha",
++      wizard: "int",
++      mystic: "wis",
++    };
++    const castingModifier = abilityModifier(
++      draft.abilities[castingAbility[spellcastingClass.id] ?? "int"],
++    );
++    const bonusSpells = (level: number) =>
++      level < 1 || castingModifier < level
++        ? 0
++        : Math.floor((castingModifier - level) / 4) + 1;
++    const knownLimits: Partial<Record<ClassId, number[]>> = {
++      bard: [4, 2],
++      sorcerer: [4, 2],
++    };
++    const learningMode =
++      spellcastingClass.id === "wizard"
++        ? "Spellbook"
++        : spellcastingClass.id === "bard" || spellcastingClass.id === "sorcerer"
++          ? "Spells Known"
++          : "Prepared Spells";
++    const classSpells = spells.filter((spell) =>
++      spell.classes.includes(spellcastingClass.id),
++    );
++    const selectedSpells = new Set(draft.knownSpells);
++    const availableLevels = (spellSlots[spellcastingClass.id] ?? [])
++      .map((slots, level) => (slots[0] > 0 ? level : -1))
++      .filter((level) => level >= 0);
++    availableLevels.forEach((level) => {
++      const required =
++        learningMode === "Spells Known"
++          ? (knownLimits[spellcastingClass.id]?.[level] ?? 0) +
++            (level > 0 ? bonusSpells(level) : 0)
++          : learningMode === "Spellbook"
++            ? level === 0
++              ? classSpells.filter((spell) => spell.level === 0).length
++              : level === 1
++                ? 3 + Math.max(0, castingModifier)
++                : 2
++            : (spellSlots[spellcastingClass.id]?.[level]?.[0] ?? 0) +
++              bonusSpells(level);
++      const selected = classSpells.filter(
++        (spell) => spell.level === level && selectedSpells.has(spell.name),
++      ).length;
++      if (selected < required)
++        creationErrors.push(
++          `Select ${required} level ${level} ${learningMode.toLowerCase()} spell${required === 1 ? "" : "s"}.`,
++        );
++    });
++  }
+   return (
+     <section className={`creation-area ${locked ? "creation-locked" : ""}`}>
+       <div className="creation-heading">
+@@ -2732,7 +3079,7 @@ function CreationPanel({
+                 )}
+               </div>
+             </label>
+-            <label>
++            <label className="prestige-creation-field">
+               Prestige Class
+               <div className="class-field menu-left">
+                 <button
+@@ -2795,13 +3142,14 @@ function CreationPanel({
+                       }
+                       onClick={() => {
+                         onChange("prestigeClass", undefined);
++                        onChange("highSorceryOrder", undefined);
+                         setPrestigeClassMenuOpen(false);
+                         setMenuTooltip({ field: "", description: "" });
+                       }}
+                     >
+                       <span>None</span>
+                     </button>
+-                    {Object.values(dragonlancePrestigeClasses)
++                    {availablePrestigeClasses
+                       .filter((definition) =>
+                         matchesMenuQuery(definition.name, "prestige"),
+                       )
+@@ -2835,6 +3183,8 @@ function CreationPanel({
+                           }
+                           onClick={() => {
+                             onChange("prestigeClass", definition.id);
++                            if (definition.id !== "wizard-of-high-sorcery")
++                              onChange("highSorceryOrder", undefined);
+                             setPrestigeClassMenuOpen(false);
+                             setMenuTooltip({ field: "", description: "" });
+                           }}
+@@ -2851,7 +3201,7 @@ function CreationPanel({
+                 )}
+               </div>
+             </label>
+-            <label>
++            <label className="alignment-creation-field">
+               Alignment
+               <div className="class-field menu-left">
+                 <button
+@@ -2860,7 +3210,7 @@ function CreationPanel({
+                   aria-expanded={alignmentMenuOpen}
+                   onClick={() => toggleMenu("alignment")}
+                 >
+-                  {draft.alignment}
++                  {draft.alignment || "No alignment selected"}
+                   <span aria-hidden="true">▾</span>
+                 </button>
+                 {alignmentMenuOpen && (
+@@ -2884,7 +3234,20 @@ function CreationPanel({
+                         aria-label="Search alignments"
+                       />
+                     </div>
+-                    {Object.keys(alignmentDescriptions)
++                    <button
++                      className={`race-option ${!draft.alignment ? "selected" : ""}`}
++                      type="button"
++                      role="option"
++                      aria-selected={!draft.alignment}
++                      onClick={() => {
++                        onChange("alignment", "");
++                        setAlignmentMenuOpen(false);
++                        setMenuTooltip({ field: "", description: "" });
++                      }}
++                    >
++                      <span>No alignment selected</span>
++                    </button>
++                    {availableAlignments
+                       .filter((alignment) =>
+                         matchesMenuQuery(alignment, "alignment"),
+                       )
+@@ -2932,6 +3295,45 @@ function CreationPanel({
+                 )}
+               </div>
+             </label>
++            <label className="deity-creation-field">
++              Deity
++              <select
++                value={draft.deity ?? ""}
++                onChange={(event) =>
++                  onChange("deity", event.target.value || undefined)
++                }
++              >
++                <option value="">No deity selected</option>
++                {availableDeities.map((deity) => (
++                  <option key={deity.id} value={deity.id}>
++                    {deity.name} ({deity.alignment})
++                  </option>
++                ))}
++              </select>
++            </label>
++            {dragonlanceRuleset &&
++              (draft.prestigeClass === "wizard-of-high-sorcery" ||
++                draft.prestigeClass === "white-robed-wizard" ||
++                draft.prestigeClass === "red-robed-wizard" ||
++                draft.prestigeClass === "black-robed-wizard") && (
++              <label className="high-sorcery-creation-field">
++                High Sorcery order
++                <select
++                  value={draft.highSorceryOrder ?? ""}
++                  onChange={(event) =>
++                    onChange(
++                      "highSorceryOrder",
++                      (event.target.value || undefined) as Character["highSorceryOrder"],
++                    )
++                  }
++                >
++                  <option value="">No order selected</option>
++                  <option value="white">White Robes (good)</option>
++                  <option value="red">Red Robes (neutral)</option>
++                  <option value="black">Black Robes (evil)</option>
++                </select>
++              </label>
++            )}
+           </div>
+           <div className="ability-methods">
+             <button
+@@ -3036,19 +3438,19 @@ function CreationPanel({
+                   : [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map(
+                       (score, index) => ({ score, index }),
+                     );
+-              const selectedValue =
++              const selectedPoolIndex =
+                 method === "roll" && rolledAssignments
+-                  ? String(rolledAssignments[abilityNames.indexOf(ability)])
++                  ? rolledAssignments[abilityNames.indexOf(ability)]
++                  : undefined;
++              const selectedValue =
++                selectedPoolIndex !== undefined
++                  ? String(selectedPoolIndex)
+                   : String(draft.abilities[ability]);
+-              const racialAdjustment =
+-                selectedRace.abilityModifiers[ability] ?? 0;
+-              const finalScore = draft.abilities[ability];
+-              const baseScore =
+-                method === "roll" && rolledScores && rolledAssignments
+-                  ? rolledScores[
+-                      rolledAssignments[abilityNames.indexOf(ability)]
+-                    ]
+-                  : finalScore - racialAdjustment;
++              const finalScore =
++                selectedPoolIndex !== undefined && rolledScores
++                  ? rolledScores[selectedPoolIndex] +
++                    (selectedRace.abilityModifiers[ability] ?? 0)
++                  : draft.abilities[ability];
+               return (
+                 <label key={ability}>
+                   {name}
+@@ -3085,16 +3487,20 @@ function CreationPanel({
+                     })}
+                   </select>
+                   <small className="racial-adjustment">
+-                    Roll {baseScore} {racialAdjustment > 0 ? "+" : ""}
+-                    {racialAdjustment || ""}
+-                    {racialAdjustment ? ` ${selectedRace.name}` : ""} ={" "}
+-                    {finalScore}
++                    {finalScore} ({formatModifier(abilityModifier(finalScore))})
+                   </small>
+                 </label>
+               );
+             })}
+           </div>
+           <div className="creation-actions">
++            {creationErrors.length > 0 && (
++              <ul className="creation-validation-errors">
++                {creationErrors.map((error) => (
++                  <li key={error}>{error}</li>
++                ))}
++              </ul>
++            )}
+             <span>
+               Starting hit points:{" "}
+               {Math.max(
+@@ -3104,7 +3510,12 @@ function CreationPanel({
+               )}{" "}
+               (d{classDefinitions[classId].hitDie} + Constitution modifier)
+             </span>
+-            <button className="level-button" type="button" onClick={onCreate}>
++            <button
++              className="level-button"
++              type="button"
++              disabled={creationErrors.length > 0}
++              onClick={onCreate}
++            >
+               Create Character
+             </button>
+           </div>
+@@ -3404,12 +3815,20 @@ function CharacterSheet({
+   onFeatChange,
+   onLanguagesChange,
+   allowFeatSelection,
++  finalized,
++  editable,
++  onCharacterNameChange,
++  onPlayerNameChange,
+ }: {
+   character: Character;
+   onSkillRankChange: (skill: string, change: number) => void;
+   onFeatChange: (slotId: string, featId: string) => void;
+   onLanguagesChange: (languages: string[]) => void;
+   allowFeatSelection: boolean;
++  finalized: boolean;
++  editable: boolean;
++  onCharacterNameChange: (name: string) => void;
++  onPlayerNameChange: (player: string) => void;
+ }) {
+   const classId = character.classLevels.at(-1)?.classId ?? "fighter";
+   const characterRace =
+@@ -3447,6 +3866,10 @@ function CharacterSheet({
+         ];
+       })
+       .flat(),
++    ...(character.classFeatures ?? []).map((ability) => ({
++      source: classDefinitions[classId].name,
++      ability,
++    })),
+     ...(character.prestigeClass
+       ? (
+           dragonlancePrestigeClasses[character.prestigeClass]?.features ?? []
+@@ -3462,28 +3885,69 @@ function CharacterSheet({
+         <div className="identity-grid">
+           <label>
+             Character name
+-            <input value={character.name} readOnly />
++            {finalized ? <span className="sheet-value">{character.name}</span> : <input value={character.name} readOnly={!editable} onChange={(event) => onCharacterNameChange(event.target.value)} />}
+           </label>
+           <label>
+             Player
+-            <input value={character.player} readOnly />
++            {finalized ? <span className="sheet-value">{character.player}</span> : <input value={character.player} readOnly={!editable} onChange={(event) => onPlayerNameChange(event.target.value)} />}
+           </label>
+           <label>
+             Race
+-            <input value={character.race} readOnly />
++            {finalized ? <span className="sheet-value">{character.race}</span> : <input value={character.race} readOnly />}
+           </label>
+           <label>
+             Class
+-            <input value={classDefinitions[classId].name} readOnly />
++            {finalized ? (
++              <span className="sheet-value">{classDefinitions[classId].name}</span>
++            ) : (
++              <input value={classDefinitions[classId].name} readOnly />
++            )}
+           </label>
++          {character.prestigeClass && (
++            <label className="prestige-identity-field">
++              Prestige Class
++              {finalized ? (
++                <span className="sheet-value">
++                  {dragonlancePrestigeClasses[character.prestigeClass]?.name ?? "Prestige Class"}
++                </span>
++              ) : (
++                <input
++                  value={dragonlancePrestigeClasses[character.prestigeClass]?.name ?? "Prestige Class"}
++                  readOnly
++                />
++              )}
++            </label>
++          )}
+           <label>
+             Level
+-            <input value={character.classLevels.length} readOnly />
++            {finalized ? <span className="sheet-value">{character.classLevels.length}</span> : <input value={character.classLevels.length} readOnly />}
+           </label>
+           <label>
+             Alignment
+-            <input value={character.alignment} readOnly />
++            {finalized ? <span className="sheet-value">{character.alignment}</span> : <input value={character.alignment} readOnly />}
+           </label>
++          {character.deity && (
++            <label>
++              Deity
++              <span className="sheet-value">
++                {deityDefinitions.find((deity) => deity.id === character.deity)?.name ?? character.deity}
++              </span>
++            </label>
++          )}
++          {(character.highSorceryOrder ||
++            character.prestigeClass === "wizard-of-high-sorcery" ||
++            character.prestigeClass === "white-robed-wizard" ||
++            character.prestigeClass === "red-robed-wizard" ||
++            character.prestigeClass === "black-robed-wizard") && (
++            <label>
++              High Sorcery
++              <span className="sheet-value">
++                {character.highSorceryOrder
++                  ? `${character.highSorceryOrder[0].toUpperCase()}${character.highSorceryOrder.slice(1)} Robes`
++                  : "Unselected order"}
++              </span>
++            </label>
++          )}
+         </div>
+       </Panel>
+       <Panel title="Ability Scores" className="ability-panel">
+@@ -3550,11 +4014,13 @@ function CharacterSheet({
+       </Panel>
+       <Panel title="Languages" className="languages-panel">
+         <div className="languages-display">
+-          {getCharacterLanguages(character).map((language) => (
+-            <span className="language-chip" key={language}>
+-              {language}
+-            </span>
+-          ))}
++          {finalized ? (
++            <span className="sheet-value">{getCharacterLanguages(character).join(", ")}</span>
++          ) : (
++            getCharacterLanguages(character).map((language) => (
++              <span className="language-chip" key={language}>{language}</span>
++            ))
++          )}
+         </div>
+         {allowFeatSelection && (
+           <div className="language-panel-choices">
+@@ -3624,17 +4090,17 @@ function CharacterSheet({
+                   </span>
+                 </span>
+               </span>
+-              <span className="skill-racial">
++              {!finalized && <span className="skill-racial">
+                 {getRacialSkillBonus(character, skill)
+                   ? `${getCharacterRace(character)} (${formatModifier(getRacialSkillBonus(character, skill))})`
+                   : ""}
+-              </span>
++              </span>}
+               <span className="skill-ability">
+                 {getSkillAbility(skill)
+                   ? `${abilityLabels[getSkillAbility(skill)!]} (${formatModifier(abilityModifier(character.abilities[getSkillAbility(skill)!]))})`
+                   : "—"}
+               </span>
+-              <span className="skill-ranks">
++              {(!finalized || allowFeatSelection) && <span className="skill-ranks">
+                 <button
+                   type="button"
+                   onClick={() => onSkillRankChange(skill, -1)}
+@@ -3652,7 +4118,7 @@ function CharacterSheet({
+                 >
+                   +
+                 </button>
+-              </span>
++              </span>}
+               <strong title={getSkillTotalTooltip(character, skill)}>
+                 {formatModifier(
+                   (getSkillAbility(skill)
+@@ -3839,6 +4305,7 @@ function EquipmentStore({
+   onEquipmentChange: (equipment: Record<string, string>) => void;
+   onInventoryChange: (inventory: Record<string, number>) => void;
+ }) {
++  const [storeOpen, setStoreOpen] = useState(true);
+   const [enhancements, setEnhancements] = useState<Record<string, string>>({});
+   const [specialEnchantments, setSpecialEnchantments] = useState<
+     Record<string, string>
+@@ -3960,8 +4427,6 @@ function EquipmentStore({
+     "Weapons",
+     "Armor",
+     "Shields",
+-    "Head",
+-    "Neck",
+     "Shoulders",
+     "Arms",
+     "Hands",
+@@ -3969,6 +4434,8 @@ function EquipmentStore({
+     "Waist",
+     "Feet",
+     "Body & Wondrous Items",
++    "Head",
++    "Neck",
+     "Ammunition",
+     "Adventuring Gear",
+     "Tools & Kits",
+@@ -3991,23 +4458,33 @@ function EquipmentStore({
+         <strong>
+           {totalItems} item{totalItems === 1 ? "" : "s"} owned
+         </strong>
+-      </div>
+-      <label className="store-size-row">
+-        <span>Item size</span>
+-        <select
+-          value={itemSize}
+-          onChange={(event) => setItemSize(event.target.value)}
++        <button
++          className="secondary-button store-toggle"
++          type="button"
++          onClick={() => setStoreOpen((current) => !current)}
++          aria-expanded={storeOpen}
+         >
+-          {sizeOptions.map((size) => (
+-            <option key={size} value={size}>
+-              {size}
+-              {size === playerSize ? ` (${character.race})` : ""}
+-            </option>
+-          ))}
+-        </select>
+-        <small>Defaults to the character's size: {playerSize}.</small>
+-      </label>
+-      <div className="equipment-store-grid">
++          {storeOpen ? "Close Store" : "Open Store"}
++        </button>
++      </div>
++      {storeOpen ? (
++        <>
++          <label className="store-size-row">
++            <span>Item size</span>
++            <select
++              value={itemSize}
++              onChange={(event) => setItemSize(event.target.value)}
++            >
++              {sizeOptions.map((size) => (
++                <option key={size} value={size}>
++                  {size}
++                  {size === playerSize ? ` (${character.race})` : ""}
++                </option>
++              ))}
++            </select>
++            <small>Defaults to the character's size: {playerSize}.</small>
++          </label>
++          <div className="equipment-store-grid">
+         {categories.map((itemCategory) => {
+           const itemSelect = (
+             <EquipmentItemPicker
+@@ -4058,7 +4535,12 @@ function EquipmentStore({
+           const previewPrice =
+             itemCategory === "Weapons" ? weaponPrice : armorPrice;
+           return (
+-            <div className="store-category" key={itemCategory}>
++            <div
++              className={`store-category${
++                itemCategory === "Shields" ? " shields-store-category" : ""
++              }`}
++              key={itemCategory}
++            >
+               {itemCategory}
+               {hasEnhancement ? (
+                 <span className="store-category-controls">
+@@ -4119,8 +4601,10 @@ function EquipmentStore({
+               )}
+             </div>
+           );
+-        })}
+-      </div>
++            })}
++          </div>
++        </>
++      ) : null}
+       <section className="equipment-inventory" aria-labelledby="equipment-inventory-title">
+         <div className="equipment-inventory-header">
+           <h3 id="equipment-inventory-title">Inventory</h3>
+@@ -4350,10 +4834,12 @@ function SpellSheet({
+   character,
+   onKnownSpellsChange,
+   onPreparedSpellsChange,
++  editable,
+ }: {
+   character: Character;
+   onKnownSpellsChange: (spells: string[]) => void;
+   onPreparedSpellsChange: (spells: string[]) => void;
++  editable: boolean;
+ }) {
+   const spellcastingLevel = character.classLevels.find(
+     (level) => classDefinitions[level.classId].spellcasting,
+@@ -4540,7 +5026,7 @@ function SpellSheet({
+                   const preparationLimitReached =
+                     preparedSpellCount >= dailySpellCapacity;
+                   return (
+-                    <tr key={slot}>
++                    <tr className={spellName ? undefined : "empty-spell-row"} key={slot}>
+                       <td>
+                         {learningMode === "Prepared Spells" && (
+                           <input
+@@ -4576,6 +5062,8 @@ function SpellSheet({
+                       <td>
+                         {level === 0 && learningMode === "Spellbook" ? (
+                           spellName
++                        ) : !editable ? (
++                          spellName || ""
+                         ) : (
+                           <SpellPicker
+                             spells={levelSpells.filter(
+diff --git a/src/domain.ts b/src/domain.ts
+index 1429feb..ca7fbb0 100644
+--- a/src/domain.ts
++++ b/src/domain.ts
+@@ -3,7 +3,7 @@ export type AbilityName = 'str' | 'dex' | 'con' | 'int' | 'wis' | 'cha'
+ export type AbilityScores = Record<AbilityName, number>
+ 
+ export type ClassId = 'barbarian' | 'bard' | 'cleric' | 'druid' | 'fighter' | 'monk' | 'paladin' | 'ranger' | 'rogue' | 'sorcerer' | 'wizard' | 'mystic' | 'noble'
+-export type PrestigeClassId = 'knight-of-the-crown' | 'knight-of-the-sword' | 'knight-of-the-rose' | 'knight-of-neraka' | 'renegade-hunter' | 'white-robed-wizard' | 'red-robed-wizard' | 'black-robed-wizard' | 'master-of-the-way'
++export type PrestigeClassId = 'knight-of-the-crown' | 'knight-of-the-sword' | 'knight-of-the-rose' | 'knight-of-neraka' | 'renegade-hunter' | 'wizard-of-high-sorcery' | 'white-robed-wizard' | 'red-robed-wizard' | 'black-robed-wizard' | 'master-of-the-way'
+ export type FeatId = string
+ 
+ export type ContentSourceId = 'core-35-srd' | 'dragonlance-user-pack'
+@@ -33,6 +33,42 @@ export interface ClassDefinition {
+   spellcasting: boolean
+ }
+ 
++export interface DeityDefinition {
++  id: string
++  name: string
++  alignment: string
++  source: ContentSourceId
++}
++
++export const deityDefinitions: DeityDefinition[] = [
++  { id: 'bahamut', name: 'Bahamut', alignment: 'Lawful Good', source: 'core-35-srd' },
++  { id: 'corellon', name: 'Corellon Larethian', alignment: 'Chaotic Good', source: 'core-35-srd' },
++  { id: 'moradin', name: 'Moradin', alignment: 'Lawful Good', source: 'core-35-srd' },
++  { id: 'pelor', name: 'Pelor', alignment: 'Neutral Good', source: 'core-35-srd' },
++  { id: 'heironeous', name: 'Heironeous', alignment: 'Lawful Good', source: 'core-35-srd' },
++  { id: 'kord', name: 'Kord', alignment: 'Chaotic Neutral', source: 'core-35-srd' },
++  { id: 'st-cuthbert', name: 'St. Cuthbert', alignment: 'Lawful Neutral', source: 'core-35-srd' },
++  { id: 'we-jas', name: 'Wee Jas', alignment: 'Lawful Neutral', source: 'core-35-srd' },
++  { id: 'obad-hai', name: 'Obad-Hai', alignment: 'True Neutral', source: 'core-35-srd' },
++  { id: 'hextor', name: 'Hextor', alignment: 'Lawful Evil', source: 'core-35-srd' },
++  { id: 'nerull', name: 'Nerull', alignment: 'Neutral Evil', source: 'core-35-srd' },
++  { id: 'erythnul', name: 'Erythnul', alignment: 'Chaotic Evil', source: 'core-35-srd' },
++  { id: 'paladine', name: 'Paladine', alignment: 'Lawful Good', source: 'dragonlance-user-pack' },
++  { id: 'mishakal', name: 'Mishakal', alignment: 'Neutral Good', source: 'dragonlance-user-pack' },
++  { id: 'kiri-jolith', name: 'Kiri-Jolith', alignment: 'Lawful Good', source: 'dragonlance-user-pack' },
++  { id: 'majere', name: 'Majere', alignment: 'Lawful Neutral', source: 'dragonlance-user-pack' },
++  { id: 'gilean', name: 'Gilean', alignment: 'True Neutral', source: 'dragonlance-user-pack' },
++  { id: 'reorx', name: 'Reorx', alignment: 'True Neutral', source: 'dragonlance-user-pack' },
++  { id: 'habbakuk', name: 'Habbakuk', alignment: 'Chaotic Good', source: 'dragonlance-user-pack' },
++  { id: 'branchala', name: 'Branchala', alignment: 'Chaotic Good', source: 'dragonlance-user-pack' },
++  { id: 'takhisis', name: 'Takhisis', alignment: 'Lawful Evil', source: 'dragonlance-user-pack' },
++  { id: 'sargonnas', name: 'Sargonnas', alignment: 'Chaotic Evil', source: 'dragonlance-user-pack' },
++  { id: 'chemosh', name: 'Chemosh', alignment: 'Neutral Evil', source: 'dragonlance-user-pack' },
++  { id: 'morgion', name: 'Morgion', alignment: 'Neutral Evil', source: 'dragonlance-user-pack' },
++  { id: 'nuitari', name: 'Nuitari', alignment: 'Lawful Evil', source: 'dragonlance-user-pack' },
++  { id: 'zeboim', name: 'Zeboim', alignment: 'Chaotic Evil', source: 'dragonlance-user-pack' },
++]
++
+ export interface RaceDefinition {
+   id: string
+   name: string
+@@ -50,7 +86,7 @@ export interface PrestigeClassDefinition {
+   id: PrestigeClassId
+   name: string
+   source: ContentSourceId
+-  prerequisites: { bab?: number; ability?: Partial<Record<AbilityName, number>>; feats?: string[]; classes?: ClassId[] }
++  prerequisites: { bab?: number; ability?: Partial<Record<AbilityName, number>>; feats?: string[]; classes?: ClassId[]; races?: string[] }
+   features: string[]
+ }
+ 
+@@ -90,6 +126,9 @@ export interface Character {
+   inventory: Record<string, number>
+   languages: string[]
+   prestigeClass?: PrestigeClassId
++  classFeatures?: string[]
++  deity?: string
++  highSorceryOrder?: 'white' | 'red' | 'black'
+ }
+ 
+ export interface LevelUpDraft {
+@@ -145,6 +184,7 @@ export const dragonlancePrestigeClasses: Record<PrestigeClassId, PrestigeClassDe
+   'knight-of-the-rose': { id: 'knight-of-the-rose', name: 'Knight of the Rose', source: 'dragonlance-user-pack', prerequisites: { bab: 6, feats: ['Leadership'], classes: ['fighter', 'paladin'] }, features: ['Rose oath', 'Inspire courage', 'Command authority'] },
+   'knight-of-neraka': { id: 'knight-of-neraka', name: 'Knight of Neraka', source: 'dragonlance-user-pack', prerequisites: { bab: 5, feats: ['Knight of Takhisis'], classes: ['fighter', 'paladin', 'ranger'] }, features: ['Dark allegiance', 'Aura of command', 'Terror tactics'] },
+   'renegade-hunter': { id: 'renegade-hunter', name: 'Renegade Hunter', source: 'dragonlance-user-pack', prerequisites: { feats: ['Spell Focus'] }, features: ['Magic detection', 'Counterspell training', 'Hunter of renegades'] },
++  'wizard-of-high-sorcery': { id: 'wizard-of-high-sorcery', name: 'High Sorcery', source: 'dragonlance-user-pack', prerequisites: { ability: { int: 13 }, feats: ['Mages of High Sorcery'], classes: ['wizard', 'sorcerer'] }, features: ['Order oath', 'Lunar spell power'] },
+   'white-robed-wizard': { id: 'white-robed-wizard', name: 'White-Robed Wizard', source: 'dragonlance-user-pack', prerequisites: { ability: { int: 13 }, feats: ['Mages of High Sorcery'], classes: ['wizard', 'sorcerer'] }, features: ['White robe oath', 'Protective magic', 'Lunar spell power'] },
+   'red-robed-wizard': { id: 'red-robed-wizard', name: 'Red-Robed Wizard', source: 'dragonlance-user-pack', prerequisites: { ability: { int: 13 }, feats: ['Mages of High Sorcery'], classes: ['wizard', 'sorcerer'] }, features: ['Red robe oath', 'Neutral magic', 'Lunar spell power'] },
+   'black-robed-wizard': { id: 'black-robed-wizard', name: 'Black-Robed Wizard', source: 'dragonlance-user-pack', prerequisites: { ability: { int: 13 }, feats: ['Mages of High Sorcery'], classes: ['wizard', 'sorcerer'] }, features: ['Black robe oath', 'Aggressive magic', 'Lunar spell power'] },
+@@ -154,7 +194,7 @@ export const dragonlancePrestigeClasses: Record<PrestigeClassId, PrestigeClassDe
+ export const initialCharacter: Character = {
+   name: 'Unnamed Hero', player: 'Player', race: 'Human', alignment: 'Neutral Good',
+   abilities: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
+-  classLevels: [{ classId: 'fighter', level: 1 }], hitPoints: 10, feats: [], featSelections: {}, skills: {}, skillRanksByClass: {}, knownSpells: [], preparedSpells: [], equipment: {}, inventory: {}, languages: ['Common'], prestigeClass: undefined,
++  classLevels: [{ classId: 'fighter', level: 1 }], hitPoints: 10, feats: [], featSelections: {}, skills: {}, skillRanksByClass: {}, knownSpells: [], preparedSpells: [], equipment: {}, inventory: {}, languages: ['Common'], prestigeClass: undefined, deity: undefined, highSorceryOrder: undefined,
+ }
+ 
+ export function abilityModifier(score: number) {
+diff --git a/vite.config.ts b/vite.config.ts
+index 9982072..b308a8e 100644
+--- a/vite.config.ts
++++ b/vite.config.ts
+@@ -4,4 +4,5 @@ import { defineConfig } from 'vite'
+ // https://vite.dev/config/
+ export default defineConfig({
+   plugins: [react()],
++  base: './',
+ })

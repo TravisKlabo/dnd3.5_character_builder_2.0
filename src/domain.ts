@@ -3,7 +3,7 @@ export type AbilityName = 'str' | 'dex' | 'con' | 'int' | 'wis' | 'cha'
 export type AbilityScores = Record<AbilityName, number>
 
 export type ClassId = 'barbarian' | 'bard' | 'cleric' | 'druid' | 'fighter' | 'monk' | 'paladin' | 'ranger' | 'rogue' | 'sorcerer' | 'wizard' | 'mystic' | 'noble'
-export type PrestigeClassId = 'knight-of-the-crown' | 'knight-of-the-sword' | 'knight-of-the-rose' | 'knight-of-neraka' | 'renegade-hunter' | 'white-robed-wizard' | 'red-robed-wizard' | 'black-robed-wizard' | 'master-of-the-way'
+export type PrestigeClassId = 'knight-of-the-crown' | 'knight-of-the-sword' | 'knight-of-the-rose' | 'knight-of-neraka' | 'renegade-hunter' | 'wizard-of-high-sorcery' | 'white-robed-wizard' | 'red-robed-wizard' | 'black-robed-wizard' | 'master-of-the-way'
 export type FeatId = string
 
 export type ContentSourceId = 'core-35-srd' | 'dragonlance-user-pack'
@@ -33,6 +33,42 @@ export interface ClassDefinition {
   spellcasting: boolean
 }
 
+export interface DeityDefinition {
+  id: string
+  name: string
+  alignment: string
+  source: ContentSourceId
+}
+
+export const deityDefinitions: DeityDefinition[] = [
+  { id: 'bahamut', name: 'Bahamut', alignment: 'Lawful Good', source: 'core-35-srd' },
+  { id: 'corellon', name: 'Corellon Larethian', alignment: 'Chaotic Good', source: 'core-35-srd' },
+  { id: 'moradin', name: 'Moradin', alignment: 'Lawful Good', source: 'core-35-srd' },
+  { id: 'pelor', name: 'Pelor', alignment: 'Neutral Good', source: 'core-35-srd' },
+  { id: 'heironeous', name: 'Heironeous', alignment: 'Lawful Good', source: 'core-35-srd' },
+  { id: 'kord', name: 'Kord', alignment: 'Chaotic Neutral', source: 'core-35-srd' },
+  { id: 'st-cuthbert', name: 'St. Cuthbert', alignment: 'Lawful Neutral', source: 'core-35-srd' },
+  { id: 'we-jas', name: 'Wee Jas', alignment: 'Lawful Neutral', source: 'core-35-srd' },
+  { id: 'obad-hai', name: 'Obad-Hai', alignment: 'True Neutral', source: 'core-35-srd' },
+  { id: 'hextor', name: 'Hextor', alignment: 'Lawful Evil', source: 'core-35-srd' },
+  { id: 'nerull', name: 'Nerull', alignment: 'Neutral Evil', source: 'core-35-srd' },
+  { id: 'erythnul', name: 'Erythnul', alignment: 'Chaotic Evil', source: 'core-35-srd' },
+  { id: 'paladine', name: 'Paladine', alignment: 'Lawful Good', source: 'dragonlance-user-pack' },
+  { id: 'mishakal', name: 'Mishakal', alignment: 'Neutral Good', source: 'dragonlance-user-pack' },
+  { id: 'kiri-jolith', name: 'Kiri-Jolith', alignment: 'Lawful Good', source: 'dragonlance-user-pack' },
+  { id: 'majere', name: 'Majere', alignment: 'Lawful Neutral', source: 'dragonlance-user-pack' },
+  { id: 'gilean', name: 'Gilean', alignment: 'True Neutral', source: 'dragonlance-user-pack' },
+  { id: 'reorx', name: 'Reorx', alignment: 'True Neutral', source: 'dragonlance-user-pack' },
+  { id: 'habbakuk', name: 'Habbakuk', alignment: 'Chaotic Good', source: 'dragonlance-user-pack' },
+  { id: 'branchala', name: 'Branchala', alignment: 'Chaotic Good', source: 'dragonlance-user-pack' },
+  { id: 'takhisis', name: 'Takhisis', alignment: 'Lawful Evil', source: 'dragonlance-user-pack' },
+  { id: 'sargonnas', name: 'Sargonnas', alignment: 'Chaotic Evil', source: 'dragonlance-user-pack' },
+  { id: 'chemosh', name: 'Chemosh', alignment: 'Neutral Evil', source: 'dragonlance-user-pack' },
+  { id: 'morgion', name: 'Morgion', alignment: 'Neutral Evil', source: 'dragonlance-user-pack' },
+  { id: 'nuitari', name: 'Nuitari', alignment: 'Lawful Evil', source: 'dragonlance-user-pack' },
+  { id: 'zeboim', name: 'Zeboim', alignment: 'Chaotic Evil', source: 'dragonlance-user-pack' },
+]
+
 export interface RaceDefinition {
   id: string
   name: string
@@ -50,7 +86,7 @@ export interface PrestigeClassDefinition {
   id: PrestigeClassId
   name: string
   source: ContentSourceId
-  prerequisites: { bab?: number; ability?: Partial<Record<AbilityName, number>>; feats?: string[]; classes?: ClassId[] }
+  prerequisites: { bab?: number; ability?: Partial<Record<AbilityName, number>>; feats?: string[]; classes?: ClassId[]; races?: string[] }
   features: string[]
 }
 
@@ -90,6 +126,9 @@ export interface Character {
   inventory: Record<string, number>
   languages: string[]
   prestigeClass?: PrestigeClassId
+  classFeatures?: string[]
+  deity?: string
+  highSorceryOrder?: 'white' | 'red' | 'black'
 }
 
 export interface LevelUpDraft {
@@ -145,6 +184,7 @@ export const dragonlancePrestigeClasses: Record<PrestigeClassId, PrestigeClassDe
   'knight-of-the-rose': { id: 'knight-of-the-rose', name: 'Knight of the Rose', source: 'dragonlance-user-pack', prerequisites: { bab: 6, feats: ['Leadership'], classes: ['fighter', 'paladin'] }, features: ['Rose oath', 'Inspire courage', 'Command authority'] },
   'knight-of-neraka': { id: 'knight-of-neraka', name: 'Knight of Neraka', source: 'dragonlance-user-pack', prerequisites: { bab: 5, feats: ['Knight of Takhisis'], classes: ['fighter', 'paladin', 'ranger'] }, features: ['Dark allegiance', 'Aura of command', 'Terror tactics'] },
   'renegade-hunter': { id: 'renegade-hunter', name: 'Renegade Hunter', source: 'dragonlance-user-pack', prerequisites: { feats: ['Spell Focus'] }, features: ['Magic detection', 'Counterspell training', 'Hunter of renegades'] },
+  'wizard-of-high-sorcery': { id: 'wizard-of-high-sorcery', name: 'High Sorcery', source: 'dragonlance-user-pack', prerequisites: { ability: { int: 13 }, feats: ['Mages of High Sorcery'], classes: ['wizard', 'sorcerer'] }, features: ['Order oath', 'Lunar spell power'] },
   'white-robed-wizard': { id: 'white-robed-wizard', name: 'White-Robed Wizard', source: 'dragonlance-user-pack', prerequisites: { ability: { int: 13 }, feats: ['Mages of High Sorcery'], classes: ['wizard', 'sorcerer'] }, features: ['White robe oath', 'Protective magic', 'Lunar spell power'] },
   'red-robed-wizard': { id: 'red-robed-wizard', name: 'Red-Robed Wizard', source: 'dragonlance-user-pack', prerequisites: { ability: { int: 13 }, feats: ['Mages of High Sorcery'], classes: ['wizard', 'sorcerer'] }, features: ['Red robe oath', 'Neutral magic', 'Lunar spell power'] },
   'black-robed-wizard': { id: 'black-robed-wizard', name: 'Black-Robed Wizard', source: 'dragonlance-user-pack', prerequisites: { ability: { int: 13 }, feats: ['Mages of High Sorcery'], classes: ['wizard', 'sorcerer'] }, features: ['Black robe oath', 'Aggressive magic', 'Lunar spell power'] },
@@ -154,7 +194,7 @@ export const dragonlancePrestigeClasses: Record<PrestigeClassId, PrestigeClassDe
 export const initialCharacter: Character = {
   name: 'Unnamed Hero', player: 'Player', race: 'Human', alignment: 'Neutral Good',
   abilities: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
-  classLevels: [{ classId: 'fighter', level: 1 }], hitPoints: 10, feats: [], featSelections: {}, skills: {}, skillRanksByClass: {}, knownSpells: [], preparedSpells: [], equipment: {}, inventory: {}, languages: ['Common'], prestigeClass: undefined,
+  classLevels: [{ classId: 'fighter', level: 1 }], hitPoints: 10, feats: [], featSelections: {}, skills: {}, skillRanksByClass: {}, knownSpells: [], preparedSpells: [], equipment: {}, inventory: {}, languages: ['Common'], prestigeClass: undefined, deity: undefined, highSorceryOrder: undefined,
 }
 
 export function abilityModifier(score: number) {
