@@ -4,6 +4,7 @@ export type AbilityScores = Record<AbilityName, number>
 
 export type ClassId = 'barbarian' | 'bard' | 'cleric' | 'druid' | 'fighter' | 'monk' | 'paladin' | 'ranger' | 'rogue' | 'sorcerer' | 'wizard' | 'mystic' | 'noble'
 export type PrestigeClassId = 'knight-of-the-crown' | 'knight-of-the-sword' | 'knight-of-the-rose' | 'knight-of-neraka' | 'renegade-hunter' | 'white-robed-wizard' | 'red-robed-wizard' | 'black-robed-wizard' | 'master-of-the-way'
+export type FeatId = string
 
 export type ContentSourceId = 'core-35-srd' | 'dragonlance-user-pack'
 
@@ -58,6 +59,19 @@ export interface ClassLevel {
   level: number
 }
 
+export interface FeatDefinition {
+  id: FeatId
+  name: string
+  source: ContentSourceId
+  description: string
+  prerequisites?: {
+    abilities?: Partial<Record<AbilityName, number>>
+    baseAttackBonus?: number
+    feats?: FeatId[]
+  }
+  fighterBonus?: boolean
+}
+
 export interface Character {
   name: string
   player: string
@@ -67,9 +81,14 @@ export interface Character {
   classLevels: ClassLevel[]
   hitPoints: number
   feats: string[]
+  featSelections: Record<string, FeatId | ''>
   skills: Record<string, number>
   skillRanksByClass: Record<string, Record<string, number>>
+  knownSpells: string[]
   preparedSpells: string[]
+  equipment: Record<string, string>
+  inventory: Record<string, number>
+  languages: string[]
   prestigeClass?: PrestigeClassId
 }
 
@@ -99,12 +118,12 @@ export const classDefinitions: Record<ClassId, ClassDefinition> = {
 
 export const raceDefinitions: Record<string, RaceDefinition> = {
   human: { id: 'human', name: 'Human', source: 'core-35-srd', size: 'Medium', abilityModifiers: {}, specialAbilities: ['Bonus feat', 'Extra skill points'] },
-  dwarf: { id: 'dwarf', name: 'Dwarf', source: 'core-35-srd', speed: 20, abilityModifiers: { con: 2, cha: -2 } },
-  elf: { id: 'elf', name: 'Elf', source: 'core-35-srd', abilityModifiers: { dex: 2, con: -2 }, racialSkillBonuses: { Listen: 2, Search: 2, Spot: 2 } },
-  halfling: { id: 'halfling', name: 'Halfling', source: 'core-35-srd', speed: 20, abilityModifiers: { dex: 2, str: -2 }, racialSkillBonuses: { Climb: 2, Jump: 2, Listen: 2, 'Move Silently': 2 } },
-  gnome: { id: 'gnome', name: 'Gnome', source: 'core-35-srd', speed: 20, abilityModifiers: { con: 2, str: -2 }, racialSkillBonuses: { Listen: 2, Craft: 2 } },
-  'half-orc': { id: 'half-orc', name: 'Half-orc', source: 'core-35-srd', abilityModifiers: { str: 2, int: -2, cha: -2 } },
-  'half-elf': { id: 'half-elf', name: 'Half-elf', source: 'core-35-srd', abilityModifiers: {}, racialSkillBonuses: { Listen: 1, Search: 1, Spot: 1 } },
+  dwarf: { id: 'dwarf', name: 'Dwarf', source: 'core-35-srd', speed: 20, abilityModifiers: { con: 2, cha: -2 }, specialAbilities: ['Darkvision 60 ft.', 'Stonecunning', 'Stability', 'Dwarven weapon familiarity', 'Dwarven armor familiarity', '+2 racial bonus on saves against poison', '+2 racial bonus on saves against spells and spell-like effects'] },
+  elf: { id: 'elf', name: 'Elf', source: 'core-35-srd', abilityModifiers: { dex: 2, con: -2 }, racialSkillBonuses: { Listen: 2, Search: 2, Spot: 2 }, specialAbilities: ['Low-light vision'] },
+  halfling: { id: 'halfling', name: 'Halfling', source: 'core-35-srd', speed: 20, abilityModifiers: { dex: 2, str: -2 }, racialSkillBonuses: { Climb: 2, Jump: 2, Listen: 2, 'Move Silently': 2 }, specialAbilities: ['+1 racial bonus on all saving throws', '+2 morale bonus on saves against fear', '+1 racial bonus on attacks with thrown weapons and slings', 'Halfling weapon familiarity', 'Lucky'] },
+  gnome: { id: 'gnome', name: 'Gnome', source: 'core-35-srd', speed: 20, abilityModifiers: { con: 2, str: -2 }, racialSkillBonuses: { Listen: 2, Craft: 2 }, specialAbilities: ['Low-light vision', '+2 racial bonus on saves against illusions', '+1 racial bonus to the save DC of illusion spells', 'Gnome weapon familiarity', 'Speak with animals'] },
+  'half-orc': { id: 'half-orc', name: 'Half-orc', source: 'core-35-srd', abilityModifiers: { str: 2, int: -2, cha: -2 }, specialAbilities: ['Darkvision 60 ft.'] },
+  'half-elf': { id: 'half-elf', name: 'Half-elf', source: 'core-35-srd', abilityModifiers: {}, racialSkillBonuses: { Listen: 1, Search: 1, Spot: 1 }, specialAbilities: ['Low-light vision', 'Immunity to sleep spells and effects', '+2 racial bonus on saves against enchantment spells and effects', '+2 racial bonus on Diplomacy and Gather Information checks'] },
   kender: { id: 'kender', name: 'Kender', source: 'dragonlance-user-pack', size: 'Small', speed: 20, abilityModifiers: { str: -2, dex: 2, cha: 2 }, traits: ['Fearless', 'Kender Pockets', 'Taunt', 'Curiosity'] },
   draconian: { id: 'draconian', name: 'Draconian', source: 'dragonlance-user-pack', size: 'Medium', abilityModifiers: { str: 2, con: 2, cha: -2 }, traits: ['Darkvision', 'Draconic Heritage', 'Death Throes'] },
   'qualinesti-elf': { id: 'qualinesti-elf', name: 'Qualinesti Elf', source: 'dragonlance-user-pack', size: 'Medium', abilityModifiers: { str: -2, dex: 2, con: -2, int: 2 }, traits: ['Keen Senses', 'Low-Light Vision', 'Elven Resistance'] },
@@ -135,7 +154,7 @@ export const dragonlancePrestigeClasses: Record<PrestigeClassId, PrestigeClassDe
 export const initialCharacter: Character = {
   name: 'Unnamed Hero', player: 'Player', race: 'Human', alignment: 'Neutral Good',
   abilities: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
-  classLevels: [{ classId: 'fighter', level: 1 }], hitPoints: 10, feats: [], skills: {}, skillRanksByClass: {}, preparedSpells: [], prestigeClass: undefined,
+  classLevels: [{ classId: 'fighter', level: 1 }], hitPoints: 10, feats: [], featSelections: {}, skills: {}, skillRanksByClass: {}, knownSpells: [], preparedSpells: [], equipment: {}, inventory: {}, languages: ['Common'], prestigeClass: undefined,
 }
 
 export function abilityModifier(score: number) {
