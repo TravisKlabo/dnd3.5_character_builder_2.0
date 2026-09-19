@@ -2085,6 +2085,24 @@ function App() {
   const [levelUpDraft, setLevelUpDraft] = useState<LevelUpDraft | null>(null);
   const levelUpMode = levelUpDraft !== null;
 
+  const changeAbilityMethod = (method: "roll" | "pointBuy" | "manual") => {
+    setAbilityMethod(method);
+    if (method !== "roll") return;
+    setRolledScores(null);
+    setRolledAssignments(null);
+    setCreationDraft((current) => ({
+      ...current,
+      abilities: {
+        str: 10,
+        dex: 10,
+        con: 10,
+        int: 10,
+        wis: 10,
+        cha: 10,
+      },
+    }));
+  };
+
   const startLevelUp = (classId: ClassId) =>
     setLevelUpDraft(beginLevelUp(character, classId));
   const rollDraftHitPoints = () => {
@@ -2514,7 +2532,7 @@ function App() {
               rolledAssignments={rolledAssignments}
               onRolledAssignmentsChange={setRolledAssignments}
               onToggle={() => setCreationOpen(!creationOpen)}
-              onMethodChange={setAbilityMethod}
+              onMethodChange={changeAbilityMethod}
               onChange={updateCreationDraft}
               onClassChange={updateCreationClass}
               onRaceChange={updateCreationRace}
