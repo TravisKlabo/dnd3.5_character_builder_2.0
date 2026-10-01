@@ -861,6 +861,7 @@ type StoreItem = {
 };
 const storeItems: StoreItem[] = [
   { name: "Longsword", category: "Weapons", price: 15, weight: "4 lb." },
+  { name: "Rapier", category: "Weapons", price: 20, weight: "2 lb." },
   { name: "Dagger", category: "Weapons", price: 2, weight: "1 lb." },
   { name: "Greatsword", category: "Weapons", price: 50, weight: "8 lb." },
   { name: "Shortbow", category: "Weapons", price: 30, weight: "2 lb." },
@@ -1200,38 +1201,88 @@ function getEnchantmentDescription(value: string, special = false) {
 const weaponProfiles: Record<string, { damage: string; crit: string }> = {
   Longsword: { damage: "1d8", crit: "19–20/x2" },
   Dagger: { damage: "1d4", crit: "19–20/x2" },
+  Handaxe: { damage: "1d6", crit: "x3" },
   Greatsword: { damage: "2d6", crit: "19–20/x2" },
   Shortbow: { damage: "1d6", crit: "x3" },
   Longbow: { damage: "1d8", crit: "x3" },
   Rapier: { damage: "1d6", crit: "18–20/x2" },
+  Javelin: { damage: "1d6", crit: "x2" },
+  Trident: { damage: "1d8", crit: "x2" },
+  Net: { damage: "—", crit: "—" },
+  Whip: { damage: "1d3", crit: "x2" },
+  Kukri: { damage: "1d4", crit: "18–20/x2" },
+  Kama: { damage: "1d6", crit: "x2" },
+  Sickle: { damage: "1d6", crit: "x2" },
   Scimitar: { damage: "1d6", crit: "18–20/x2" },
   Battleaxe: { damage: "1d8", crit: "x3" },
   Greataxe: { damage: "1d12", crit: "x3" },
   Warhammer: { damage: "1d8", crit: "x3" },
   Mace: { damage: "1d8", crit: "x2" },
+  "Light Mace": { damage: "1d6", crit: "x2" },
+  "Light Hammer": { damage: "1d4", crit: "x2" },
   Spear: { damage: "1d8", crit: "x3" },
+  Glaive: { damage: "1d10", crit: "x3" },
+  Halberd: { damage: "1d10", crit: "x3" },
+  Guisarme: { damage: "2d4", crit: "x3" },
+  "Spiked Chain": { damage: "2d4", crit: "x2" },
+  Falchion: { damage: "2d4", crit: "18–20/x2" },
+  Lance: { damage: "1d8", crit: "x3" },
+  Morningstar: { damage: "1d8", crit: "x2" },
   Quarterstaff: { damage: "1d6", crit: "x2" },
   "Light Crossbow": { damage: "1d8", crit: "19–20/x2" },
   "Heavy Crossbow": { damage: "1d10", crit: "19–20/x2" },
+  "Repeating Crossbow": { damage: "1d8", crit: "19–20/x2" },
+  "Hand Crossbow": { damage: "1d4", crit: "19–20/x2" },
+  Sap: { damage: "1d6", crit: "x2" },
+  Nunchaku: { damage: "1d6", crit: "x2" },
+  Sai: { damage: "1d4", crit: "x2" },
+  Siangham: { damage: "1d6", crit: "x2" },
+  Dart: { damage: "1d4", crit: "x2" },
+  Shuriken: { damage: "1d2", crit: "x2" },
   Sling: { damage: "1d4", crit: "x2" },
 };
 
 const weaponDamageTypes: Record<string, string> = {
   Longsword: "slashing",
   Dagger: "piercing or slashing",
+  Handaxe: "slashing",
   Greatsword: "slashing",
   Shortbow: "piercing",
   Longbow: "piercing",
   Rapier: "piercing",
+  Javelin: "piercing",
+  Trident: "piercing",
+  Net: "—",
+  Whip: "slashing",
+  Kukri: "slashing",
+  Kama: "slashing",
+  Sickle: "slashing",
   Scimitar: "slashing",
   Battleaxe: "slashing",
   Greataxe: "slashing",
   Warhammer: "bludgeoning",
   Mace: "bludgeoning",
+  "Light Mace": "bludgeoning",
+  "Light Hammer": "bludgeoning",
   Spear: "piercing",
+  Glaive: "slashing",
+  Halberd: "slashing",
+  Guisarme: "slashing",
+  "Spiked Chain": "piercing",
+  Falchion: "slashing",
+  Lance: "piercing",
+  Morningstar: "bludgeoning or piercing",
   Quarterstaff: "bludgeoning",
   "Light Crossbow": "piercing",
   "Heavy Crossbow": "piercing",
+  "Repeating Crossbow": "piercing",
+  "Hand Crossbow": "piercing",
+  Sap: "bludgeoning",
+  Nunchaku: "bludgeoning",
+  Sai: "piercing",
+  Siangham: "piercing",
+  Dart: "piercing",
+  Shuriken: "piercing",
   Sling: "bludgeoning",
 };
 
@@ -1288,6 +1339,7 @@ function EquipmentItemPicker({
   onPurchase,
   bulk = false,
   menuOnLeft = false,
+  tooltipOnLeft = false,
 }: {
   items: StoreItem[];
   size: string;
@@ -1296,6 +1348,7 @@ function EquipmentItemPicker({
   onPurchase: (item: StoreItem, quantity?: number) => void;
   bulk?: boolean;
   menuOnLeft?: boolean;
+  tooltipOnLeft?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -1336,7 +1389,7 @@ function EquipmentItemPicker({
   }, [open]);
   return (
     <div
-      className={`class-field feat-picker equipment-item-picker${menuOnLeft ? " menu-on-left" : ""}`}
+      className={`class-field feat-picker equipment-item-picker${menuOnLeft ? " menu-on-left" : ""}${tooltipOnLeft ? " tooltip-on-left" : ""}`}
       ref={pickerRef}
     >
       <button
@@ -1588,6 +1641,36 @@ storeItems.push(
     weight: "1 lb.",
   },
   {
+    name: "Cloak of Elvenkind",
+    category: "Shoulders",
+    price: 2500,
+    weight: "1 lb.",
+  },
+  {
+    name: "Cloak of Displacement (Minor)",
+    category: "Shoulders",
+    price: 24000,
+    weight: "1 lb.",
+  },
+  {
+    name: "Cloak of Displacement (Major)",
+    category: "Shoulders",
+    price: 50000,
+    weight: "1 lb.",
+  },
+  {
+    name: "Cloak of the Manta",
+    category: "Shoulders",
+    price: 7200,
+    weight: "1 lb.",
+  },
+  {
+    name: "Cape of the Mountebank",
+    category: "Shoulders",
+    price: 10080,
+    weight: "1 lb.",
+  },
+  {
     name: "Gloves of Dexterity +2",
     category: "Hands",
     price: 4000,
@@ -1653,6 +1736,41 @@ storeItems.push(
     price: 50,
     weight: "100 lb.",
   },
+  ...[
+    ["Arms", "Bracers of Armor +1", 1000, "1 lb."],
+    ["Arms", "Bracers of Archery, Lesser", 5000, "1 lb."],
+    ["Hands", "Gloves of Swimming and Climbing", 6250, "—"],
+    ["Hands", "Gauntlets of Ogre Power", 4000, "4 lb."],
+    ["Rings", "Ring of Swimming", 2500, "—"],
+    ["Rings", "Ring of Invisibility", 20000, "—"],
+    ["Rings", "Ring of Feather Falling", 2200, "—"],
+    ["Waist", "Belt of Dwarvenkind", 14900, "1 lb."],
+    ["Feet", "Boots of Speed", 12000, "1 lb."],
+    ["Feet", "Winged Boots", 16000, "1 lb."],
+    ["Body & Wondrous Items", "Portable Hole", 20000, "—"],
+    ["Body & Wondrous Items", "Figurine of Wondrous Power, Silver Raven", 3800, "1 lb."],
+    ["Head", "Circlet of Persuasion", 4500, "—"],
+    ["Head", "Helm of Telepathy", 27000, "3 lb."],
+    ["Neck", "Periapt of Wisdom +2", 4000, "—"],
+    ["Neck", "Periapt of Health", 7400, "—"],
+    ["Ammunition", "Cold Iron Arrows (20)", 2, "3 lb."],
+    ["Ammunition", "Masterwork Arrows (20)", 61, "3 lb."],
+    ["Tools & Kits", "Climber's Kit", 80, "5 lb."],
+    ["Tools & Kits", "Disguise Kit", 50, "8 lb."],
+    ["Consumables", "Smokestick", 20, "0.5 lb."],
+    ["Consumables", "Thunderstone", 30, "1 lb."],
+    ["Potions, Scrolls & Wands", "Potion of Cure Moderate Wounds", 300, "—"],
+    ["Potions, Scrolls & Wands", "Potion of Invisibility", 300, "—"],
+    ["Potions, Scrolls & Wands", "Wand of Cure Moderate Wounds", 4500, "—"],
+    ["Mounts & Vehicles", "Light Horse", 75, "—"],
+    ["Mounts & Vehicles", "Warhorse", 400, "—"],
+    ["Mounts & Vehicles", "Mule", 8, "—"],
+  ].map(([category, name, price, weight]) => ({
+    category: category as StoreCategory,
+    name: name as string,
+    price: price as number,
+    weight: weight as string,
+  })),
 );
 const pointBuyCosts: Record<number, number> = {
   8: 0,
@@ -1693,15 +1811,115 @@ function getAvailableSkillCount(character: Character) {
   let available = 0;
   character.classLevels.forEach((entry, index) => {
     const classDefinition = classDefinitions[entry.classId];
+    if (!classDefinition) return;
     const pointsPerLevel = Math.max(
       1,
       classDefinition.skillPoints +
         abilityModifier(character.abilities.int) +
         (character.race.toLowerCase() === "human" ? 1 : 0),
     );
-    available += pointsPerLevel * (index === 0 ? 4 : 1) * entry.level;
+    available += pointsPerLevel * (entry.level + (index === 0 ? 3 : 0));
   });
   return available;
+}
+
+function getLevelUpSpellWarnings(original: Character, proposed: Character) {
+  const classId = proposed.classLevels.find((entry) => {
+    const originalEntry = original.classLevels.find(
+      (candidate) => candidate.classId === entry.classId,
+    );
+    return entry.level > (originalEntry?.level ?? 0);
+  })?.classId;
+  if (!classId || !classDefinitions[classId].spellcasting) return [];
+  const originalLevel = Math.max(
+    0,
+    ...original.classLevels
+      .filter((entry) => entry.classId === classId)
+      .map((entry) => entry.level),
+  );
+  const proposedLevel = Math.max(
+    0,
+    ...proposed.classLevels
+      .filter((entry) => entry.classId === classId)
+      .map((entry) => entry.level),
+  );
+  if (proposedLevel <= originalLevel) return [];
+  const classSpells = srdSpells.filter((spell) => spell.classes.includes(classId));
+  const selectedCount = (knownSpells: string[], level: number) =>
+    knownSpells.filter((spellName) =>
+      classSpells.some(
+        (spell) =>
+          spell.name === spellName &&
+          spell.level === level &&
+          (!proposed.knownSpellClasses?.[spellName] ||
+            proposed.knownSpellClasses[spellName] === classId),
+      ),
+    ).length;
+  const spellLevelName = (level: number) =>
+    level === 0 ? "0-level" : `${level}${level === 1 ? "st" : level === 2 ? "nd" : "th"}-level`;
+  const warnings: string[] = [];
+  if (classId === "bard" || classId === "sorcerer") {
+    for (let level = 0; level <= 2; level += 1) {
+      const base = classId === "bard"
+        ? level === 0
+          ? 3 + proposedLevel
+          : level === 1
+            ? Math.min(4, Math.floor((proposedLevel + 1) / 2) + 1)
+            : 0
+        : level === 0
+          ? 4 + Math.max(0, proposedLevel - 1)
+          : level === 1
+            ? Math.min(4, Math.floor((proposedLevel + 1) / 2) + 1)
+            : 0;
+      const required = base;
+      const originalSelected = selectedCount(original.knownSpells, level);
+      const proposedSelected = selectedCount(proposed.knownSpells, level);
+      const missing = Math.max(
+        0,
+        originalLevel === 0
+          ? required - Math.max(0, proposedSelected - originalSelected)
+          : required - proposedSelected,
+      );
+      if (missing) warnings.push(`Learn ${missing} additional ${spellLevelName(level)} ${classDefinitions[classId].name} spell${missing === 1 ? "" : "s"}.`);
+    }
+  } else if (classId === "wizard") {
+    const intelligenceModifier = abilityModifier(proposed.abilities.int);
+    for (let level = 0; level <= 2; level += 1) {
+      if (!(spellSlots[classId]?.[level]?.[0] ?? 0)) continue;
+      const required = level === 0
+        ? classSpells.filter((spell) => spell.level === 0).length
+        : level === 1
+          ? 3 + Math.max(0, intelligenceModifier)
+          : 2;
+      const originalSelected = selectedCount(original.knownSpells, level);
+      const proposedSelected = selectedCount(proposed.knownSpells, level);
+      const missing = Math.max(
+        0,
+        originalLevel === 0
+          ? required - Math.max(0, proposedSelected - originalSelected)
+          : required - proposedSelected,
+      );
+      if (missing) warnings.push(`Add ${missing} ${spellLevelName(level)} Wizard spell${missing === 1 ? "" : "s"} to the spellbook.`);
+    }
+  }
+  return warnings;
+}
+
+function getNewLevelUpFeatSlots(original: Character, proposed: Character) {
+  const originalSlots = new Set(getFeatSlots(original).map((slot) => slot.id));
+  return getFeatSlots(proposed).filter((slot) => !originalSlots.has(slot.id));
+}
+
+function getLevelUpSkillWarnings(original: Character, proposed: Character) {
+  const newSkillPoints =
+    getAvailableSkillCount(proposed) - getAvailableSkillCount(original);
+  const newSkillRanks =
+    getSpentSkillPoints(proposed) - getSpentSkillPoints(original);
+  if (newSkillRanks < newSkillPoints)
+    return [
+      `Spend all new skill points (${newSkillPoints - newSkillRanks} remaining).`,
+    ];
+  return [];
 }
 
 function getSpentSkillPoints(character: Character) {
@@ -1724,7 +1942,8 @@ function getSkillMaximum(character: Character, skill: string) {
 
 function getBaseAttackBonus(character: Character) {
   return character.classLevels.reduce((total, entry) => {
-    const progression = classDefinitions[entry.classId].baseAttackBonus;
+    const progression = classDefinitions[entry.classId]?.baseAttackBonus;
+    if (!progression) return total;
     return (
       total +
       (progression === "good"
@@ -1838,14 +2057,34 @@ function normalizeFeatSelections(
   return normalized;
 }
 
-function canIncreaseSkillRank(character: Character, skill: string) {
+function canIncreaseSkillRank(
+  character: Character,
+  skill: string,
+  levelUpOriginal?: Character,
+) {
   const currentRanks = Number(character.skills[skill] || 0);
   const pointCost = isClassSkill(character, skill) ? 1 : 2;
+  const availableSkillPoints = levelUpOriginal
+    ? getSpentSkillPoints(levelUpOriginal) +
+      getAvailableSkillCount(character) -
+      getAvailableSkillCount(levelUpOriginal)
+    : getAvailableSkillCount(character);
   return (
     currentRanks < getSkillMaximum(character, skill) &&
     getSpentSkillPoints(character) + pointCost <=
-      getAvailableSkillCount(character)
+      availableSkillPoints
   );
+}
+
+function getAssignedSkillRanks(
+  character: Character,
+  skill: string,
+  levelUpOriginal?: Character,
+) {
+  const ranks = Number(character.skills[skill] || 0);
+  return levelUpOriginal
+    ? Math.max(0, ranks - Number(levelUpOriginal.skills[skill] || 0))
+    : ranks;
 }
 
 function getSkillAbility(skill: string): AbilityName | null {
@@ -2072,6 +2311,7 @@ function App() {
   const [creationOpen, setCreationOpen] = useState(true);
   const [creationLocked, setCreationLocked] = useState(false);
   const [printPreviewHtml, setPrintPreviewHtml] = useState<string | null>(null);
+  const importInputRef = useRef<HTMLInputElement>(null);
   const [ruleset, setRuleset] = useState<
     "core-35-srd" | "dragonlance-user-pack" | "dragonlance-monster-classes"
   >("core-35-srd");
@@ -2083,6 +2323,9 @@ function App() {
     null,
   );
   const [levelUpDraft, setLevelUpDraft] = useState<LevelUpDraft | null>(null);
+  const [lastLevelUpClassId, setLastLevelUpClassId] = useState<ClassId>(
+    initialCharacter.classLevels.at(-1)?.classId ?? "fighter",
+  );
   const levelUpMode = levelUpDraft !== null;
 
   const changeAbilityMethod = (method: "roll" | "pointBuy" | "manual") => {
@@ -2103,10 +2346,30 @@ function App() {
     }));
   };
 
-  const startLevelUp = (classId: ClassId) =>
-    setLevelUpDraft(beginLevelUp(character, classId));
-  const rollDraftHitPoints = () => {
+  const startLevelUp = (classId: ClassId) => {
+    setLastLevelUpClassId(classId);
+    if (classDefinitions[classId].spellcasting) setActiveSheet("spells");
+    const freshDraft = beginLevelUp(cloneCharacter(character), classId);
+    setLevelUpDraft({
+      ...freshDraft,
+      hitPointRoll: null,
+      abilityIncrease: null,
+      validationErrors: [],
+    });
+  };
+  const updateLevelUpAbilityIncrease = (ability: AbilityName | null) => {
     if (!levelUpDraft) return;
+    const abilities = { ...levelUpDraft.original.abilities };
+    if (ability) abilities[ability] += 1;
+    setLevelUpDraft({
+      ...levelUpDraft,
+      abilityIncrease: ability,
+      proposed: { ...levelUpDraft.proposed, abilities },
+      validationErrors: [],
+    });
+  };
+  const rollDraftHitPoints = () => {
+    if (!levelUpDraft || levelUpDraft.hitPointRoll !== null) return;
     const hitPointRoll = rollHitDie(
       classDefinitions[levelUpDraft.classId].hitDie,
     );
@@ -2114,7 +2377,23 @@ function App() {
   };
   const confirmLevelUp = () => {
     if (!levelUpDraft) return;
-    const validationErrors = validateLevelUp(levelUpDraft);
+    const validationErrors = [
+      ...validateLevelUp(levelUpDraft),
+      ...getLevelUpSkillWarnings(
+        levelUpDraft.original,
+        levelUpDraft.proposed,
+      ),
+      ...getNewLevelUpFeatSlots(
+        levelUpDraft.original,
+        levelUpDraft.proposed,
+      )
+        .filter((slot) => !levelUpDraft.proposed.featSelections?.[slot.id])
+        .map((slot) => `Select ${slot.label} before confirming.`),
+      ...getLevelUpSpellWarnings(
+        levelUpDraft.original,
+        levelUpDraft.proposed,
+      ),
+    ];
     if (validationErrors.length) {
       setLevelUpDraft({ ...levelUpDraft, validationErrors });
       return;
@@ -2131,7 +2410,23 @@ function App() {
   const updateCreationDraft = <Key extends keyof Character>(
     key: Key,
     value: Character[Key],
-  ) => setCreationDraft((current) => ({ ...current, [key]: value }));
+  ) => setCreationDraft((current) => {
+    if (key === "prestigeClass") {
+      const prestigeClass = value as Character["prestigeClass"];
+      const classLevels = current.classLevels.filter(
+        (level) => !("prestigeClassId" in level),
+      );
+      if (prestigeClass) {
+        classLevels.push({
+          classId: current.classLevels[0].classId,
+          prestigeClassId: prestigeClass,
+          level: 1,
+        });
+      }
+      return { ...current, prestigeClass, classLevels };
+    }
+    return { ...current, [key]: value };
+  });
   const updateCreationAbility = (ability: AbilityName, value: number) =>
     setCreationDraft((current) => ({
       ...current,
@@ -2141,13 +2436,25 @@ function App() {
     const update = (current: Character) => {
       const classSkill = isClassSkill(current, skill);
       const currentRanks = Number(current.skills[skill] || 0);
+      const minimumRanks = levelUpDraft
+        ? Number(levelUpDraft.original.skills[skill] || 0)
+        : 0;
       const maxRanks = getSkillMaximum(current, skill);
-      const nextRanks = Math.max(0, Math.min(maxRanks, currentRanks + change));
+      const nextRanks = Math.max(
+        minimumRanks,
+        Math.min(maxRanks, currentRanks + change),
+      );
+
       const currentSpent = getSpentSkillPoints(current);
       const pointCost = classSkill ? 1 : 2;
+      const availableSkillPoints = levelUpDraft
+        ? getSpentSkillPoints(levelUpDraft.original) +
+          getAvailableSkillCount(current) -
+          getAvailableSkillCount(levelUpDraft.original)
+        : getAvailableSkillCount(current);
       if (
         change > 0 &&
-        currentSpent + pointCost > getAvailableSkillCount(current)
+        currentSpent + pointCost > availableSkillPoints
       )
         return current;
       const classId = current.classLevels.at(-1)?.classId;
@@ -2171,6 +2478,11 @@ function App() {
       };
     };
     if (creationOpen && !creationLocked) setCreationDraft(update);
+    else if (levelUpDraft)
+      setLevelUpDraft({
+        ...levelUpDraft,
+        proposed: update(levelUpDraft.proposed),
+      });
     else setCharacter(update);
   };
   const updateFeatSelection = (slotId: string, featId: string) => {
@@ -2213,8 +2525,19 @@ function App() {
       });
     else setCharacter(update);
   };
-  const updateKnownSpells = (knownSpells: string[]) => {
-    const update = (current: Character) => ({ ...current, knownSpells });
+  const updateKnownSpells = (knownSpells: string[], classId?: ClassId) => {
+    const update = (current: Character) => {
+      const knownSpellClasses = { ...(current.knownSpellClasses ?? {}) };
+      current.knownSpells.forEach((spell) => {
+        if (!knownSpells.includes(spell)) delete knownSpellClasses[spell];
+      });
+      if (classId) {
+        knownSpells.forEach((spell) => {
+          if (!current.knownSpells.includes(spell)) knownSpellClasses[spell] = classId;
+        });
+      }
+      return { ...current, knownSpells, knownSpellClasses };
+    };
     if (creationOpen && !creationLocked) setCreationDraft(update);
     else if (levelUpDraft)
       setLevelUpDraft({
@@ -2320,6 +2643,7 @@ function App() {
     setAbilityMethod("manual");
     setRolledScores(null);
     setRolledAssignments(null);
+    setLastLevelUpClassId("fighter");
   };
   const showPrintPreview = () => {
     const appShell = document.querySelector<HTMLElement>(".app-shell");
@@ -2351,8 +2675,90 @@ function App() {
     : character;
   const displayedCharacter = levelUpDraft?.proposed ?? calculatedCharacter;
   const hasSpellcasting = displayedCharacter.classLevels.some(
-    (level) => classDefinitions[level.classId].spellcasting,
+    (level) => classDefinitions[level.classId as ClassId]?.spellcasting,
   );
+  const levelUpWarnings = levelUpDraft
+    ? [
+        ...(levelUpDraft.proposed.classLevels.reduce(
+          (total, entry) => total + entry.level,
+          0,
+        ) % 4 === 0 && !levelUpDraft.abilityIncrease
+          ? [
+              "Choose an ability score to increase by +1 before rolling hit points.",
+            ]
+          : []),
+        ...(levelUpDraft.hitPointRoll === null
+          ? ["Roll hit points before confirming the level-up."]
+          : []),
+        ...getLevelUpSkillWarnings(
+          levelUpDraft.original,
+          levelUpDraft.proposed,
+        ),
+        ...getNewLevelUpFeatSlots(
+          levelUpDraft.original,
+          levelUpDraft.proposed,
+        )
+          .filter((slot) => !levelUpDraft.proposed.featSelections?.[slot.id])
+          .map((slot) => `Select ${slot.label} before confirming.`),
+        ...getLevelUpSpellWarnings(
+          levelUpDraft.original,
+          levelUpDraft.proposed,
+        ),
+      ]
+    : [];
+  const canRollAndConfirmLevelUp =
+    levelUpDraft !== null &&
+    levelUpWarnings.every(
+      (warning) => warning !== "Roll hit points before confirming the level-up.",
+    );
+  const levelUpTotalLevel = levelUpDraft?.proposed.classLevels.reduce(
+    (total, entry) => total + entry.level,
+    0,
+  );
+  const gainsAbilityIncrease =
+    levelUpTotalLevel !== undefined && levelUpTotalLevel % 4 === 0;
+  const saveCharacter = () => {
+    localStorage.setItem("dnd35-character-builder-character", JSON.stringify(displayedCharacter));
+    window.alert("Character saved.");
+  };
+  const exportCharacter = () => {
+    const file = new Blob([JSON.stringify(displayedCharacter, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(file);
+    const link = document.createElement("a");
+    link.href = url;
+    const characterName = displayedCharacter.name.trim() || "character";
+    const playerName = displayedCharacter.player.trim() || "player";
+    link.download = `${characterName}-${playerName}.json`.replace(/[\\/:*?"<>|]/g, "-");
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+  const importCharacter = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    try {
+      const imported = JSON.parse(await file.text()) as Character;
+      if (
+        typeof imported.name !== "string" ||
+        typeof imported.player !== "string" ||
+        typeof imported.race !== "string" ||
+        typeof imported.alignment !== "string" ||
+        !imported.abilities ||
+        !Array.isArray(imported.classLevels)
+      )
+        throw new Error("Invalid character file");
+      setCharacter(cloneCharacter(imported));
+      setCreationDraft(cloneCharacter(imported));
+      setCreationLocked(true);
+      setCreationOpen(false);
+      setLevelUpDraft(null);
+      window.alert("Character imported.");
+    } catch {
+      window.alert("That file is not a valid D&D 3.5 character JSON file.");
+    }
+  };
   const visibleSheet =
     !hasSpellcasting && activeSheet === "spells" ? "character" : activeSheet;
 
@@ -2373,12 +2779,26 @@ function App() {
           >
             Print
           </button>
-          <button className="quiet-button" type="button">
+          <button className="quiet-button" type="button" onClick={saveCharacter}>
             Save
           </button>
-          <button className="quiet-button" type="button">
+          <button className="quiet-button" type="button" onClick={exportCharacter}>
             Export
           </button>
+          <button
+            className="quiet-button"
+            type="button"
+            onClick={() => importInputRef.current?.click()}
+          >
+            Import
+          </button>
+          <input
+            ref={importInputRef}
+            type="file"
+            accept="application/json,.json"
+            hidden
+            onChange={importCharacter}
+          />
           {creationLocked && (
             <>
               <button className="quiet-button" type="button" onClick={reopenCreation}>
@@ -2398,7 +2818,7 @@ function App() {
             <button
               className="level-button"
               type="button"
-              onClick={() => startLevelUp("fighter")}
+              onClick={() => startLevelUp(lastLevelUpClassId)}
             >
               Enter Level-Up Mode
             </button>
@@ -2466,24 +2886,64 @@ function App() {
                 ))}
               </select>
             </label>
-            <span>
-              Hit die: d{classDefinitions[levelUpDraft.classId].hitDie}{" "}
-              {levelUpDraft.hitPointRoll === null
-                ? "not rolled"
-                : `roll ${levelUpDraft.hitPointRoll}`}
-            </span>
-            <button
-              className="quiet-button"
-              type="button"
-              onClick={rollDraftHitPoints}
-            >
-              Roll Hit Points
-            </button>
-            {levelUpDraft.validationErrors.map((error) => (
-              <small className="validation-error" key={error}>
-                {error}
-              </small>
-            ))}
+            {gainsAbilityIncrease && (
+              <label className="draft-class level-ability-choice">
+                Ability score increase at level {levelUpTotalLevel}
+                <span>
+                  Choose one ability to increase by +1. This change is provisional
+                  until you confirm the level-up.
+                </span>
+                <select
+                  value={levelUpDraft.abilityIncrease ?? ""}
+                  onChange={(event) =>
+                    updateLevelUpAbilityIncrease(
+                      (event.target.value || null) as AbilityName | null,
+                    )
+                  }
+                >
+                  <option value="">Choose an ability</option>
+                  {abilityNames.map((ability) => (
+                    <option key={ability} value={ability}>
+                      {ability.toUpperCase()} ({levelUpDraft.proposed.abilities[ability]})
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            <div className="level-roll-controls">
+              <span>
+                Hit die: d{classDefinitions[levelUpDraft.classId].hitDie}{" "}
+                {levelUpDraft.hitPointRoll === null
+                  ? "not rolled"
+                  : `roll ${levelUpDraft.hitPointRoll}`}
+              </span>
+              <button
+                className="quiet-button"
+                type="button"
+                onClick={rollDraftHitPoints}
+                disabled={
+                  levelUpDraft.hitPointRoll !== null ||
+                  levelUpWarnings.some(
+                    (warning) =>
+                      warning !== "Roll hit points before confirming the level-up.",
+                  )
+                }
+              >
+                Roll Hit Points
+              </button>
+            </div>
+            <div className="level-todo-list">
+              {levelUpWarnings.map((warning) => (
+                <small className="validation-error" key={warning}>
+                  {warning}
+                </small>
+              ))}
+              {levelUpDraft.validationErrors.map((error) => (
+                <small className="validation-error" key={error}>
+                  {error}
+                </small>
+              ))}
+            </div>
           </div>
           <div className="level-actions">
             <button
@@ -2497,6 +2957,7 @@ function App() {
               className="level-button"
               type="button"
               onClick={confirmLevelUp}
+              disabled={!levelUpDraft.hitPointRoll || !canRollAndConfirmLevelUp}
             >
               Confirm Level-Up
             </button>
@@ -2554,6 +3015,8 @@ function App() {
           )}
           <CharacterSheet
             character={displayedCharacter}
+            levelUpOriginal={levelUpDraft?.original}
+            levelDisplayCharacter={levelUpDraft ? character : undefined}
             onSkillRankChange={updateSkillRanks}
             onFeatChange={updateFeatSelection}
             onLanguagesChange={updateLanguages}
@@ -2576,9 +3039,18 @@ function App() {
       {visibleSheet === "spells" && (
         <SpellSheet
           character={displayedCharacter}
+          levelUpOriginal={levelUpDraft?.original}
+          levelUpClassId={levelUpDraft?.classId}
           onKnownSpellsChange={updateKnownSpells}
           onPreparedSpellsChange={updatePreparedSpells}
-          editable={!creationLocked || levelUpMode}
+          editable={
+            !creationLocked ||
+            (levelUpMode &&
+              Boolean(
+                levelUpDraft?.classId &&
+                  classDefinitions[levelUpDraft.classId].spellcasting,
+              ))
+          }
         />
       )}
     </main>
@@ -2633,17 +3105,19 @@ function CreationPanel({
   const [classMenuOpen, setClassMenuOpen] = useState(false);
   const [prestigeClassMenuOpen, setPrestigeClassMenuOpen] = useState(false);
   const [alignmentMenuOpen, setAlignmentMenuOpen] = useState(false);
+  const [deityMenuOpen, setDeityMenuOpen] = useState(false);
   const [menuQuery, setMenuQuery] = useState({
     race: "",
     class: "",
     prestige: "",
     alignment: "",
+    deity: "",
   });
   const [menuTooltip, setMenuTooltip] = useState({
     field: "",
     description: "",
   });
-  const toggleMenu = (menu: "race" | "class" | "prestige" | "alignment") => {
+  const toggleMenu = (menu: "race" | "class" | "prestige" | "alignment" | "deity") => {
     const nextOpen =
       menu === "race"
         ? !raceMenuOpen
@@ -2651,11 +3125,14 @@ function CreationPanel({
           ? !classMenuOpen
           : menu === "prestige"
             ? !prestigeClassMenuOpen
-            : !alignmentMenuOpen;
+            : menu === "alignment"
+              ? !alignmentMenuOpen
+              : !deityMenuOpen;
     setRaceMenuOpen(menu === "race" && nextOpen);
     setClassMenuOpen(menu === "class" && nextOpen);
     setPrestigeClassMenuOpen(menu === "prestige" && nextOpen);
     setAlignmentMenuOpen(menu === "alignment" && nextOpen);
+    setDeityMenuOpen(menu === "deity" && nextOpen);
     if (!nextOpen) setMenuTooltip({ field: "", description: "" });
     if (nextOpen) setMenuQuery((current) => ({ ...current, [menu]: "" }));
   };
@@ -2667,6 +3144,7 @@ function CreationPanel({
       setClassMenuOpen(false);
       setPrestigeClassMenuOpen(false);
       setAlignmentMenuOpen(false);
+      setDeityMenuOpen(false);
       setMenuTooltip({ field: "", description: "" });
     };
     const handleDocumentPointerDown = (event: PointerEvent) => {
@@ -2820,7 +3298,7 @@ function CreationPanel({
   if (!Object.values(draft.inventory).some((quantity) => quantity > 0))
     creationErrors.push("Select at least one piece of starting equipment.");
   const spellcastingLevel = draft.classLevels.find(
-    (level) => classDefinitions[level.classId].spellcasting,
+    (level) => classDefinitions[level.classId as ClassId]?.spellcasting,
   );
   if (spellcastingLevel) {
     const spellcastingClass = classDefinitions[spellcastingLevel.classId];
@@ -2862,7 +3340,7 @@ function CreationPanel({
       const required =
         learningMode === "Spells Known"
           ? (knownLimits[spellcastingClass.id]?.[level] ?? 0) +
-            (level > 0 ? bonusSpells(level) : 0)
+            0
           : learningMode === "Spellbook"
             ? level === 0
               ? classSpells.filter((spell) => spell.level === 0).length
@@ -3221,7 +3699,7 @@ function CreationPanel({
             </label>
             <label className="alignment-creation-field">
               Alignment
-              <div className="class-field menu-left">
+              <div className="class-field menu-right">
                 <button
                   className="race-trigger"
                   type="button"
@@ -3315,19 +3793,76 @@ function CreationPanel({
             </label>
             <label className="deity-creation-field">
               Deity
-              <select
-                value={draft.deity ?? ""}
-                onChange={(event) =>
-                  onChange("deity", event.target.value || undefined)
-                }
-              >
-                <option value="">No deity selected</option>
-                {availableDeities.map((deity) => (
-                  <option key={deity.id} value={deity.id}>
-                    {deity.name} ({deity.alignment})
-                  </option>
-                ))}
-              </select>
+              <div className="class-field menu-right">
+                <button
+                  className="race-trigger"
+                  type="button"
+                  aria-expanded={deityMenuOpen}
+                  onClick={() => toggleMenu("deity")}
+                >
+                  {selectedDeity?.name ?? "No deity selected"}
+                  <span aria-hidden="true">▾</span>
+                </button>
+                {deityMenuOpen && (
+                  <div className="race-menu" role="listbox" aria-label="Deity choices">
+                    <div className="menu-search">
+                      <input
+                        autoFocus
+                        value={menuQuery.deity}
+                        onChange={(event) =>
+                          setMenuQuery({ ...menuQuery, deity: event.target.value })
+                        }
+                        placeholder="Search deities"
+                        aria-label="Search deities"
+                      />
+                    </div>
+                    <button
+                      className={`race-option ${!draft.deity ? "selected" : ""}`}
+                      type="button"
+                      role="option"
+                      aria-selected={!draft.deity}
+                      onClick={() => {
+                        onChange("deity", undefined);
+                        setDeityMenuOpen(false);
+                        setMenuTooltip({ field: "", description: "" });
+                      }}
+                    >
+                      <span>No deity selected</span>
+                    </button>
+                    {availableDeities
+                      .filter((deity) => matchesMenuQuery(deity.name, "deity"))
+                      .map((deity) => (
+                        <button
+                          className={`race-option ${draft.deity === deity.id ? "selected" : ""}`}
+                          key={deity.id}
+                          type="button"
+                          role="option"
+                          aria-selected={draft.deity === deity.id}
+                          onMouseEnter={() =>
+                            setMenuTooltip({ field: "deity", description: deity.description })
+                          }
+                          onFocus={() =>
+                            setMenuTooltip({ field: "deity", description: deity.description })
+                          }
+                          onMouseLeave={() => setMenuTooltip({ field: "", description: "" })}
+                          onBlur={() => setMenuTooltip({ field: "", description: "" })}
+                          onClick={() => {
+                            onChange("deity", deity.id);
+                            setDeityMenuOpen(false);
+                            setMenuTooltip({ field: "", description: "" });
+                          }}
+                        >
+                          <span>{deity.name} ({deity.alignment})</span>
+                        </button>
+                      ))}
+                  </div>
+                )}
+                {menuTooltip.field === "deity" && (
+                  <span className="creation-menu-tooltip" role="tooltip">
+                    {menuTooltip.description}
+                  </span>
+                )}
+              </div>
             </label>
             {dragonlanceRuleset &&
               (draft.prestigeClass === "wizard-of-high-sorcery" ||
@@ -3534,7 +4069,7 @@ function CreationPanel({
               disabled={creationErrors.length > 0}
               onClick={onCreate}
             >
-              Create Character
+              Finalize Character
             </button>
           </div>
         </Panel>
@@ -3624,11 +4159,13 @@ function FeatPicker({
         !pickerRef.current?.contains(event.target)
       ) {
         setOpen(false);
+        setHoveredDescription("");
       }
     };
     const closeWhenAnotherPickerOpens = (event: Event) => {
       if (event.target !== pickerRef.current) {
         setOpen(false);
+        setHoveredDescription("");
       }
     };
     document.addEventListener("pointerdown", closeOnOutsideClick);
@@ -3649,7 +4186,10 @@ function FeatPicker({
         aria-expanded={open}
         onClick={() => {
           if (!open) document.dispatchEvent(new Event("feat-picker-open"));
-          setOpen((isOpen) => !isOpen);
+          setOpen((isOpen) => {
+            if (isOpen) setHoveredDescription("");
+            return !isOpen;
+          });
           setQuery("");
         }}
       >
@@ -3690,6 +4230,7 @@ function FeatPicker({
             onClick={() => {
               onChange("");
               setOpen(false);
+              setHoveredDescription("");
             }}
           >
             <span>Choose a feat</span>
@@ -3709,6 +4250,7 @@ function FeatPicker({
               onClick={() => {
                 onChange(feat.id);
                 setOpen(false);
+                setHoveredDescription("");
               }}
             >
               <span>{feat.name}</span>
@@ -3829,6 +4371,8 @@ function LanguagePicker({
 
 function CharacterSheet({
   character,
+  levelUpOriginal,
+  levelDisplayCharacter,
   onSkillRankChange,
   onFeatChange,
   onLanguagesChange,
@@ -3839,6 +4383,8 @@ function CharacterSheet({
   onPlayerNameChange,
 }: {
   character: Character;
+  levelUpOriginal?: Character;
+  levelDisplayCharacter?: Character;
   onSkillRankChange: (skill: string, change: number) => void;
   onFeatChange: (slotId: string, featId: string) => void;
   onLanguagesChange: (languages: string[]) => void;
@@ -3849,6 +4395,19 @@ function CharacterSheet({
   onPlayerNameChange: (player: string) => void;
 }) {
   const classId = character.classLevels.at(-1)?.classId ?? "fighter";
+  const classSummary = character.classLevels
+    .map(
+      (level) => "prestigeClassId" in level
+        ? `${dragonlancePrestigeClasses[level.prestigeClassId]?.name ?? level.prestigeClassId} ${level.level}`
+        : `${classDefinitions[level.classId]?.name ?? level.classId} ${level.level}`,
+    )
+    .concat(
+      character.prestigeClass &&
+        !character.classLevels.some((level) => "prestigeClassId" in level)
+        ? `${dragonlancePrestigeClasses[character.prestigeClass]?.name ?? "Prestige Class"} 1`
+        : [],
+    )
+    .join(" / ");
   const characterRace =
     raceDefinitions[character.race.toLowerCase().replaceAll(" ", "-")] ??
     raceDefinitions.human;
@@ -3864,6 +4423,7 @@ function CharacterSheet({
     ...character.classLevels
       .map((level) => {
         const definition = classDefinitions[level.classId];
+        if (!definition) return [];
         return [
           {
             source: `${definition.name} ${level.level}`,
@@ -3916,9 +4476,9 @@ function CharacterSheet({
           <label>
             Class
             {finalized ? (
-              <span className="sheet-value">{classDefinitions[classId].name}</span>
+              <span className="sheet-value">{classSummary}</span>
             ) : (
-              <input value={classDefinitions[classId].name} readOnly />
+              <input value={classSummary} readOnly />
             )}
           </label>
           {character.prestigeClass && (
@@ -3938,7 +4498,7 @@ function CharacterSheet({
           )}
           <label>
             Level
-            {finalized ? <span className="sheet-value">{character.classLevels.length}</span> : <input value={character.classLevels.length} readOnly />}
+            {finalized ? <span className="sheet-value">{(levelDisplayCharacter ?? character).classLevels.reduce((total, entry) => total + entry.level, 0)}</span> : <input value={(levelDisplayCharacter ?? character).classLevels.reduce((total, entry) => total + entry.level, 0)} readOnly />}
           </label>
           <label>
             Alignment
@@ -3947,9 +4507,16 @@ function CharacterSheet({
           {character.deity && (
             <label>
               Deity
-              <span className="sheet-value">
-                {deityDefinitions.find((deity) => deity.id === character.deity)?.name ?? character.deity}
-              </span>
+              {finalized ? (
+                <span className="sheet-value">
+                  {deityDefinitions.find((deity) => deity.id === character.deity)?.name ?? character.deity}
+                </span>
+              ) : (
+                <input
+                  value={deityDefinitions.find((deity) => deity.id === character.deity)?.name ?? character.deity}
+                  readOnly
+                />
+              )}
             </label>
           )}
           {(character.highSorceryOrder ||
@@ -4122,16 +4689,23 @@ function CharacterSheet({
                 <button
                   type="button"
                   onClick={() => onSkillRankChange(skill, -1)}
-                  disabled={!character.skills[skill]}
+                  disabled={
+                    levelUpOriginal
+                      ? Number(character.skills[skill] || 0) <=
+                        Number(levelUpOriginal.skills[skill] || 0)
+                      : !character.skills[skill]
+                  }
                   aria-label={`Remove rank from ${skill}`}
                 >
                   −
                 </button>
-                <span>{character.skills[skill] || 0}</span>
+                <span>
+                  {getAssignedSkillRanks(character, skill, levelUpOriginal)}
+                </span>
                 <button
                   type="button"
                   onClick={() => onSkillRankChange(skill, 1)}
-                  disabled={!canIncreaseSkillRank(character, skill)}
+                  disabled={!canIncreaseSkillRank(character, skill, levelUpOriginal)}
                   aria-label={`Add rank to ${skill}`}
                 >
                   +
@@ -4182,7 +4756,10 @@ function CharacterSheet({
             </div>
             {allowFeatSelection && (
               <div className="feat-choices level-up-feat-choices">
-                {getFeatSlots(character).map((slot) => {
+                {(levelUpOriginal
+                  ? getNewLevelUpFeatSlots(levelUpOriginal, character)
+                  : getFeatSlots(character)
+                ).map((slot) => {
                   const options = getAvailableFeats(character, slot, slot.id);
                   const selected = character.featSelections?.[slot.id] ?? "";
                   const selectedFeat = featCatalog.find(
@@ -4395,13 +4972,13 @@ function EquipmentStore({
         delete nextEquipment["Off Hand Weapon"];
         delete nextEquipment["Ranged Weapon"];
       }
+      else if (!character.equipment?.["Main Weapon"]) slot = "Main Weapon";
       else if (character.equipment?.Shield) {
         window.alert(
           "A shield occupies your off hand, so this weapon cannot be equipped in Off Hand Weapon. Unequip the shield first.",
         );
         return;
       }
-      else if (!character.equipment?.["Main Weapon"]) slot = "Main Weapon";
       else if (!lightOffHandWeaponNames.has(item.name)) {
         window.alert(
           "This weapon is not a light melee weapon and cannot be equipped in the Off Hand Weapon slot under D&D 3.5 rules. It will replace the Main Weapon.",
@@ -4514,7 +5091,8 @@ function EquipmentStore({
               onSelect={selectItem}
                 onPurchase={buy}
                 bulk={["Ammunition", "Tools & Kits", "Consumables", "Potions, Scrolls & Wands"].includes(itemCategory)}
-                menuOnLeft={["Head", "Neck", "Hands", "Rings", "Feet", "Body & Wondrous Items", "Adventuring Gear", "Tools & Kits", "Potions, Scrolls & Wands", "Rings & Magic Items"].includes(itemCategory)}
+                menuOnLeft={["Neck", "Hands", "Feet", "Tools & Kits", "Rings & Magic Items"].includes(itemCategory)}
+                tooltipOnLeft={["Arms", "Waist", "Head", "Adventuring Gear", "Potions, Scrolls & Wands"].includes(itemCategory)}
             />
           );
           const hasEnhancement =
@@ -4850,52 +5428,86 @@ function formatSpellDuration(duration: string) {
 
 function SpellSheet({
   character,
+  levelUpOriginal,
+  levelUpClassId,
   onKnownSpellsChange,
   onPreparedSpellsChange,
   editable,
 }: {
   character: Character;
-  onKnownSpellsChange: (spells: string[]) => void;
+  levelUpOriginal?: Character;
+  levelUpClassId?: ClassId;
+  onKnownSpellsChange: (spells: string[], classId?: ClassId) => void;
   onPreparedSpellsChange: (spells: string[]) => void;
   editable: boolean;
 }) {
-  const spellcastingLevel = character.classLevels.find(
-    (level) => classDefinitions[level.classId].spellcasting,
-  );
+  const levelUpSpellcastingClass = levelUpClassId
+    ? classDefinitions[levelUpClassId]?.spellcasting
+      ? levelUpClassId
+      : undefined
+    : undefined;
+  const spellcastingLevel =
+    character.classLevels.find((level) => level.classId === levelUpSpellcastingClass) ??
+    character.classLevels.find(
+      (level) => classDefinitions[level.classId as ClassId]?.spellcasting,
+    );
   const spellcastingClass = spellcastingLevel
     ? classDefinitions[spellcastingLevel.classId]
     : classDefinitions.wizard;
+  const castingAbility: Partial<Record<ClassId, keyof Character["abilities"]>> =
+    {
+      bard: "cha",
+      cleric: "wis",
+      druid: "wis",
+      mystic: "wis",
+      paladin: "cha",
+      ranger: "wis",
+      sorcerer: "cha",
+      wizard: "int",
+    };
+  const spellcastingLevels = character.classLevels.filter(
+    (level) => classDefinitions[level.classId as ClassId]?.spellcasting,
+  );
   const learningMode =
     spellcastingClass.id === "wizard"
       ? "Spellbook"
       : spellcastingClass.id === "bard" || spellcastingClass.id === "sorcerer"
         ? "Spells Known"
         : "Prepared Spells";
-  const availableLevels = (spellSlots[spellcastingClass.id] ?? [])
-    .map((slots, index) => (slots[0] > 0 ? index : -1))
-    .filter((level) => level >= 0);
+  const availableLevels = (spellSlots[spellcastingClass.id] ?? []).map(
+    (_slots, index) => index,
+  );
   const selectedSpells = new Set(character.knownSpells);
   const preparedSpells = new Set(character.preparedSpells);
   const preparedSpellCount = character.preparedSpells.length;
-  const classSpells = spells.filter((spell) =>
-    spell.classes.includes(spellcastingClass.id),
+  const classSpells = spells.filter(
+    (spell) =>
+      spell.classes.includes(spellcastingClass.id) ||
+      (levelUpOriginal?.knownSpells.includes(spell.name) ?? false),
   );
-  const castingAbility: Partial<Record<ClassId, keyof Character["abilities"]>> =
-    {
-      bard: "cha",
-      cleric: "wis",
-      druid: "wis",
-      paladin: "cha",
-      ranger: "wis",
-      sorcerer: "cha",
-      wizard: "int",
-    };
+  const addingNewSpellcastingClass = Boolean(
+    levelUpClassId &&
+      levelUpOriginal &&
+      !levelUpOriginal.classLevels.some(
+        (entry) => entry.classId === levelUpClassId,
+      ),
+  );
   const castingModifier = abilityModifier(
     character.abilities[castingAbility[spellcastingClass.id] ?? "int"],
   );
-  const knownLimits: Partial<Record<ClassId, number[]>> = {
-    bard: [4, 2],
-    sorcerer: [4, 2],
+  const classLevel = spellcastingLevel?.level ?? 1;
+  const knownSpellLimit = (level: number) => {
+    if (spellcastingClass.id === "bard") {
+      if (level === 0) return 3 + classLevel;
+      if (level === 1)
+        return Math.min(4, Math.floor((classLevel + 1) / 2) + 1);
+    }
+    if (spellcastingClass.id === "sorcerer") {
+      if (level === 0) return 4 + Math.max(0, classLevel - 1);
+      if (level === 1)
+        return Math.min(4, Math.floor((classLevel + 1) / 2) + 1);
+    }
+    return 0;
   };
   const bonusSpells = (level: number) => {
     if (level < 1 || castingModifier < level) return 0;
@@ -4903,8 +5515,7 @@ function SpellSheet({
   };
   const levelLimit = (level: number) =>
     learningMode === "Spells Known"
-      ? (knownLimits[spellcastingClass.id]?.[level] ?? 0) +
-        (level > 0 ? bonusSpells(level) : 0)
+      ? knownSpellLimit(level)
       : learningMode === "Spellbook"
         ? level === 0
           ? classSpells.filter((spell) => spell.level === 0).length
@@ -4920,23 +5531,50 @@ function SpellSheet({
       bonusSpells(level),
     0,
   );
+  const preparedSpellCapacityByClass = spellcastingLevels
+    .map((levelEntry) => {
+      const classDefinition = classDefinitions[levelEntry.classId];
+      const ability = castingAbility[levelEntry.classId] ?? "int";
+      const modifier = abilityModifier(character.abilities[ability]);
+      const levels = (spellSlots[levelEntry.classId] ?? [])
+        .map((slots, level) => ({ slots, level }))
+        .filter(({ slots }) => slots[0] > 0)
+        .map(({ slots, level }) => {
+          const uses = slots[0] +
+            (level < 1 || modifier < level
+              ? 0
+              : Math.floor((modifier - level) / 4) + 1);
+          return uses > 0 ? `L${level}: ${uses}` : "";
+        })
+        .filter(Boolean);
+      return levels.length
+        ? `${classDefinition.name}: ${levels.join(" · ")}`
+        : `${classDefinition.name}: none`;
+    })
+    .join(" | ");
   const setSpellSlot = (level: number, slot: number, spell: string) => {
     const levelSelections = classSpells
       .filter((entry) => entry.level === level)
       .map((entry) => entry.name)
-      .filter((name) => selectedSpells.has(name));
+      .filter(
+        (name) =>
+          selectedSpells.has(name) &&
+          (addingNewSpellcastingClass
+            ? !levelUpOriginal?.knownSpells.includes(name)
+            : !character.knownSpellClasses?.[name] ||
+              character.knownSpellClasses[name] === spellcastingClass.id),
+      );
     const nextLevelSelections = [...levelSelections];
     nextLevelSelections[slot] = spell;
-    const next = [...selectedSpells].filter(
-      (name) =>
-        classSpells.find((entry) => entry.name === name)?.level !== level,
-    );
+    const next = [...selectedSpells].filter((name) => {
+      return !levelSelections.includes(name);
+    });
     onKnownSpellsChange([
       ...next,
       ...nextLevelSelections.filter(
         (name, index) => name && nextLevelSelections.indexOf(name) === index,
       ),
-    ]);
+    ], spellcastingClass.id);
   };
 
   return (
@@ -4949,10 +5587,13 @@ function SpellSheet({
           </label>
           <label>
             Spells Casting Class and Level
-            <input
-              value={`${spellcastingClass.name} ${spellcastingLevel?.level ?? 1}`}
-              readOnly
-            />
+            {spellcastingLevels.map((level) => (
+              <input
+                key={level.classId}
+                value={`${classDefinitions[level.classId].name} ${level.level}`}
+                readOnly
+              />
+            ))}
           </label>
         </div>
         <div>
@@ -4962,27 +5603,29 @@ function SpellSheet({
           </label>
           <label>
             Spellcasting Ability
-            <input
-              value={(
-                castingAbility[spellcastingClass.id] ?? "int"
-              ).toUpperCase()}
-              readOnly
-            />
+            {spellcastingLevels.map((level) => (
+              <input
+                key={level.classId}
+                value={(castingAbility[level.classId] ?? "int").toUpperCase()}
+                readOnly
+              />
+            ))}
           </label>
         </div>
         <div className="spell-sheet-brand">CHARACTER SPELL SHEET</div>
       </div>
       <div className="spell-sheet-stats">
         <Stat label="Spell Save DC" value={String(10 + castingModifier + 1)} />
-        <Stat label="Spellcasting Class" value={spellcastingClass.name} />
         <Stat
-          label="Prepared Spells Available"
-          value={
-            learningMode === "Prepared Spells" || learningMode === "Spellbook"
-              ? String(dailySpellCapacity)
-              : "N/A"
-          }
+          label="Spellcasting Classes"
+          value={spellcastingLevels
+            .map(
+              (level) =>
+                `${classDefinitions[level.classId].name} ${level.level}`,
+            )
+            .join(" / ")}
         />
+        <Stat label="Prepared Spells Available" value={preparedSpellCapacityByClass} />
         <Stat label="Selection" value={learningMode} />
       </div>
       <div className="spell-sheet-title">SPELLS</div>
@@ -4995,9 +5638,33 @@ function SpellSheet({
           .filter((spell) => selectedSpells.has(spell.name))
           .map((spell) => spell.name);
         const rowCount =
-          level === 0 && learningMode === "Spellbook"
-            ? Math.max(6, levelSpells.length)
-            : Math.max(6, Math.max(limit, selectedForLevel.length) + 4);
+          (() => {
+            const newSpellCount = addingNewSpellcastingClass
+              ? selectedForLevel.filter(
+                  (spellName) =>
+                    !levelUpOriginal?.knownSpells.includes(spellName),
+                ).length
+              : 0;
+            const remainingNewSpells = addingNewSpellcastingClass
+              ? Math.max(0, limit - newSpellCount)
+              : 0;
+            return level === 0 && learningMode === "Spellbook"
+              ? Math.max(6, levelSpells.length)
+              : Math.max(
+                  6,
+                  selectedForLevel.length + remainingNewSpells + 4,
+                );
+          })();
+        const newSpellCount = addingNewSpellcastingClass
+          ? selectedForLevel.filter(
+              (spellName) =>
+                !levelUpOriginal?.knownSpells.includes(spellName),
+            ).length
+          : 0;
+        const newSpellStart = selectedForLevel.length;
+        const remainingNewSpells = addingNewSpellcastingClass
+          ? Math.max(0, limit - newSpellCount)
+          : 0;
         return (
           <section className="spell-level-table" key={level}>
             <div className="spell-level-heading">
@@ -5090,13 +5757,38 @@ function SpellSheet({
                                 selectedForLevel[slot] === entry.name,
                             )}
                             selected={spellName}
-                            placeholder={slot < limit ? "Choose a spell" : ""}
+                            placeholder={
+                              (addingNewSpellcastingClass
+                                ? slot >= newSpellStart &&
+                                  slot < newSpellStart + remainingNewSpells
+                                : slot < limit)
+                                ? levelUpOriginal
+                                  ? "Choose a new spell"
+                                  : "Choose a spell"
+                                : ""
+                            }
                             onChange={(name) => setSpellSlot(level, slot, name)}
                           />
                         )}
                       </td>
                       <td className="spell-description-cell">
-                        {spell?.description || ""}
+                        {spell && (
+                          <>
+                            {spell.description || ""}
+                            <small>
+                              ({classDefinitions[
+                                character.knownSpellClasses?.[spell.name] as ClassId
+                              ]?.name ??
+                                spell.classes
+                                  .map(
+                                    (classId) =>
+                                      classDefinitions[classId as ClassId]?.name ??
+                                      classId,
+                                  )
+                                  .join(", ")})
+                            </small>
+                          </>
+                        )}
                       </td>
                       <td />
                       <td>{spell?.savingThrow || ""}</td>

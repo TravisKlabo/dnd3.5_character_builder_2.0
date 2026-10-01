@@ -37,36 +37,37 @@ export interface DeityDefinition {
   id: string
   name: string
   alignment: string
+  description: string
   source: ContentSourceId
 }
 
 export const deityDefinitions: DeityDefinition[] = [
-  { id: 'bahamut', name: 'Bahamut', alignment: 'Lawful Good', source: 'core-35-srd' },
-  { id: 'corellon', name: 'Corellon Larethian', alignment: 'Chaotic Good', source: 'core-35-srd' },
-  { id: 'moradin', name: 'Moradin', alignment: 'Lawful Good', source: 'core-35-srd' },
-  { id: 'pelor', name: 'Pelor', alignment: 'Neutral Good', source: 'core-35-srd' },
-  { id: 'heironeous', name: 'Heironeous', alignment: 'Lawful Good', source: 'core-35-srd' },
-  { id: 'kord', name: 'Kord', alignment: 'Chaotic Neutral', source: 'core-35-srd' },
-  { id: 'st-cuthbert', name: 'St. Cuthbert', alignment: 'Lawful Neutral', source: 'core-35-srd' },
-  { id: 'we-jas', name: 'Wee Jas', alignment: 'Lawful Neutral', source: 'core-35-srd' },
-  { id: 'obad-hai', name: 'Obad-Hai', alignment: 'True Neutral', source: 'core-35-srd' },
-  { id: 'hextor', name: 'Hextor', alignment: 'Lawful Evil', source: 'core-35-srd' },
-  { id: 'nerull', name: 'Nerull', alignment: 'Neutral Evil', source: 'core-35-srd' },
-  { id: 'erythnul', name: 'Erythnul', alignment: 'Chaotic Evil', source: 'core-35-srd' },
-  { id: 'paladine', name: 'Paladine', alignment: 'Lawful Good', source: 'dragonlance-user-pack' },
-  { id: 'mishakal', name: 'Mishakal', alignment: 'Neutral Good', source: 'dragonlance-user-pack' },
-  { id: 'kiri-jolith', name: 'Kiri-Jolith', alignment: 'Lawful Good', source: 'dragonlance-user-pack' },
-  { id: 'majere', name: 'Majere', alignment: 'Lawful Neutral', source: 'dragonlance-user-pack' },
-  { id: 'gilean', name: 'Gilean', alignment: 'True Neutral', source: 'dragonlance-user-pack' },
-  { id: 'reorx', name: 'Reorx', alignment: 'True Neutral', source: 'dragonlance-user-pack' },
-  { id: 'habbakuk', name: 'Habbakuk', alignment: 'Chaotic Good', source: 'dragonlance-user-pack' },
-  { id: 'branchala', name: 'Branchala', alignment: 'Chaotic Good', source: 'dragonlance-user-pack' },
-  { id: 'takhisis', name: 'Takhisis', alignment: 'Lawful Evil', source: 'dragonlance-user-pack' },
-  { id: 'sargonnas', name: 'Sargonnas', alignment: 'Chaotic Evil', source: 'dragonlance-user-pack' },
-  { id: 'chemosh', name: 'Chemosh', alignment: 'Neutral Evil', source: 'dragonlance-user-pack' },
-  { id: 'morgion', name: 'Morgion', alignment: 'Neutral Evil', source: 'dragonlance-user-pack' },
-  { id: 'nuitari', name: 'Nuitari', alignment: 'Lawful Evil', source: 'dragonlance-user-pack' },
-  { id: 'zeboim', name: 'Zeboim', alignment: 'Chaotic Evil', source: 'dragonlance-user-pack' },
+  { id: 'bahamut', name: 'Bahamut', alignment: 'Lawful Good', description: 'Dragon deity of justice, protection, and good dragons.', source: 'core-35-srd' },
+  { id: 'corellon', name: 'Corellon Larethian', alignment: 'Chaotic Good', description: 'Elven deity of art, magic, and freedom.', source: 'core-35-srd' },
+  { id: 'moradin', name: 'Moradin', alignment: 'Lawful Good', description: 'Dwarven deity of creation, craft, and protection.', source: 'core-35-srd' },
+  { id: 'pelor', name: 'Pelor', alignment: 'Neutral Good', description: 'Deity of the sun, healing, and goodness.', source: 'core-35-srd' },
+  { id: 'heironeous', name: 'Heironeous', alignment: 'Lawful Good', description: 'Deity of chivalry, honor, and valor.', source: 'core-35-srd' },
+  { id: 'kord', name: 'Kord', alignment: 'Chaotic Neutral', description: 'Deity of strength, athleticism, and storms.', source: 'core-35-srd' },
+  { id: 'st-cuthbert', name: 'St. Cuthbert', alignment: 'Lawful Neutral', description: 'Deity of common sense, wisdom, and retribution.', source: 'core-35-srd' },
+  { id: 'we-jas', name: 'Wee Jas', alignment: 'Lawful Neutral', description: 'Deity of magic, death, and law.', source: 'core-35-srd' },
+  { id: 'obad-hai', name: 'Obad-Hai', alignment: 'True Neutral', description: 'Deity of nature, wilderness, and balance.', source: 'core-35-srd' },
+  { id: 'hextor', name: 'Hextor', alignment: 'Lawful Evil', description: 'Deity of tyranny, war, and discord.', source: 'core-35-srd' },
+  { id: 'nerull', name: 'Nerull', alignment: 'Neutral Evil', description: 'Deity of death, darkness, and murder.', source: 'core-35-srd' },
+  { id: 'erythnul', name: 'Erythnul', alignment: 'Chaotic Evil', description: 'Deity of envy, slaughter, and panic.', source: 'core-35-srd' },
+  { id: 'paladine', name: 'Paladine', alignment: 'Lawful Good', description: 'God of good dragons, guardianship, and justice.', source: 'dragonlance-user-pack' },
+  { id: 'mishakal', name: 'Mishakal', alignment: 'Neutral Good', description: 'Goddess of healing, compassion, and restoration.', source: 'dragonlance-user-pack' },
+  { id: 'kiri-jolith', name: 'Kiri-Jolith', alignment: 'Lawful Good', description: 'God of honor, courage, and righteous battle.', source: 'dragonlance-user-pack' },
+  { id: 'majere', name: 'Majere', alignment: 'Lawful Neutral', description: 'God of discipline, meditation, and insight.', source: 'dragonlance-user-pack' },
+  { id: 'gilean', name: 'Gilean', alignment: 'True Neutral', description: 'God of knowledge, balance, and free will.', source: 'dragonlance-user-pack' },
+  { id: 'reorx', name: 'Reorx', alignment: 'True Neutral', description: 'God of forging, invention, and dwarven craft.', source: 'dragonlance-user-pack' },
+  { id: 'habbakuk', name: 'Habbakuk', alignment: 'Chaotic Good', description: 'God of animals, the sea, and freedom.', source: 'dragonlance-user-pack' },
+  { id: 'branchala', name: 'Branchala', alignment: 'Chaotic Good', description: 'God of music, inspiration, and joy.', source: 'dragonlance-user-pack' },
+  { id: 'takhisis', name: 'Takhisis', alignment: 'Lawful Evil', description: 'Goddess of darkness, tyranny, and evil dragons.', source: 'dragonlance-user-pack' },
+  { id: 'sargonnas', name: 'Sargonnas', alignment: 'Chaotic Evil', description: 'God of vengeance, fire, and destruction.', source: 'dragonlance-user-pack' },
+  { id: 'chemosh', name: 'Chemosh', alignment: 'Neutral Evil', description: 'God of undeath, false hope, and corruption.', source: 'dragonlance-user-pack' },
+  { id: 'morgion', name: 'Morgion', alignment: 'Neutral Evil', description: 'God of disease, decay, and secrets.', source: 'dragonlance-user-pack' },
+  { id: 'nuitari', name: 'Nuitari', alignment: 'Lawful Evil', description: 'God of forbidden magic, darkness, and ambition.', source: 'dragonlance-user-pack' },
+  { id: 'zeboim', name: 'Zeboim', alignment: 'Chaotic Evil', description: 'Goddess of storms, the sea, and destruction.', source: 'dragonlance-user-pack' },
 ]
 
 export interface RaceDefinition {
@@ -95,6 +96,12 @@ export interface ClassLevel {
   level: number
 }
 
+export interface PrestigeClassLevel {
+  classId: ClassId
+  prestigeClassId: PrestigeClassId
+  level: number
+}
+
 export interface FeatDefinition {
   id: FeatId
   name: string
@@ -114,13 +121,14 @@ export interface Character {
   race: string
   alignment: string
   abilities: AbilityScores
-  classLevels: ClassLevel[]
+  classLevels: (ClassLevel | PrestigeClassLevel)[]
   hitPoints: number
   feats: string[]
   featSelections: Record<string, FeatId | ''>
   skills: Record<string, number>
   skillRanksByClass: Record<string, Record<string, number>>
   knownSpells: string[]
+  knownSpellClasses?: Record<string, ClassId>
   preparedSpells: string[]
   equipment: Record<string, string>
   inventory: Record<string, number>
@@ -136,6 +144,7 @@ export interface LevelUpDraft {
   proposed: Character
   classId: ClassId
   hitPointRoll: number | null
+  abilityIncrease: AbilityName | null
   validationErrors: string[]
 }
 
@@ -194,7 +203,7 @@ export const dragonlancePrestigeClasses: Record<PrestigeClassId, PrestigeClassDe
 export const initialCharacter: Character = {
   name: 'Unnamed Hero', player: 'Player', race: 'Human', alignment: 'Neutral Good',
   abilities: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
-  classLevels: [{ classId: 'fighter', level: 1 }], hitPoints: 10, feats: [], featSelections: {}, skills: {}, skillRanksByClass: {}, knownSpells: [], preparedSpells: [], equipment: {}, inventory: {}, languages: ['Common'], prestigeClass: undefined, deity: undefined, highSorceryOrder: undefined,
+  classLevels: [{ classId: 'fighter', level: 1 }], hitPoints: 10, feats: [], featSelections: {}, skills: {}, skillRanksByClass: {}, knownSpells: [], knownSpellClasses: {}, preparedSpells: [], equipment: {}, inventory: {}, languages: ['Common'], prestigeClass: undefined, deity: undefined, highSorceryOrder: undefined,
 }
 
 export function abilityModifier(score: number) {
@@ -280,14 +289,20 @@ export function hitPointGain(character: Character, hitPointRoll: number) {
 
 export function beginLevelUp(character: Character, classId: ClassId): LevelUpDraft {
   const proposed = cloneCharacter(character)
-  proposed.classLevels = [...proposed.classLevels, { classId, level: nextClassLevel(character, classId) }]
-  return { original: cloneCharacter(character), proposed, classId, hitPointRoll: null, validationErrors: [] }
+  const existingClass = proposed.classLevels.find((entry) => entry.classId === classId)
+  if (existingClass) existingClass.level = nextClassLevel(character, classId)
+  else proposed.classLevels = [...proposed.classLevels, { classId, level: 1 }]
+  return { original: cloneCharacter(character), proposed, classId, hitPointRoll: null, abilityIncrease: null, validationErrors: [] }
 }
 
 export function validateLevelUp(draft: LevelUpDraft): string[] {
   const errors: string[] = []
-  if (draft.proposed.classLevels.length !== draft.original.classLevels.length + 1) errors.push('A level-up must add exactly one class level.')
+  const originalTotalLevel = draft.original.classLevels.reduce((total, entry) => total + entry.level, 0)
+  const proposedTotalLevel = draft.proposed.classLevels.reduce((total, entry) => total + entry.level, 0)
+  if (proposedTotalLevel !== originalTotalLevel + 1) errors.push('A level-up must add exactly one class level.')
   if (draft.proposed.classLevels.some((entry) => entry.level < 1)) errors.push('Class levels must be at least 1.')
+  if (proposedTotalLevel % 4 === 0 && !draft.abilityIncrease)
+    errors.push('Choose an ability score to increase before confirming the level-up.')
   if (draft.hitPointRoll === null) errors.push('Roll hit points before confirming the level-up.')
   return errors
 }
