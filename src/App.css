@@ -74,6 +74,9 @@
 .skill-name { display: grid; grid-template-columns: 16px minmax(0, 1fr); align-items: center; gap: 8px; color: #243447; }
 .skill-name > span { border-left: 1px solid #c6c9c2; padding-left: 8px; }
 .skill-name input { width: 16px; height: 16px; margin: 0; padding: 0; accent-color: #2878c8; }
+.skill-cost-indicator { display: block; margin-top: 2px; font-size: .62rem; font-weight: 700; line-height: 1.2; }
+.skill-cost-indicator.class-skill { color: #68736f; }
+.skill-cost-indicator.cross-class-skill { color: #b14b38; }
 .skills-panel .list-row { grid-template-columns: minmax(0, 1.5fr) 92px 72px 112px .35fr; }
 .skills-panel .list-row > strong { border-left: 1px solid #c6c9c2; padding-left: 12px; }
 .skill-racial { color: #68736f; font-size: .7rem; white-space: nowrap; }

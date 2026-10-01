@@ -859,7 +859,8 @@ type StoreCategory =
   | "Waist"
   | "Feet"
   | "Body & Wondrous Items"
-  | "Mounts & Vehicles";
+  | "Mounts & Vehicles"
+  | "Instruments";
 type StoreItem = {
   name: string;
   category: StoreCategory;
@@ -1125,6 +1126,7 @@ function getStoreItemDescription(item: StoreItem) {
     return `Shield bonus +${shieldBonus}; armor check penalty ${checkPenalty}; uses the off hand.`;
   }
   if (item.category === "Ammunition") return "Ammunition used with a compatible ranged weapon.";
+  if (item.category === "Instruments") return "A musical instrument used for performance, bardic music, or magical effects.";
   if (item.category === "Tools & Kits") return "A tool or kit used for a specific task.";
   if (item.category === "Consumables") return "A consumable item used once or over a short duration.";
   if (item.category === "Potions, Scrolls & Wands") return "A magical item that provides a spell or magical effect.";
@@ -1338,6 +1340,73 @@ const twoHandedWeaponNames = new Set([
   "Heavy Crossbow",
   "Repeating Crossbow",
 ]);
+
+const simpleWeaponNames = new Set([
+  "Dagger",
+  "Light Mace",
+  "Light Hammer",
+  "Morningstar",
+  "Quarterstaff",
+  "Light Crossbow",
+  "Heavy Crossbow",
+  "Sling",
+  "Javelin",
+  "Dart",
+  "Shuriken",
+]);
+
+const martialWeaponNames = new Set([
+  "Longsword",
+  "Rapier",
+  "Greatsword",
+  "Shortbow",
+  "Longbow",
+  "Handaxe",
+  "Trident",
+  "Net",
+  "Whip",
+  "Kukri",
+  "Kama",
+  "Sickle",
+  "Glaive",
+  "Halberd",
+  "Guisarme",
+  "Spiked Chain",
+  "Falchion",
+  "Lance",
+  "Repeating Crossbow",
+  "Hand Crossbow",
+]);
+
+const martialWeaponClasses = new Set(["barbarian", "fighter", "paladin", "ranger"]);
+const armorCategories = new Set(["Armor", "Shields"]);
+
+function getItemProficiencyWarning(character: Character, item: StoreItem) {
+  if (item.category === "Instruments" || item.category === "Adventuring Gear") return null;
+  const classIds = character.classLevels.map((entry) => entry.classId);
+  if (item.category === "Weapons") {
+    const simple = simpleWeaponNames.has(item.name);
+    const martial = martialWeaponNames.has(item.name);
+    const proficient = classIds.some((classId) =>
+      simple || (martial && martialWeaponClasses.has(classId)) ||
+      (classId === "bard" && ["Longsword", "Rapier", "Shortbow", "Whip"].includes(item.name)) ||
+      (classId === "rogue" && ["Rapier", "Hand Crossbow", "Shortbow", "Shortsword", "Sap"].includes(item.name)),
+    );
+    return proficient ? null : `${item.name}: this character is not proficient with this weapon and will take the normal nonproficiency penalties.`;
+  }
+  if (armorCategories.has(item.category)) {
+    const mediumArmor = ["Hide Armor", "Scale Mail", "Chainmail", "Mithral Breastplate"].includes(item.name);
+    const lightArmor = ["Padded Armor", "Leather Armor", "Studded Leather", "Mithral Chain Shirt"].includes(item.name);
+    const proficient = classIds.some((classId) => {
+      if (["fighter", "paladin", "cleric", "barbarian"].includes(classId)) return true;
+      if (classId === "ranger") return lightArmor || mediumArmor;
+      if (["bard", "rogue", "noble"].includes(classId)) return lightArmor;
+      return false;
+    });
+    return proficient ? null : `${item.name}: this character is not proficient with this armor or shield and will take the normal nonproficiency penalties.`;
+  }
+  return null;
+}
 
 function EquipmentItemPicker({
   items,
@@ -1595,7 +1664,6 @@ storeItems.push(
     "Torches (5)",
     "Holy Symbol",
     "Spell Component Pouch",
-    "Musical Instrument",
     "Traveler's Cloak",
     "Sunrod",
     "Tanglefoot Bag",
@@ -1615,6 +1683,22 @@ storeItems.push(
     price: 5,
     weight: "varies",
   })),
+  { name: "Bagpipes", category: "Instruments", price: 30, weight: "6 lb.", description: "A wind instrument with a distinctive drone." },
+  { name: "Drum", category: "Instruments", price: 5, weight: "3 lb.", description: "A percussion instrument played with a beater or the hands." },
+  { name: "Dulcimer", category: "Instruments", price: 25, weight: "10 lb.", description: "A stringed instrument played by striking its strings." },
+  { name: "Flute", category: "Instruments", price: 5, weight: "2 lb.", description: "A simple woodwind instrument." },
+  { name: "Lute", category: "Instruments", price: 35, weight: "3 lb.", description: "A portable plucked string instrument." },
+  { name: "Lyre", category: "Instruments", price: 30, weight: "3 lb.", description: "A small harp-like string instrument." },
+  { name: "Mandolin", category: "Instruments", price: 15, weight: "3 lb.", description: "A small, short-necked string instrument." },
+  { name: "Pan Pipes", category: "Instruments", price: 12, weight: "2 lb.", description: "A set of connected pipes played by blowing across their openings." },
+  { name: "Shawm", category: "Instruments", price: 2, weight: "1 lb.", description: "A double-reed woodwind instrument." },
+  { name: "Horn", category: "Instruments", price: 3, weight: "2 lb.", description: "A curved horn used as a signaling or musical instrument." },
+  { name: "Drum of Panic", category: "Instruments", price: 30000, weight: "3 lb.", description: "Effect: playing the drum creates a panic effect in creatures that hear it." },
+  { name: "Horn of Blasting", category: "Instruments", price: 20000, weight: "2 lb.", description: "Effect: a blast produces a powerful cone of sonic force that can damage and deafen creatures." },
+  { name: "Horn of the Tritons", category: "Instruments", price: 15000, weight: "2 lb.", description: "Effects: can calm rough water, frighten aquatic creatures, and call or command creatures of the sea." },
+  { name: "Lyre of Building", category: "Instruments", price: 13000, weight: "3 lb.", description: "Effect: playing the lyre aids construction, repairs structural damage, and protects structures from harm." },
+  { name: "Pipes of Haunting", category: "Instruments", price: 6000, weight: "3 lb.", description: "Effect: playing the pipes creates a haunting tune that can frighten creatures that hear it." },
+  { name: "Pipes of Pain", category: "Instruments", price: 12000, weight: "3 lb.", description: "Effect: playing the pipes causes intense pain and penalties to creatures that hear the music." },
   ...[
     "Scroll of Identify",
     "Scroll of Protection from Evil",
@@ -1810,8 +1894,14 @@ function formatRaceDetails(race: (typeof raceDefinitions)[string]) {
   return `${formatRaceModifiers(race.abilityModifiers)}; Size ${race.size ?? "not specified"}; ${abilities.length ? abilities.join(", ") : "No special abilities recorded"}`;
 }
 
-function isClassSkill(character: Character, skill: string) {
-  const classIds = character.classLevels.map((entry) => entry.classId);
+function isClassSkill(
+  character: Character,
+  skill: string,
+  classId?: ClassId,
+) {
+  const classIds = classId
+    ? [classId]
+    : character.classLevels.map((entry) => entry.classId);
   return classIds.some((classId) => classSkills[classId]?.includes(skill));
 }
 
@@ -1949,16 +2039,29 @@ function getLevelUpSpellWarnings(original: Character, proposed: Character) {
   return warnings;
 }
 
+function getLevelUpClassId(original: Character, proposed: Character): ClassId {
+  return (
+    proposed.classLevels.find((entry) => {
+      const originalEntry = original.classLevels.find(
+        (candidate) => candidate.classId === entry.classId,
+      );
+      return entry.level > (originalEntry?.level ?? 0);
+    })?.classId ?? "fighter"
+  );
+}
+
 function getNewLevelUpFeatSlots(original: Character, proposed: Character) {
   const originalSlots = new Set(getFeatSlots(original).map((slot) => slot.id));
   return getFeatSlots(proposed).filter((slot) => !originalSlots.has(slot.id));
 }
 
 function getLevelUpSkillWarnings(original: Character, proposed: Character) {
+  const classId = getLevelUpClassId(original, proposed);
   const newSkillPoints =
     getAvailableSkillCount(proposed) - getAvailableSkillCount(original);
   const newSkillRanks =
-    getSpentSkillPoints(proposed) - getSpentSkillPoints(original);
+    getLevelUpSpentSkillPoints(original, proposed, classId) -
+    getSpentSkillPoints(original);
   if (newSkillRanks < newSkillPoints)
     return [
       `Spend all new skill points (${newSkillPoints - newSkillRanks} remaining).`,
@@ -1972,6 +2075,21 @@ function getSpentSkillPoints(character: Character) {
       total + Number(ranks || 0) * (isClassSkill(character, skill) ? 1 : 2)
     );
   }, 0);
+}
+
+function getLevelUpSpentSkillPoints(
+  original: Character,
+  proposed: Character,
+  classId: ClassId,
+) {
+  const addedCost = skills.reduce((total, skill) => {
+    const addedRanks = Math.max(
+      0,
+      Number(proposed.skills[skill] || 0) - Number(original.skills[skill] || 0),
+    );
+    return total + addedRanks * (isClassSkill(proposed, skill, classId) ? 1 : 2);
+  }, 0);
+  return getSpentSkillPoints(original) + addedCost;
 }
 
 function getSkillMaximum(character: Character, skill: string) {
@@ -2105,17 +2223,28 @@ function canIncreaseSkillRank(
   character: Character,
   skill: string,
   levelUpOriginal?: Character,
+  levelUpClassId?: ClassId,
 ) {
   const currentRanks = Number(character.skills[skill] || 0);
-  const pointCost = isClassSkill(character, skill) ? 1 : 2;
+  const activeLevelUpClassId = levelUpOriginal
+    ? levelUpClassId ?? getLevelUpClassId(levelUpOriginal, character)
+    : undefined;
+  const pointCost = isClassSkill(character, skill, activeLevelUpClassId) ? 1 : 2;
   const availableSkillPoints = levelUpOriginal
-    ? getSpentSkillPoints(levelUpOriginal) +
+    ? getAvailableSkillCount(levelUpOriginal) +
       getAvailableSkillCount(character) -
       getAvailableSkillCount(levelUpOriginal)
     : getAvailableSkillCount(character);
+  const spentSkillPoints = levelUpOriginal
+    ? getLevelUpSpentSkillPoints(
+        levelUpOriginal,
+        character,
+        activeLevelUpClassId ?? "fighter",
+      )
+    : getSpentSkillPoints(character);
   return (
     currentRanks < getSkillMaximum(character, skill) &&
-    getSpentSkillPoints(character) + pointCost <=
+    spentSkillPoints + pointCost <=
       availableSkillPoints
   );
 }
@@ -2478,7 +2607,8 @@ function App() {
     }));
   const updateSkillRanks = (skill: string, change: number) => {
     const update = (current: Character) => {
-      const classSkill = isClassSkill(current, skill);
+      const classId = levelUpDraft?.classId ?? current.classLevels.at(-1)?.classId;
+      const classSkill = isClassSkill(current, skill, classId);
       const currentRanks = Number(current.skills[skill] || 0);
       const minimumRanks = levelUpDraft
         ? Number(levelUpDraft.original.skills[skill] || 0)
@@ -2489,19 +2619,24 @@ function App() {
         Math.min(maxRanks, currentRanks + change),
       );
 
-      const currentSpent = getSpentSkillPoints(current);
       const pointCost = classSkill ? 1 : 2;
       const availableSkillPoints = levelUpDraft
         ? getSpentSkillPoints(levelUpDraft.original) +
           getAvailableSkillCount(current) -
           getAvailableSkillCount(levelUpDraft.original)
         : getAvailableSkillCount(current);
+      const currentSpent = levelUpDraft
+        ? getLevelUpSpentSkillPoints(
+            levelUpDraft.original,
+            current,
+            levelUpDraft.classId,
+          )
+        : getSpentSkillPoints(current);
       if (
         change > 0 &&
         currentSpent + pointCost > availableSkillPoints
       )
         return current;
-      const classId = current.classLevels.at(-1)?.classId;
       if (!classId) return current;
       const currentClassRanks =
         current.skillRanksByClass?.[classId]?.[skill] ?? 0;
@@ -3072,6 +3207,7 @@ function App() {
           <CharacterSheet
             character={displayedCharacter}
             levelUpOriginal={levelUpDraft?.original}
+            levelUpClassId={levelUpDraft?.classId}
             levelDisplayCharacter={levelUpDraft ? character : undefined}
             onSkillRankChange={updateSkillRanks}
             onFeatChange={updateFeatSelection}
@@ -4436,6 +4572,7 @@ function LanguagePicker({
 function CharacterSheet({
   character,
   levelUpOriginal,
+  levelUpClassId,
   levelDisplayCharacter,
   onSkillRankChange,
   onFeatChange,
@@ -4448,6 +4585,7 @@ function CharacterSheet({
 }: {
   character: Character;
   levelUpOriginal?: Character;
+  levelUpClassId?: ClassId;
   levelDisplayCharacter?: Character;
   onSkillRankChange: (skill: string, change: number) => void;
   onFeatChange: (slotId: string, featId: string) => void;
@@ -4459,6 +4597,9 @@ function CharacterSheet({
   onPlayerNameChange: (player: string) => void;
 }) {
   const classId = character.classLevels.at(-1)?.classId ?? "fighter";
+  const skillDisplayClassId = levelUpOriginal
+    ? levelUpClassId ?? getLevelUpClassId(levelUpOriginal, character)
+    : undefined;
   const classSummary = character.classLevels
     .map(
       (level) => "prestigeClassId" in level
@@ -4712,7 +4853,13 @@ function CharacterSheet({
         )}
       </Panel>
       <Panel
-        title={`Skills (${getSpentSkillPoints(character)}/${getAvailableSkillCount(character)})`}
+        title={`Skills (${levelUpOriginal
+          ? getLevelUpSpentSkillPoints(
+              levelUpOriginal,
+              character,
+              getLevelUpClassId(levelUpOriginal, character),
+            )
+          : getSpentSkillPoints(character)}/${getAvailableSkillCount(character)})`}
         className="skills-panel"
       >
         <div className="list-grid">
@@ -4722,18 +4869,29 @@ function CharacterSheet({
                 <span className="tooltip-anchor">
                   <input
                     type="checkbox"
-                    checked={isClassSkill(character, skill)}
+                    checked={isClassSkill(character, skill, skillDisplayClassId)}
                     readOnly
                     aria-label={`${skill} class skill`}
                   />
                   <span className="inline-tooltip" role="tooltip">
-                    {isClassSkill(character, skill)
+                    {isClassSkill(character, skill, skillDisplayClassId)
                       ? "Class skill: 1 point per rank; maximum ranks equal character level + 3."
                       : "Cross-class skill: 2 points per rank; maximum ranks equal half of character level + 3."}
                   </span>
                 </span>
                 <span className="tooltip-anchor">
                   {skill}
+                  <span
+                    className={`skill-cost-indicator ${
+                      isClassSkill(character, skill, skillDisplayClassId)
+                        ? "class-skill"
+                        : "cross-class-skill"
+                    }`}
+                  >
+                    {isClassSkill(character, skill, skillDisplayClassId)
+                      ? "Class skill - 1 pt"
+                      : "Cross-class - 2 pts"}
+                  </span>
                   <span className="inline-tooltip" role="tooltip">
                     {skillDescriptions[skill]}
                   </span>
@@ -4769,7 +4927,14 @@ function CharacterSheet({
                 <button
                   type="button"
                   onClick={() => onSkillRankChange(skill, 1)}
-                  disabled={!canIncreaseSkillRank(character, skill, levelUpOriginal)}
+                  disabled={
+                    !canIncreaseSkillRank(
+                      character,
+                      skill,
+                      levelUpOriginal,
+                      levelUpClassId,
+                    )
+                  }
                   aria-label={`Add rank to ${skill}`}
                 >
                   +
@@ -5017,6 +5182,13 @@ function EquipmentStore({
     const item = [...storeItems]
       .sort((left, right) => right.name.length - left.name.length)
       .find((entry) => itemName.includes(entry.name));
+    if (item) {
+      const proficiencyWarning = getItemProficiencyWarning(character, item);
+      if (proficiencyWarning) {
+        window.alert(proficiencyWarning);
+        return;
+      }
+    }
     let slot = "Miscellaneous";
     let nextEquipment = { ...(character.equipment ?? {}) };
     if (item?.category === "Shields") {
@@ -5102,6 +5274,7 @@ function EquipmentStore({
     "Potions, Scrolls & Wands",
     "Rings & Magic Items",
     "Mounts & Vehicles",
+    "Instruments",
   ];
   const categories = categoryOrder.filter((itemCategory) =>
     storeItems.some((item) => item.category === itemCategory),
@@ -5156,7 +5329,7 @@ function EquipmentStore({
                 onPurchase={buy}
                 bulk={["Ammunition", "Tools & Kits", "Consumables", "Potions, Scrolls & Wands"].includes(itemCategory)}
                 menuOnLeft={["Neck", "Hands", "Feet", "Tools & Kits", "Rings & Magic Items"].includes(itemCategory)}
-                tooltipOnLeft={["Arms", "Waist", "Head", "Adventuring Gear", "Potions, Scrolls & Wands"].includes(itemCategory)}
+                tooltipOnLeft={["Arms", "Waist", "Head", "Adventuring Gear", "Potions, Scrolls & Wands", "Instruments"].includes(itemCategory)}
             />
           );
           const hasEnhancement =
