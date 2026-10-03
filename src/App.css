@@ -91,9 +91,15 @@
 .feat-picker { position: relative; width: 50%; min-width: 220px; }
 .feat-picker-tooltip { position: absolute; z-index: 20; left: calc(100% + max(280px, min(360px, 42vw)) + 27px); width: max-content; max-width: min(360px, 42vw); padding: 9px 11px; border: 1px solid #243447; background: #243447; color: #fff; font-size: .74rem; font-weight: 400; line-height: 1.4; text-transform: none; box-shadow: 0 6px 16px #39444c2b; }
 .feat-picker-tooltip::before { content: ""; position: absolute; top: 10px; left: -6px; width: 10px; height: 10px; border-bottom: 1px solid #243447; border-left: 1px solid #243447; background: #243447; transform: rotate(45deg); }
-.feat-picker .race-menu { top: 0; left: calc(100% + 18px); width: min(360px, 42vw); min-width: 280px; max-height: 268px; overflow-y: auto; }
+.spell-source-marker { position: relative; border: 0; padding: 0; background: transparent; color: #3d78a8; font: inherit; cursor: pointer; }
+.spell-source-marker:hover, .spell-source-marker:focus-visible { color: #285b83; text-decoration: underline; }
+.spell-source-marker::after { content: attr(data-tooltip); position: absolute; z-index: 20; bottom: calc(100% + 9px); left: 50%; width: max-content; max-width: min(280px, 60vw); padding: 9px 11px; border: 1px solid #243447; background: #243447; color: #fff; font-size: .74rem; font-weight: 400; line-height: 1.4; text-decoration: none; box-shadow: 0 6px 16px #39444c2b; opacity: 0; pointer-events: none; transform: translateX(-50%); }
+.spell-source-marker::before { content: ""; position: absolute; z-index: 21; bottom: calc(100% + 4px); left: 50%; width: 10px; height: 10px; border-right: 1px solid #243447; border-bottom: 1px solid #243447; background: #243447; opacity: 0; pointer-events: none; transform: translateX(-50%) rotate(45deg); }
+.spell-source-marker:hover::after, .spell-source-marker:hover::before, .spell-source-marker:focus-visible::after, .spell-source-marker:focus-visible::before { opacity: 1; }
+.feat-picker .race-menu { top: 0; left: calc(100% + 18px); z-index: 30; width: min(360px, 42vw); min-width: 280px; max-height: 268px; overflow-y: auto; }
 .equipment-item-picker.menu-on-left .race-menu { right: calc(100% + 18px); left: auto; }
 .spell-picker .feat-picker-tooltip { left: calc(100% + min(360px, 42vw) + 36px); right: auto; max-width: min(360px, 42vw); transform: none; }
+.spell-picker .race-menu { position: fixed; top: auto; left: auto; }
 .spell-picker .feat-picker-tooltip::before { right: auto; left: -6px; border: 0; border-bottom: 1px solid #243447; border-left: 1px solid #243447; }
 .language-picker { width: 100%; }
 .language-picker .race-menu { top: calc(100% + 4px); left: 0; width: 100%; min-width: 180px; max-height: 268px; overflow-y: auto; }
@@ -128,7 +134,7 @@
 .spell-sheet-stats .stat-label { display: block; padding: 3px; background: #202020; color: #fff; font-size: .55rem; text-align: center; text-transform: uppercase; }
 .spell-sheet-stats .stat-value { display: block; padding: 8px 4px; font-size: .78rem; text-align: center; }
 .spell-sheet-title { padding: 5px; background: #202020; color: #fff; font-size: .85rem; font-weight: 700; letter-spacing: .16em; text-align: center; }
-.spell-level-table { min-width: 820px; overflow-x: auto; }
+.spell-level-table { position: relative; z-index: 2; min-width: 820px; overflow: visible; }
 .spell-level-heading { display: flex; align-items: center; gap: 8px; min-height: 26px; background: #202020; color: #fff; }
 .spell-level-heading strong { min-width: 210px; padding: 5px 12px; font-size: .78rem; letter-spacing: .04em; }
 .spell-level-heading span { margin-left: auto; font-size: .55rem; text-transform: uppercase; }
@@ -146,6 +152,7 @@
 .spell-level-table td input[type="checkbox"]:checked { background: linear-gradient(135deg, transparent 43%, #202020 43% 57%, transparent 57%), linear-gradient(45deg, transparent 53%, #202020 53% 65%, transparent 65%); }
 .spell-level-table td input[type="checkbox"]:disabled { cursor: not-allowed; opacity: .4; }
 .spell-level-table .spell-picker { width: 100%; min-width: 0; }
+.spell-level-table .spell-picker .race-menu { top: auto; bottom: 0; }
 .spell-level-table .spell-picker .race-trigger { width: 100%; padding: 2px 3px; border: 0; background: transparent; font-size: .64rem; text-align: left; }
 .spell-description-cell { overflow: hidden; color: #4d4d4d; line-height: 1.2; }
 .equipment-sheet { display: grid; gap: 16px; padding: 8px; background: #fff; }
@@ -219,7 +226,7 @@
 .store-item-action b { color: #202020; font-size: .75rem; white-space: nowrap; }
 .store-item-action small { width: 100%; text-align: right; }
 .secondary-button { padding: 5px 9px; border: 1px solid #202020; background: #fff; color: #202020; cursor: pointer; font: inherit; font-size: .7rem; }
-@media (max-width: 900px) { .spell-sheet { overflow-x: auto; } .spell-sheet-header { grid-template-columns: 1fr 1fr; } .spell-sheet-brand { grid-column: 1 / -1; } }
+@media (max-width: 900px) { .spell-sheet { overflow-x: auto; } .spell-level-table { overflow-x: auto; } .spell-sheet-header { grid-template-columns: 1fr 1fr; } .spell-sheet-brand { grid-column: 1 / -1; } }
 @media (max-width: 700px) { .equipment-slot-grid { grid-template-columns: 1fr; min-height: 0; } .equipment-figure { display: none; } .equipment-footer, .equipment-summary, .equipment-store-grid { grid-template-columns: 1fr; } .equipment-store-header { align-items: start; flex-direction: column; } .store-category-controls { grid-template-columns: 1fr; width: 100%; } .store-category-controls > select:first-of-type, .store-category-controls > select:nth-of-type(2), .store-built-item { grid-column: auto; width: auto; } .equipment-inventory-row { grid-template-columns: 1fr 1fr; } .equipment-inventory-name { grid-column: 1 / -1; } .equipment-inventory-actions { grid-column: 1 / -1; justify-content: start; } }
 .feat-no-results { display: block; padding: 10px; color: #68736f; font-size: .76rem; text-transform: none; }
 .print-preview-modal { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 20px; background: #20202099; }

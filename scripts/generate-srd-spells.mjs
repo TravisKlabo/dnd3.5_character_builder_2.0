@@ -38,12 +38,16 @@ for (const [classId, url] of Object.entries(sources)) {
     const level = Number(levelMatch[1]);
     const section = match[2];
     for (const match of section.matchAll(/<a[^>]+href="[^"#]*\/spells\/[^"#]+"[^>]*>([^<]+)<\/a>([\s\S]*?)(?=<a[^>]+href="[^"#]*\/spells\/|$)/gi)) {
-      const name = match[1].replace(/\s+/g, " ").trim();
+      const parsedName = match[1].replace(/\s+/g, " ").trim();
+      const name = parsedName.toLowerCase() === "magic missiles"
+        ? "Magic Missile"
+        : parsedName;
       if (!name || /^M$|^F$|^X$/i.test(name)) continue;
       const description = decodeHtml(match[2]).replace(/^\s*[:.]?\s*/, "");
       const href = match[0].match(/href="([^"]+)"/i)?.[1] ?? "";
-      const key = `${level}:${name}`;
+      const key = `${level}:${name.toLowerCase()}`;
       const entry = spells.get(key) ?? { name, level, classes: [], description, href };
+      if (name[0] && name[0] === name[0].toUpperCase()) entry.name = name;
       if (!entry.classes.includes(classId)) entry.classes.push(classId);
       spells.set(key, entry);
     }

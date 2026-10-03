@@ -3,8 +3,9 @@ export type AbilityName = 'str' | 'dex' | 'con' | 'int' | 'wis' | 'cha'
 export type AbilityScores = Record<AbilityName, number>
 
 export type ClassId = 'barbarian' | 'bard' | 'cleric' | 'druid' | 'fighter' | 'monk' | 'paladin' | 'ranger' | 'rogue' | 'sorcerer' | 'wizard' | 'mystic' | 'noble'
-export type PrestigeClassId = 'knight-of-the-crown' | 'knight-of-the-sword' | 'knight-of-the-rose' | 'knight-of-neraka' | 'renegade-hunter' | 'wizard-of-high-sorcery' | 'white-robed-wizard' | 'red-robed-wizard' | 'black-robed-wizard' | 'master-of-the-way'
+export type PrestigeClassId = 'knight-of-the-crown' | 'knight-of-the-sword' | 'knight-of-the-rose' | 'knight-of-neraka' | 'renegade-hunter' | 'wizard-of-high-sorcery' | 'white-robed-wizard' | 'red-robed-wizard' | 'black-robed-wizard' | 'master-of-the-way' | 'arcane-archer' | 'arcane-trickster' | 'assassin' | 'dragon-disciple' | 'duelist' | 'dwarven-defender' | 'eldritch-knight' | 'hierophant' | 'horizon-walker' | 'loremaster' | 'mystic-theurge' | 'shadowdancer' | 'thaumaturgist'
 export type FeatId = string
+export type SpellAcquisition = 'starting' | 'level-up' | 'spellbook' | 'scroll' | 'research' | 'reward'
 
 export type ContentSourceId = 'core-35-srd' | 'dragonlance-user-pack'
 
@@ -130,7 +131,9 @@ export interface Character {
   knownSpells: string[]
   knownSpellClasses?: Record<string, ClassId>
   knownSpellsByClass?: Partial<Record<ClassId, string[]>>
+  spellAcquisitionByClass?: Partial<Record<ClassId, Record<string, SpellAcquisition>>>
   preparedSpells: string[]
+  preparedSpellsByClass?: Partial<Record<ClassId, string[]>>
   equipment: Record<string, string>
   inventory: Record<string, number>
   languages: string[]
@@ -189,6 +192,19 @@ export const raceDefinitions: Record<string, RaceDefinition> = {
 }
 
 export const dragonlancePrestigeClasses: Record<PrestigeClassId, PrestigeClassDefinition> = {
+  'arcane-archer': { id: 'arcane-archer', name: 'Arcane Archer', source: 'core-35-srd', prerequisites: { bab: 6, ability: { dex: 13 }, feats: ['Point Blank Shot', 'Precise Shot'], classes: ['fighter', 'ranger'] }, features: ['Enhance arrows', 'Imbue arrow', 'Seeker arrow', 'Phase arrow', 'Hail of arrows'] },
+  'arcane-trickster': { id: 'arcane-trickster', name: 'Arcane Trickster', source: 'core-35-srd', prerequisites: { ability: { int: 13 }, feats: ['Mage Hand'], classes: ['rogue', 'sorcerer', 'wizard'] }, features: ['Ranged legerdemain', 'Sneak attack', 'Impromptu sneak attack'] },
+  assassin: { id: 'assassin', name: 'Assassin', source: 'core-35-srd', prerequisites: { ability: { dex: 13 }, classes: ['rogue'] }, features: ['Poison use', 'Sneak attack', 'Death attack', 'Hide in plain sight'] },
+  'dragon-disciple': { id: 'dragon-disciple', name: 'Dragon Disciple', source: 'core-35-srd', prerequisites: { ability: { cha: 13 }, classes: ['sorcerer'] }, features: ['Draconic abilities', 'Natural armor', 'Breath weapon', 'Wings'] },
+  duelist: { id: 'duelist', name: 'Duelist', source: 'core-35-srd', prerequisites: { bab: 6, ability: { dex: 13 }, feats: ['Combat Expertise', 'Weapon Finesse'], classes: ['fighter', 'rogue'] }, features: ['Canny defense', 'Improved reaction', 'Grace', 'Precise strike'] },
+  'dwarven-defender': { id: 'dwarven-defender', name: 'Dwarven Defender', source: 'core-35-srd', prerequisites: { bab: 7, ability: { con: 13 }, feats: ['Dodge'], races: ['dwarf'] }, features: ['Defensive stance', 'Uncanny dodge', 'Damage reduction'] },
+  'eldritch-knight': { id: 'eldritch-knight', name: 'Eldritch Knight', source: 'core-35-srd', prerequisites: { bab: 3, feats: ['Martial Weapon Proficiency'], classes: ['fighter', 'sorcerer', 'wizard'] }, features: ['Bonus feat', 'Spellcasting advancement'] },
+  hierophant: { id: 'hierophant', name: 'Hierophant', source: 'core-35-srd', prerequisites: { ability: { wis: 15 }, classes: ['cleric', 'druid'] }, features: ['Special ability', 'Spell-like ability'] },
+  'horizon-walker': { id: 'horizon-walker', name: 'Horizon Walker', source: 'core-35-srd', prerequisites: { bab: 6, feats: ['Endurance'], classes: ['barbarian', 'fighter', 'ranger'] }, features: ['Terrain mastery', 'Planar terrain mastery'] },
+  loremaster: { id: 'loremaster', name: 'Loremaster', source: 'core-35-srd', prerequisites: { ability: { int: 13 }, feats: ['Any metamagic feat', 'Any item creation feat'], classes: ['bard', 'cleric', 'druid', 'sorcerer', 'wizard'] }, features: ['Secret', 'Lore', 'Greater lore'] },
+  'mystic-theurge': { id: 'mystic-theurge', name: 'Mystic Theurge', source: 'core-35-srd', prerequisites: { classes: ['cleric', 'druid', 'sorcerer', 'wizard'] }, features: ['Dual spellcasting advancement'] },
+  shadowdancer: { id: 'shadowdancer', name: 'Shadowdancer', source: 'core-35-srd', prerequisites: { ability: { dex: 13 }, feats: ['Combat Reflexes', 'Dodge', 'Mobility'], classes: ['bard', 'monk', 'rogue'] }, features: ['Hide in plain sight', 'Darkvision', 'Shadow companion'] },
+  thaumaturgist: { id: 'thaumaturgist', name: 'Thaumaturgist', source: 'core-35-srd', prerequisites: { ability: { wis: 13 }, feats: ['Spell Focus'], classes: ['cleric', 'druid', 'sorcerer', 'wizard'] }, features: ['Improved ally', 'Planar cohort', 'Planar durance'] },
   'knight-of-the-crown': { id: 'knight-of-the-crown', name: 'Knight of the Crown', source: 'dragonlance-user-pack', prerequisites: { bab: 4, feats: ['Mounted Combat'], classes: ['fighter', 'paladin', 'ranger'] }, features: ['Crown oath', 'Knightly challenge', 'Mounted combat training'] },
   'knight-of-the-sword': { id: 'knight-of-the-sword', name: 'Knight of the Sword', source: 'dragonlance-user-pack', prerequisites: { bab: 5, feats: ['Weapon Focus'], classes: ['fighter', 'paladin'] }, features: ['Sword oath', 'Fearless courage', 'Smite evil improvement'] },
   'knight-of-the-rose': { id: 'knight-of-the-rose', name: 'Knight of the Rose', source: 'dragonlance-user-pack', prerequisites: { bab: 6, feats: ['Leadership'], classes: ['fighter', 'paladin'] }, features: ['Rose oath', 'Inspire courage', 'Command authority'] },
@@ -204,7 +220,7 @@ export const dragonlancePrestigeClasses: Record<PrestigeClassId, PrestigeClassDe
 export const initialCharacter: Character = {
   name: 'Unnamed Hero', player: 'Player', race: 'Human', alignment: 'Neutral Good',
   abilities: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
-  classLevels: [{ classId: 'fighter', level: 1 }], hitPoints: 10, feats: [], featSelections: {}, skills: {}, skillRanksByClass: {}, knownSpells: [], knownSpellClasses: {}, knownSpellsByClass: {}, preparedSpells: [], equipment: {}, inventory: {}, languages: ['Common'], prestigeClass: undefined, deity: undefined, highSorceryOrder: undefined,
+  classLevels: [{ classId: 'fighter', level: 1 }], hitPoints: 10, feats: [], featSelections: {}, skills: {}, skillRanksByClass: {}, knownSpells: [], knownSpellClasses: {}, knownSpellsByClass: {}, spellAcquisitionByClass: {}, preparedSpells: [], preparedSpellsByClass: {}, equipment: {}, inventory: {}, languages: ['Common'], prestigeClass: undefined, deity: undefined, highSorceryOrder: undefined,
 }
 
 export function abilityModifier(score: number) {
