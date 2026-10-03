@@ -879,6 +879,33 @@ type StoreItem = {
   price: number;
   weight: string;
   description?: string;
+  custom?: boolean;
+  damage?: string;
+  damageSmall?: string;
+  damageMedium?: string;
+  damageLarge?: string;
+  damageType?: string;
+  critical?: string;
+  proficiency?: "Simple" | "Martial" | "Exotic";
+  handedness?: "Light" | "One-handed" | "Two-handed" | "Ranged";
+  finesse?: boolean;
+  rangeIncrement?: string;
+  rangeSmall?: string;
+  rangeMedium?: string;
+  rangeLarge?: string;
+  reach?: string;
+  specialProperties?: string;
+  armorBonus?: number;
+  maxDexterity?: number;
+  armorCheckPenalty?: number;
+  arcaneSpellFailure?: number;
+  armorSpeed?: string;
+  armorCategory?: "Light" | "Medium" | "Heavy";
+  shieldBonus?: number;
+  shieldType?: "Buckler" | "Light" | "Heavy" | "Tower" | "Custom";
+  shieldCheckPenalty?: number;
+  shieldSpellFailure?: number;
+  towerShieldProficiency?: boolean;
 };
 const storeItems: StoreItem[] = [
   { name: "Longsword", category: "Weapons", price: 15, weight: "4 lb." },
@@ -985,6 +1012,32 @@ const storeItems: StoreItem[] = [
     weight: "25 lb.",
   },
 ];
+const customStoreItemsStorageKey = "dnd35-character-builder.custom-store-items";
+
+function loadCustomStoreItems() {
+  try {
+    const stored = window.localStorage.getItem(customStoreItemsStorageKey);
+    if (!stored) return [];
+    const items = JSON.parse(stored) as StoreItem[];
+    return Array.isArray(items) ? items.filter((item) => item.custom && item.name && item.category) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveCustomStoreItems() {
+  const customItems = storeItems.filter((item) => item.custom);
+  window.localStorage.setItem(customStoreItemsStorageKey, JSON.stringify(customItems));
+}
+
+function formatCustomItemName(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[A-Za-z][^\s-]*/g, (word) =>
+      word.charAt(0).toUpperCase() + word.slice(1),
+    );
+}
 
 storeItems.push(
   { name: "Club", category: "Weapons", price: 0, weight: "3 lb." },
@@ -1143,6 +1196,10 @@ const shieldCheckPenalties: Record<string, number> = {
   "Tower Shield": -10,
 };
 
+if (typeof window !== "undefined") {
+  storeItems.push(...loadCustomStoreItems());
+}
+
 function getEquipmentArmorClass(character: Character) {
   const equipment = character.equipment ?? {};
   const armorName = equipment.Armor ?? "";
@@ -1151,6 +1208,9 @@ function getEquipmentArmorClass(character: Character) {
   const armorBaseName = Object.keys(armorBonuses)
     .sort((left, right) => right.length - left.length)
     .find((name) => armorName.includes(name));
+  const customArmor = [...storeItems]
+    .sort((left, right) => right.name.length - left.name.length)
+    .find((item) => item.category === "Armor" && armorName.includes(item.name));
   const shieldBaseName = Object.keys(shieldBonuses)
     .sort((left, right) => right.length - left.length)
     .find((name) => shieldName.includes(name));
@@ -1159,12 +1219,12 @@ function getEquipmentArmorClass(character: Character) {
     : 0;
   const maximumDexterityBonus = armorBaseName
     ? armorMaximumDexterity[armorBaseName]
-    : Infinity;
+    : customArmor?.maxDexterity ?? Infinity;
   const armorEnhancement = armorName.match(/\+(\d+)/)?.[1];
   const shieldEnhancement = shieldName.match(/\+(\d+)/)?.[1];
   return armorClass(
     character,
-    (armorBaseName ? armorBonuses[armorBaseName] : 0) +
+    (armorBaseName ? armorBonuses[armorBaseName] : customArmor?.armorBonus ?? 0) +
       (armorEnhancement ? Number(armorEnhancement) : 0) +
       bracersArmorBonus,
     maximumDexterityBonus,
@@ -1191,45 +1251,65 @@ function getSizedWeaponDamage(damage: string, size: string) {
   return damage;
 }
 
+function getWeaponDamageForSize(item: StoreItem, size: string) {
+  const customDamage = size === "Small" ? item.damageSmall : size === "Large" ? item.damageLarge : item.damageMedium;
+  return customDamage ?? getSizedWeaponDamage(item.damage ?? getWeaponProfile(item.name).damage, size);
+}
+
+function getWeaponRangeForSize(item: StoreItem, size: string) {
+  return size === "Small"
+    ? item.rangeSmall ?? item.rangeIncrement
+    : size === "Large"
+      ? item.rangeLarge ?? item.rangeIncrement
+      : item.rangeMedium ?? item.rangeIncrement;
+}
+
 function getStoreItemDescription(item: StoreItem, size = "Medium") {
   if (item.category === "Armor") {
     const name = Object.keys(armorBonuses)
       .sort((left, right) => right.length - left.length)
       .find((entry) => item.name.includes(entry));
-    const armorBonus = name ? armorBonuses[name] : 0;
-    const armorClass = name ? armorClasses[name] : "Unknown";
-    const maximumDexterity = name ? armorMaximumDexterity[name] : Infinity;
+    const armorBonus = name ? armorBonuses[name] : item.armorBonus ?? 0;
+    const armorClass = name ? armorClasses[name] : `${item.armorCategory ?? "Custom"} armor`;
+    const maximumDexterity = name ? armorMaximumDexterity[name] : item.maxDexterity ?? Infinity;
     const checkPenalty = name
       ? armorCheckPenalties[name] - (item.name.startsWith("Masterwork ") ? 1 : 0)
-      : 0;
+      : item.armorCheckPenalty ?? 0;
     const baseDescription = item.description ? `${item.description} ` : "";
     const masterworkBenefit = item.name.startsWith("Masterwork ")
       ? " Masterwork: armor check penalty reduced by 1."
       : "";
-    return `${baseDescription}${armorClass} armor; armor bonus +${armorBonus}; max Dex ${maximumDexterity === Infinity ? "—" : `+${maximumDexterity}`}; armor check penalty ${checkPenalty}.${masterworkBenefit}`;
+    return `${baseDescription}${armorClass} armor; armor bonus +${armorBonus}; max Dex ${maximumDexterity === Infinity ? "—" : `+${maximumDexterity}`}; armor check penalty ${checkPenalty}; arcane spell failure ${item.arcaneSpellFailure ?? 0}%; speed ${item.armorSpeed ?? "varies"}.${masterworkBenefit}`;
   }
   if (item.category === "Weapons") {
     const profile = getWeaponProfile(item.name);
     const baseWeaponName = item.name.replace(/^(?:Masterwork|Cold Iron|Silver|Mithral) /, "");
-    const damageType = weaponDamageTypes[item.name] ?? weaponDamageTypes[baseWeaponName] ?? "varies";
-    const damage = getSizedWeaponDamage(profile.damage, size);
-    const critical = profile.crit === "20/x2" ? "" : `; crit ${profile.crit}`;
+    const damageType = item.damageType ?? weaponDamageTypes[item.name] ?? weaponDamageTypes[baseWeaponName] ?? "varies";
+    const damage = getWeaponDamageForSize(item, size);
+    const criticalValue = item.critical ?? profile.crit;
+    const critical = item.custom || criticalValue !== "20/x2" ? `; crit ${criticalValue}` : "";
     const masterworkBenefit = item.name.startsWith("Masterwork ")
       ? " Masterwork: +1 enhancement bonus on attack rolls; this does not add damage."
       : "";
-    return `${item.description ? `${item.description} ` : ""}${damageType}; ${damage} damage${critical}.${masterworkBenefit}`;
+    const properties = [
+      item.finesse ? "finesse" : "",
+      getWeaponRangeForSize(item, size) ? `range ${getWeaponRangeForSize(item, size)}` : "",
+      item.reach ? `reach ${item.reach}` : "",
+      item.specialProperties ?? "",
+    ].filter(Boolean).join(", ");
+    return `${item.description ? `${item.description} ` : ""}${damageType}; ${damage} damage${critical}.${properties ? ` Properties: ${properties}.` : ""}${masterworkBenefit}`;
   }
   if (item.description) return item.description;
   if (item.category === "Shields") {
     const name = Object.keys(shieldBonuses).find((entry) => item.name.includes(entry));
-    const shieldBonus = name ? shieldBonuses[name] : 0;
+    const shieldBonus = name ? shieldBonuses[name] : item.shieldBonus ?? 0;
     const checkPenalty = name
       ? shieldCheckPenalties[name] - (item.name.startsWith("Masterwork ") ? 1 : 0)
-      : 0;
+      : item.shieldCheckPenalty ?? 0;
     const masterworkBenefit = item.name.startsWith("Masterwork ")
       ? " Masterwork: shield check penalty reduced by 1."
       : "";
-    return `Shield bonus +${shieldBonus}; armor check penalty ${checkPenalty}; uses the off hand.${masterworkBenefit}`;
+    return `Shield bonus +${shieldBonus}; armor check penalty ${checkPenalty}; arcane spell failure ${item.shieldSpellFailure ?? 0}%; ${item.shieldType ?? "custom"} shield; uses the off hand.${masterworkBenefit}`;
   }
   if (item.category === "Ammunition") return "Ammunition used with a compatible ranged weapon.";
   if (item.category === "Instruments") return "A musical instrument used for performance, bardic music, or magical effects.";
@@ -1276,7 +1356,10 @@ function getInventoryEntryDetails(key: string) {
   const size = match?.[2] ?? "Medium";
   const item = [...storeItems]
     .sort((left, right) => right.name.length - left.name.length)
-    .find((entry) => name.includes(entry.name));
+    .find((entry) => entry.name === name) ??
+    [...storeItems]
+      .sort((left, right) => right.name.length - left.name.length)
+      .find((entry) => name.includes(entry.name));
   const spellName = name.match(/^(?:Wand|Scroll) of (.+?) \(CL /)?.[1];
   const spell = spellName
     ? srdSpells.find((entry) => entry.name === spellName)
@@ -1419,8 +1502,10 @@ function getEquippedWeaponStats(character: Character, key: string, attackPenalty
     .find((entry) => name.includes(entry.name));
   if (!item || item.category !== "Weapons") return null;
   const profile = getWeaponProfile(item.name);
-  const isRanged = rangedWeaponNames.has(item.name);
-  const ability = isRanged ? character.abilities.dex : character.abilities.str;
+  const isRanged = item.handedness === "Ranged" || rangedWeaponNames.has(item.name);
+  const hasWeaponFinesse = Object.values(character.featSelections ?? {}).includes("weapon-finesse");
+  const usesFinesse = Boolean(item.finesse && hasWeaponFinesse && item.handedness === "Light");
+  const ability = isRanged || usesFinesse ? character.abilities.dex : character.abilities.str;
   const enhancement = Number(name.match(/\+(\d+)/)?.[1] ?? 0);
   const masterwork = name.startsWith("Masterwork ") ? 1 : 0;
   const baseAttackBonus = getBaseAttackBonus(character);
@@ -1435,9 +1520,9 @@ function getEquippedWeaponStats(character: Character, key: string, attackPenalty
   return {
     name,
     attack,
-    damage: `${getSizedWeaponDamage(profile.damage, size)}${damageAbility >= 0 ? `+${damageAbility}` : damageAbility}`,
-    damageType: weaponDamageTypes[item.name] ?? "varies",
-    critical: profile.crit,
+    damage: `${getWeaponDamageForSize(item, size)}${damageAbility >= 0 ? `+${damageAbility}` : damageAbility}`,
+    damageType: item.damageType ?? weaponDamageTypes[item.name] ?? "varies",
+    critical: item.critical ?? profile.crit,
     baseAttackBonus,
     abilityAttackBonus,
     enhancement,
@@ -1559,9 +1644,12 @@ function getItemProficiencyWarning(character: Character, item: StoreItem) {
   if (item.category === "Instruments" || item.category === "Adventuring Gear") return null;
   const classIds = character.classLevels.map((entry) => entry.classId);
   if (item.category === "Weapons") {
+    if (item.custom && item.proficiency === "Simple") return null;
     const baseName = getBaseEquipmentName(item.name);
     const simple = simpleWeaponNames.has(baseName);
-    const martial = martialWeaponNames.has(baseName);
+    const martial = item.custom
+      ? item.proficiency === "Martial"
+      : martialWeaponNames.has(baseName);
     const race = raceDefinitions[character.race.toLowerCase().replaceAll(" ", "-")];
     const racialWeapons = race?.id === "dwarf"
       ? ["Dwarven Waraxe", "Warhammer"]
@@ -1581,7 +1669,7 @@ function getItemProficiencyWarning(character: Character, item: StoreItem) {
   }
   if (item.category === "Shields") {
     const baseName = getBaseEquipmentName(item.name);
-    const towerShield = baseName === "Tower Shield";
+    const towerShield = item.towerShieldProficiency || baseName === "Tower Shield";
     const metalShield = /steel|mithral|metal/i.test(baseName);
     const proficient = classIds.some((classId) =>
       ["barbarian", "bard", "cleric", "druid", "fighter", "paladin", "ranger"].includes(classId) &&
@@ -1592,8 +1680,12 @@ function getItemProficiencyWarning(character: Character, item: StoreItem) {
   }
   if (item.category === "Armor") {
     const baseName = getBaseEquipmentName(item.name);
-    const mediumArmor = ["Hide Armor", "Scale Mail", "Chainmail", "Mithral Breastplate"].includes(baseName);
-    const lightArmor = ["Padded Armor", "Leather Armor", "Studded Leather", "Mithral Chain Shirt"].includes(baseName);
+    const mediumArmor = item.custom
+      ? item.armorCategory === "Medium"
+      : ["Hide Armor", "Scale Mail", "Chainmail", "Mithral Breastplate"].includes(baseName);
+    const lightArmor = item.custom
+      ? item.armorCategory === "Light"
+      : ["Padded Armor", "Leather Armor", "Studded Leather", "Mithral Chain Shirt"].includes(baseName);
     const metalArmor = /chain|scale|breastplate|full plate|steel|mithral/i.test(baseName);
     const proficient = classIds.some((classId) => {
       if (classId === "druid") return !metalArmor && (lightArmor || mediumArmor);
@@ -3385,7 +3477,11 @@ function App() {
     window.alert("Character saved.");
   };
   const exportCharacter = () => {
-    const file = new Blob([JSON.stringify(displayedCharacter, null, 2)], {
+    const exportData = {
+      ...displayedCharacter,
+      customItems: storeItems.filter((item) => item.custom),
+    };
+    const file = new Blob([JSON.stringify(exportData, null, 2)], {
       type: "application/json",
     });
     const url = URL.createObjectURL(file);
@@ -3412,6 +3508,32 @@ function App() {
         !Array.isArray(imported.classLevels)
       )
         throw new Error("Invalid character file");
+      const importedCustomItems = (imported.customItems ?? []).filter(
+        (item): item is StoreItem =>
+          typeof item === "object" &&
+          item !== null &&
+          item.custom === true &&
+          typeof item.name === "string" &&
+          typeof item.category === "string",
+      );
+      const newCustomItems = importedCustomItems.filter(
+        (item) =>
+          !storeItems.some(
+            (existing) =>
+              existing.category === item.category &&
+              existing.name.trim().toLowerCase() === item.name.trim().toLowerCase(),
+          ),
+      );
+      if (newCustomItems.length) {
+        storeItems.push(...newCustomItems);
+        const storedCustomItems = [
+          ...storeItems.filter((item) => item.custom),
+        ];
+        window.localStorage.setItem(
+          customStoreItemsStorageKey,
+          JSON.stringify(storedCustomItems),
+        );
+      }
       setCharacter(cloneCharacter(imported));
       setCreationDraft(cloneCharacter(imported));
       setCreationLocked(true);
@@ -6219,6 +6341,41 @@ function EquipmentStore({
   ) => void;
 }) {
   const [storeOpen, setStoreOpen] = useState(true);
+  const [customItemOpen, setCustomItemOpen] = useState(false);
+  const [customItemsOpen, setCustomItemsOpen] = useState(false);
+  const customItems = storeItems.filter((item) => item.custom);
+  const [customItemType, setCustomItemType] = useState<"Weapon" | "Armor" | "Shield" | "Miscellaneous">("Weapon");
+  const [customItemName, setCustomItemName] = useState("");
+  const [customItemPrice, setCustomItemPrice] = useState("0");
+  const [customItemWeight, setCustomItemWeight] = useState("0 lb.");
+  const [customItemDescription, setCustomItemDescription] = useState("");
+  const [customDamage, setCustomDamage] = useState("1d8");
+  const [customDamageSmall, setCustomDamageSmall] = useState("");
+  const [customDamageMedium, setCustomDamageMedium] = useState("");
+  const [customDamageLarge, setCustomDamageLarge] = useState("");
+  const [customDamageType, setCustomDamageType] = useState("slashing");
+  const [customCritical, setCustomCritical] = useState("20/x2");
+  const [customProficiency, setCustomProficiency] = useState<StoreItem["proficiency"]>("Simple");
+  const [customHandedness, setCustomHandedness] = useState<StoreItem["handedness"]>("One-handed");
+  const [customWeaponMode, setCustomWeaponMode] = useState<"Melee" | "Ranged" | "Thrown">("Melee");
+  const [customFinesse, setCustomFinesse] = useState(false);
+  const [customRange, setCustomRange] = useState("");
+  const [customRangeSmall, setCustomRangeSmall] = useState("");
+  const [customRangeMedium, setCustomRangeMedium] = useState("");
+  const [customRangeLarge, setCustomRangeLarge] = useState("");
+  const [customReach, setCustomReach] = useState("");
+  const [customProperties, setCustomProperties] = useState("");
+  const [customArmorBonus, setCustomArmorBonus] = useState("0");
+  const [customArmorCategory, setCustomArmorCategory] = useState<StoreItem["armorCategory"]>("Light");
+  const [customMaxDexterity, setCustomMaxDexterity] = useState("");
+  const [customArmorCheckPenalty, setCustomArmorCheckPenalty] = useState("0");
+  const [customSpellFailure, setCustomSpellFailure] = useState("0");
+  const [customArmorSpeed, setCustomArmorSpeed] = useState("30 ft.");
+  const [customShieldBonus, setCustomShieldBonus] = useState("0");
+  const [customShieldType, setCustomShieldType] = useState<StoreItem["shieldType"]>("Custom");
+  const [customShieldCheckPenalty, setCustomShieldCheckPenalty] = useState("0");
+  const [customShieldSpellFailure, setCustomShieldSpellFailure] = useState("0");
+  const [customTowerShield, setCustomTowerShield] = useState(false);
   const playerRaceId = character.race.toLowerCase().replaceAll(" ", "-");
   const playerSize = raceDefinitions[playerRaceId]?.size ?? "Medium";
   const [itemSize, setItemSize] = useState<string>(playerSize);
@@ -6282,7 +6439,7 @@ function EquipmentStore({
       if (rangedWeaponNames.has(item.name)) {
         slot = "Ranged Weapon";
       }
-      else if (twoHandedWeaponNames.has(item.name)) {
+      else if (item?.handedness === "Two-handed" || twoHandedWeaponNames.has(item.name)) {
         slot = "Main Weapon";
         delete nextEquipment["Off Hand Weapon"];
         delete nextEquipment["Ranged Weapon"];
@@ -6342,6 +6499,97 @@ function EquipmentStore({
   const categories = categoryOrder.filter((itemCategory) =>
     storeItems.some((item) => item.category === itemCategory),
   );
+  const saveCustomItem = () => {
+    const name = formatCustomItemName(customItemName);
+    if (!name) return;
+    const category: StoreCategory =
+      customItemType === "Weapon"
+        ? "Weapons"
+        : customItemType === "Armor"
+          ? "Armor"
+          : customItemType === "Shield"
+            ? "Shields"
+            : "Adventuring Gear";
+    const duplicateCustomItem = storeItems.some(
+      (item) =>
+        item.category === category &&
+        item.name.trim().toLowerCase() === name.toLowerCase(),
+    );
+    if (duplicateCustomItem) {
+      window.alert(`A custom ${customItemType.toLowerCase()} named "${name}" already exists.`);
+      return;
+    }
+    const customItem: StoreItem = {
+      name,
+      category,
+      price: Math.max(0, Number(customItemPrice) || 0),
+      weight: customItemWeight.trim() || "0 lb.",
+      description: customItemDescription.trim() || "Custom item.",
+      custom: true,
+      ...(customItemType === "Weapon"
+        ? { damage: customDamage, damageSmall: customDamageSmall.trim() || undefined, damageMedium: customDamageMedium.trim() || undefined, damageLarge: customDamageLarge.trim() || undefined, damageType: customDamageType, critical: customCritical, proficiency: customProficiency, handedness: customHandedness, finesse: customFinesse, rangeIncrement: customRange.trim() || undefined, rangeSmall: customRangeSmall.trim() || undefined, rangeMedium: customRangeMedium.trim() || undefined, rangeLarge: customRangeLarge.trim() || undefined, reach: customReach.trim() || undefined, specialProperties: customProperties.trim() || undefined }
+        : {}),
+      ...(customItemType === "Armor"
+        ? {
+            armorBonus: Number(customArmorBonus) || 0,
+            armorCategory: customArmorCategory,
+            maxDexterity: customMaxDexterity === "" ? undefined : Number(customMaxDexterity),
+            armorCheckPenalty: Number(customArmorCheckPenalty) || 0,
+            arcaneSpellFailure: Number(customSpellFailure) || 0,
+            armorSpeed: customArmorSpeed.trim() || "30 ft.",
+          }
+        : {}),
+      ...(customItemType === "Shield"
+        ? {
+            shieldBonus: Number(customShieldBonus) || 0,
+            shieldType: customShieldType,
+            shieldCheckPenalty: Number(customShieldCheckPenalty) || 0,
+            shieldSpellFailure: Number(customShieldSpellFailure) || 0,
+            towerShieldProficiency: customTowerShield,
+          }
+        : {}),
+    };
+    storeItems.push(customItem);
+    saveCustomStoreItems();
+    setCustomItemName("");
+    setCustomItemPrice("0");
+    setCustomItemWeight("0 lb.");
+    setCustomItemDescription("");
+    setCustomDamage("1d8");
+    setCustomDamageSmall("");
+    setCustomDamageMedium("");
+    setCustomDamageLarge("");
+    setCustomDamageType("slashing");
+    setCustomCritical("20/x2");
+    setCustomProficiency("Simple");
+    setCustomHandedness("One-handed");
+    setCustomWeaponMode("Melee");
+    setCustomFinesse(false);
+    setCustomRange("");
+    setCustomRangeSmall("");
+    setCustomRangeMedium("");
+    setCustomRangeLarge("");
+    setCustomReach("");
+    setCustomProperties("");
+    setCustomArmorBonus("0");
+    setCustomArmorCategory("Light");
+    setCustomMaxDexterity("");
+    setCustomArmorCheckPenalty("0");
+    setCustomSpellFailure("0");
+    setCustomArmorSpeed("30 ft.");
+    setCustomShieldBonus("0");
+    setCustomShieldType("Custom");
+    setCustomShieldCheckPenalty("0");
+    setCustomShieldSpellFailure("0");
+    setCustomTowerShield(false);
+    setCustomItemOpen(false);
+  };
+  const deleteCustomItem = (name: string) => {
+    for (let index = storeItems.length - 1; index >= 0; index -= 1) {
+      if (storeItems[index].custom && storeItems[index].name === name) storeItems.splice(index, 1);
+    }
+    saveCustomStoreItems();
+  };
   return (
     <section className="equipment-store">
       <div className="equipment-store-header">
@@ -6361,7 +6609,90 @@ function EquipmentStore({
         >
           {storeOpen ? "Close Store" : "Open Store"}
         </button>
+        <button className="secondary-button" type="button" onClick={() => setCustomItemOpen(true)}>
+          Create Custom Item
+        </button>
+        <button className="secondary-button" type="button" onClick={() => setCustomItemsOpen(true)}>
+          Custom Items List
+        </button>
       </div>
+      {customItemOpen && (
+        <div className="print-preview-modal" role="dialog" aria-modal="true" aria-labelledby="custom-item-title">
+          <div className="print-preview-dialog custom-item-dialog">
+            <div className="print-preview-header">
+              <div>
+                <p className="eyebrow">Custom catalog</p>
+                <h2 id="custom-item-title">Create Custom Item</h2>
+              </div>
+              <button className="secondary-button" type="button" onClick={() => setCustomItemOpen(false)}>Close</button>
+            </div>
+            <div className="custom-item-form">
+              <label>Item type<select value={customItemType} onChange={(event) => setCustomItemType(event.target.value as typeof customItemType)}><option>Weapon</option><option>Armor</option><option>Shield</option><option>Miscellaneous</option></select></label>
+              <label>Name<input value={customItemName} onChange={(event) => setCustomItemName(event.target.value)} placeholder="Moonlit Blade" /></label>
+              <label>Value (gp)<input type="number" min="0" value={customItemPrice} onChange={(event) => setCustomItemPrice(event.target.value)} /></label>
+              <label>Weight<input value={customItemWeight} onChange={(event) => setCustomItemWeight(event.target.value)} placeholder="4 lb." /></label>
+              {customItemType === "Weapon" && <>
+                <label>Damage dice<input value={customDamage} onChange={(event) => setCustomDamage(event.target.value)} placeholder="1d8" /></label>
+                <label>Small damage dice<input value={customDamageSmall} onChange={(event) => setCustomDamageSmall(event.target.value)} placeholder="1d6" /></label>
+                <label>Medium damage dice<input value={customDamageMedium} onChange={(event) => setCustomDamageMedium(event.target.value)} placeholder="1d8" /></label>
+                <label>Large damage dice<input value={customDamageLarge} onChange={(event) => setCustomDamageLarge(event.target.value)} placeholder="2d6" /></label>
+                <label>Damage type<select value={customDamageType} onChange={(event) => setCustomDamageType(event.target.value)}><option>bludgeoning</option><option>piercing</option><option>slashing</option></select></label>
+                <label>Critical range/multiplier<input value={customCritical} onChange={(event) => setCustomCritical(event.target.value)} placeholder="19-20/x2" /></label>
+                <label>Proficiency<select value={customProficiency} onChange={(event) => setCustomProficiency(event.target.value as StoreItem["proficiency"])}><option>Simple</option><option>Martial</option><option>Exotic</option></select></label>
+                <label>Handedness<select value={customHandedness} onChange={(event) => setCustomHandedness(event.target.value as StoreItem["handedness"])}><option>Light</option><option>One-handed</option><option>Two-handed</option><option>Ranged</option></select></label>
+                <label>Weapon mode<select value={customWeaponMode} onChange={(event) => setCustomWeaponMode(event.target.value as typeof customWeaponMode)}><option>Melee</option><option>Ranged</option><option>Thrown</option></select></label>
+                <label>Finesse<input type="checkbox" checked={customFinesse} onChange={(event) => setCustomFinesse(event.target.checked)} /></label>
+                {(customWeaponMode === "Ranged" || customWeaponMode === "Thrown") && <label>Range increment<input value={customRange} onChange={(event) => setCustomRange(event.target.value)} placeholder="30 ft." /></label>}
+                {(customWeaponMode === "Ranged" || customWeaponMode === "Thrown") && <>
+                  <label>Small range<input value={customRangeSmall} onChange={(event) => setCustomRangeSmall(event.target.value)} placeholder="20 ft." /></label>
+                  <label>Medium range<input value={customRangeMedium} onChange={(event) => setCustomRangeMedium(event.target.value)} placeholder="30 ft." /></label>
+                  <label>Large range<input value={customRangeLarge} onChange={(event) => setCustomRangeLarge(event.target.value)} placeholder="40 ft." /></label>
+                </>}
+                <label>Reach<input value={customReach} onChange={(event) => setCustomReach(event.target.value)} placeholder="5 ft." /></label>
+                <label>Special properties<input value={customProperties} onChange={(event) => setCustomProperties(event.target.value)} placeholder="Trip, reach, brace" /></label>
+              </>}
+              {customItemType === "Armor" && <>
+                <label>Armor category<select value={customArmorCategory} onChange={(event) => setCustomArmorCategory(event.target.value as StoreItem["armorCategory"])}><option>Light</option><option>Medium</option><option>Heavy</option></select></label>
+                <label>Armor bonus<input type="number" value={customArmorBonus} onChange={(event) => setCustomArmorBonus(event.target.value)} min="0" /></label>
+                <label>Maximum Dexterity<input type="number" value={customMaxDexterity} onChange={(event) => setCustomMaxDexterity(event.target.value)} min="0" placeholder="No limit" /></label>
+                <label>Armor check penalty<input type="number" value={customArmorCheckPenalty} onChange={(event) => setCustomArmorCheckPenalty(event.target.value)} min="0" /></label>
+                <label>Arcane spell failure %<input type="number" value={customSpellFailure} onChange={(event) => setCustomSpellFailure(event.target.value)} min="0" max="100" /></label>
+                <label>Speed<input value={customArmorSpeed} onChange={(event) => setCustomArmorSpeed(event.target.value)} placeholder="20 ft." /></label>
+              </>}
+              {customItemType === "Shield" && <>
+                <label>Shield bonus<input type="number" value={customShieldBonus} onChange={(event) => setCustomShieldBonus(event.target.value)} min="0" /></label>
+                <label>Shield type<select value={customShieldType} onChange={(event) => setCustomShieldType(event.target.value as StoreItem["shieldType"])}><option>Buckler</option><option>Light</option><option>Heavy</option><option>Tower</option><option>Custom</option></select></label>
+                <label>Armor check penalty<input type="number" value={customShieldCheckPenalty} onChange={(event) => setCustomShieldCheckPenalty(event.target.value)} min="0" /></label>
+                <label>Arcane spell failure %<input type="number" value={customShieldSpellFailure} onChange={(event) => setCustomShieldSpellFailure(event.target.value)} min="0" max="100" /></label>
+                <label>Tower shield proficiency required<input type="checkbox" checked={customTowerShield} onChange={(event) => setCustomTowerShield(event.target.checked)} /></label>
+              </>}
+              <label className="custom-item-description">Description<textarea value={customItemDescription} onChange={(event) => setCustomItemDescription(event.target.value)} placeholder="Describe the item and its special properties." /></label>
+            </div>
+            <div className="print-preview-actions"><button className="primary-button" type="button" disabled={!customItemName.trim()} onClick={saveCustomItem}>Save to Store</button></div>
+          </div>
+        </div>
+      )}
+      {customItemsOpen && (
+        <div className="print-preview-modal" role="dialog" aria-modal="true" aria-labelledby="custom-items-title">
+          <div className="print-preview-dialog custom-item-dialog">
+            <div className="print-preview-header">
+              <div>
+                <p className="eyebrow">Custom catalog</p>
+                <h2 id="custom-items-title">Custom Items List</h2>
+              </div>
+              <button className="secondary-button" type="button" onClick={() => setCustomItemsOpen(false)}>Close</button>
+            </div>
+            <section className="custom-item-catalog custom-item-catalog-standalone">
+              {customItems.length ? customItems.map((item) => (
+                <div className="custom-item-catalog-row" key={item.name}>
+                  <span><strong>{item.name}</strong><small>{item.category}</small></span>
+                  <button className="secondary-button" type="button" onClick={() => deleteCustomItem(item.name)}>Delete</button>
+                </div>
+              )) : <p className="equipment-inventory-empty">No custom items saved yet.</p>}
+            </section>
+          </div>
+        </div>
+      )}
       {storeOpen ? (
         <>
           <label className="store-size-row">

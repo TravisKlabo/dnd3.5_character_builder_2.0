@@ -139,6 +139,7 @@ export interface Character {
   languages: string[]
   prestigeClass?: PrestigeClassId
   classFeatures?: string[]
+  customItems?: Record<string, unknown>[]
   deity?: string
   highSorceryOrder?: 'white' | 'red' | 'black'
 }
