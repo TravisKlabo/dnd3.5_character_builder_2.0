@@ -1227,27 +1227,49 @@ function getStoreItemDescription(item: StoreItem, size = "Medium") {
     const armorBonus = name ? armorBonuses[name] : 0;
     const armorClass = name ? armorClasses[name] : "Unknown";
     const maximumDexterity = name ? armorMaximumDexterity[name] : Infinity;
-    const checkPenalty = name ? armorCheckPenalties[name] : 0;
+    const checkPenalty = name
+      ? armorCheckPenalties[name] - (item.name.startsWith("Masterwork ") ? 1 : 0)
+      : 0;
     const baseDescription = item.description ? `${item.description} ` : "";
-    return `${baseDescription}${armorClass} armor; armor bonus +${armorBonus}; max Dex ${maximumDexterity === Infinity ? "—" : `+${maximumDexterity}`}; armor check penalty ${checkPenalty}.`;
+    const masterworkBenefit = item.name.startsWith("Masterwork ")
+      ? " Masterwork: armor check penalty reduced by 1."
+      : "";
+    return `${baseDescription}${armorClass} armor; armor bonus +${armorBonus}; max Dex ${maximumDexterity === Infinity ? "—" : `+${maximumDexterity}`}; armor check penalty ${checkPenalty}.${masterworkBenefit}`;
   }
   if (item.category === "Weapons") {
     const profile = getWeaponProfile(item.name);
-    const damageType = weaponDamageTypes[item.name] ?? "varies";
+    const baseWeaponName = item.name.replace(/^(?:Masterwork|Cold Iron|Silver|Mithral) /, "");
+    const damageType = weaponDamageTypes[item.name] ?? weaponDamageTypes[baseWeaponName] ?? "varies";
     const damage = getSizedWeaponDamage(profile.damage, size);
     const critical = profile.crit === "20/x2" ? "" : `; crit ${profile.crit}`;
-    return `${item.description ? `${item.description} ` : ""}${damageType}; ${damage} damage${critical}.`;
+    const masterworkBenefit = item.name.startsWith("Masterwork ")
+      ? " Masterwork: +1 enhancement bonus on attack rolls; this does not add damage."
+      : "";
+    return `${item.description ? `${item.description} ` : ""}${damageType}; ${damage} damage${critical}.${masterworkBenefit}`;
   }
   if (item.description) return item.description;
   if (item.category === "Shields") {
     const name = Object.keys(shieldBonuses).find((entry) => item.name.includes(entry));
     const shieldBonus = name ? shieldBonuses[name] : 0;
-    const checkPenalty = name ? shieldCheckPenalties[name] : 0;
-    return `Shield bonus +${shieldBonus}; armor check penalty ${checkPenalty}; uses the off hand.`;
+    const checkPenalty = name
+      ? shieldCheckPenalties[name] - (item.name.startsWith("Masterwork ") ? 1 : 0)
+      : 0;
+    const masterworkBenefit = item.name.startsWith("Masterwork ")
+      ? " Masterwork: shield check penalty reduced by 1."
+      : "";
+    return `Shield bonus +${shieldBonus}; armor check penalty ${checkPenalty}; uses the off hand.${masterworkBenefit}`;
   }
   if (item.category === "Ammunition") return "Ammunition used with a compatible ranged weapon.";
   if (item.category === "Instruments") return "A musical instrument used for performance, bardic music, or magical effects.";
-  if (item.category === "Tools & Kits") return "A tool or kit used for a specific task.";
+  if (item.category === "Tools & Kits") {
+    if (item.name === "Masterwork Thieves' Tools") {
+      return "+2 circumstance bonus on Disable Device and Open Lock checks.";
+    }
+    if (item.name === "Masterwork Tool") {
+      return "+2 circumstance bonus on checks made with the tool's associated skill.";
+    }
+    return "A tool or kit used for a specific task.";
+  }
   if (item.category === "Consumables") return "A consumable item used once or over a short duration.";
   if (item.category === "Potions, Scrolls & Wands") return "A magical item that provides a spell or magical effect.";
   if (item.category === "Rings") return "A magical ring that occupies a ring slot.";
