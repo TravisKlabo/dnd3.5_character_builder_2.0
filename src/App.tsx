@@ -1323,33 +1323,6 @@ function getWeaponSizeNote(size: string) {
       : "standard damage die; 5-ft. reach";
 }
 
-function getEnhancementPrice(value: string, special = false) {
-  if (value === "Normal" || value === "None") return 0;
-  return special ? 8000 : Number(value.slice(1)) * 2000;
-}
-
-function getEnchantmentDescription(value: string, special = false) {
-  if (value === "Normal" || value === "None") return "No magical enhancement.";
-  if (!special) return `Adds ${value} to attack and damage rolls.`;
-  const descriptions: Record<string, string> = {
-    Flaming: "Deals an extra 1d6 points of fire damage on a hit.",
-    Frost: "Deals an extra 1d6 points of cold damage on a hit.",
-    Shock: "Deals an extra 1d6 points of electricity damage on a hit.",
-    Keen: "Doubles the weapon's threat range; it does not stack with keen edge.",
-    Holy: "Deals extra damage to evil creatures and is strongly aligned.",
-    Vicious: "Deals extra damage to the target and its wielder on a hit.",
-    Bane: "Deals extra damage and gains an attack bonus against its chosen foe.",
-    Fortification: "Gives a chance to ignore critical hits and sneak attacks.",
-    Shadow: "Improves the wearer's Hide checks.",
-    "Silent Moves": "Improves the wearer's Move Silently checks.",
-    Slick: "Improves the wearer's Escape Artist checks.",
-    Glamered:
-      "Makes the armor appear to be a different suit of armor or clothing.",
-    Invulnerability: "Grants damage reduction against weapon attacks.",
-  };
-  return descriptions[value] ?? "A special magical ability.";
-}
-
 const weaponProfiles: Record<string, { damage: string; crit: string }> = {
   Club: { damage: "1d6", crit: "x2" },
   "Short Sword": { damage: "1d6", crit: "19–20/x2" },
@@ -5760,12 +5733,6 @@ function EquipmentStore({
   onInventoryChange: (inventory: Record<string, number>) => void;
 }) {
   const [storeOpen, setStoreOpen] = useState(true);
-  const [enhancements, setEnhancements] = useState<Record<string, string>>({});
-  const [specialEnchantments, setSpecialEnchantments] = useState<
-    Record<string, string>
-  >({});
-  const [selectedWeapons, setSelectedWeapons] = useState<StoreItem[]>([]);
-  const [selectedArmor, setSelectedArmor] = useState<StoreItem>();
   const playerRaceId = character.race.toLowerCase().replaceAll(" ", "-");
   const playerSize = raceDefinitions[playerRaceId]?.size ?? "Medium";
   const [itemSize, setItemSize] = useState<string>(playerSize);
@@ -5781,25 +5748,14 @@ function EquipmentStore({
   });
   const totalInventoryWeight = inventoryEntries.reduce((total, entry) => total + entry.totalWeight, 0);
   const selectItem = (item: StoreItem) => {
-    if (item.category === "Weapons") setSelectedWeapons([item]);
-    if (item.category === "Armor" || item.category === "Shields") setSelectedArmor(item);
+    void item;
   };
   const buy = (item: StoreItem, quantity = 1) => {
-    const enhancement = enhancements[item.category] ?? "Normal";
-    const special = specialEnchantments[item.category] ?? "None";
-    const enchantmentName =
-      item.category === "Weapons" || item.category === "Armor" || item.category === "Shields"
-        ? `${enhancement === "Normal" ? "" : `${enhancement} `}${item.name}${special === "None" ? "" : ` ${special}`}`
-        : item.name;
-    const sizedName = `${enchantmentName} (${itemSize})`;
+    const sizedName = `${item.name} (${itemSize})`;
     onInventoryChange({
       ...inventory,
       [sizedName]: (inventory[sizedName] ?? 0) + quantity,
     });
-    if (item.category === "Weapons" || item.category === "Armor" || item.category === "Shields") {
-      setEnhancements((current) => ({ ...current, [item.category]: "Normal" }));
-      setSpecialEnchantments((current) => ({ ...current, [item.category]: "None" }));
-    }
   };
   const removeInventoryItem = (key: string) => {
     const nextInventory = { ...inventory };
@@ -5867,33 +5823,6 @@ function EquipmentStore({
     nextEquipment[slot] = key;
     onEquipmentChange(nextEquipment);
   };
-  const selectedWeapon = selectedWeapons.at(-1);
-  const weaponEnhancement = enhancements.Weapons ?? "Normal";
-  const weaponSpecial = specialEnchantments.Weapons ?? "None";
-  const weaponPrice = selectedWeapon
-    ? getSizedStorePrice(selectedWeapon, itemSize) +
-      (() => {
-        const enhancementBonus = weaponEnhancement === "Normal"
-          ? 0
-          : Number(weaponEnhancement.slice(1));
-        const specialBonus = weaponSpecial === "None" ? 0 : 1;
-        const effectiveBonus = enhancementBonus + specialBonus;
-        return effectiveBonus * effectiveBonus * 2000;
-      })()
-    : 0;
-  const weaponName = selectedWeapon
-    ? `${weaponEnhancement === "Normal" ? "" : `${weaponEnhancement} `}${selectedWeapon.name}${weaponSpecial === "None" ? "" : ` ${weaponSpecial}`}`
-    : "";
-  const armorEnhancement = enhancements.Armor ?? "Normal";
-  const armorSpecial = specialEnchantments.Armor ?? "None";
-  const armorPrice = selectedArmor
-    ? getSizedStorePrice(selectedArmor, itemSize) +
-      getEnhancementPrice(armorEnhancement) +
-      getEnhancementPrice(armorSpecial, true)
-    : 0;
-  const armorName = selectedArmor
-    ? `${armorEnhancement === "Normal" ? "" : `${armorEnhancement} `}${selectedArmor.name}${armorSpecial === "None" ? "" : ` ${armorSpecial}`}`
-    : "Choose armor";
   const categoryOrder: StoreCategory[] = [
     "Weapons",
     "Armor",
@@ -5972,41 +5901,6 @@ function EquipmentStore({
                 tooltipOnLeft={["Arms", "Waist", "Head", "Adventuring Gear", "Potions, Scrolls & Wands", "Instruments"].includes(itemCategory)}
             />
           );
-          const hasEnhancement =
-            itemCategory === "Weapons" || itemCategory === "Armor" || itemCategory === "Shields";
-          const specialOptions =
-            itemCategory === "Weapons"
-              ? [
-                  "None",
-                  "Flaming",
-                  "Frost",
-                  "Shock",
-                  "Keen",
-                  "Holy",
-                  "Vicious",
-                  "Bane",
-                ]
-              : [
-                  "None",
-                  "Fortification",
-                  "Shadow",
-                  "Silent Moves",
-                  "Slick",
-                  "Glamered",
-                  "Invulnerability",
-                ];
-          const hasPreview =
-            itemCategory === "Weapons"
-              ? Boolean(selectedWeapon)
-              : itemCategory === "Armor" || itemCategory === "Shields"
-                ? Boolean(selectedArmor)
-                : false;
-          const isPreviewCategory =
-            itemCategory === "Weapons" || itemCategory === "Armor" || itemCategory === "Shields";
-          const previewName =
-            itemCategory === "Weapons" ? weaponName : armorName;
-          const previewPrice =
-            itemCategory === "Weapons" ? weaponPrice : armorPrice;
           return (
             <div
               className={`store-category${
@@ -6015,66 +5909,10 @@ function EquipmentStore({
               key={itemCategory}
             >
               {itemCategory}
-              {hasEnhancement ? (
-                <span className="store-category-controls">
-                  {itemSelect}
-                  <select
-                    value={enhancements[itemCategory] ?? "Normal"}
-                    onChange={(event) =>
-                      setEnhancements({
-                        ...enhancements,
-                        [itemCategory]: event.target.value,
-                      })
-                    }
-                    aria-label={`${itemCategory} enhancement`}
-                    title={`Enhancement price: ${getEnhancementPrice(enhancements[itemCategory] ?? "Normal").toLocaleString()} gp`}
-                  >
-                    <option value="Normal" title={getEnchantmentDescription("Normal")}>Normal (0 gp)</option>
-                    {[1, 2, 3, 4, 5].map((bonus) => (
-                      <option key={bonus} value={`+${bonus}`} title={getEnchantmentDescription(`+${bonus}`)}>
-                        +{bonus} (
-                        {getEnhancementPrice(`+${bonus}`).toLocaleString()} gp)
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    value={specialEnchantments[itemCategory] ?? "None"}
-                    onChange={(event) =>
-                      setSpecialEnchantments({
-                        ...specialEnchantments,
-                        [itemCategory]: event.target.value,
-                      })
-                    }
-                    aria-label={`${itemCategory} special enchantment`}
-                    title={`Special enchantment price: ${getEnhancementPrice(specialEnchantments[itemCategory] ?? "None", true).toLocaleString()} gp`}
-                  >
-                    {specialOptions.map((option) => (
-                      <option key={option} value={option} title={getEnchantmentDescription(option, true)}>
-                        {option} (
-                        {getEnhancementPrice(option, true).toLocaleString()} gp)
-                      </option>
-                    ))}
-                  </select>
-                  {isPreviewCategory && hasPreview ? (
-                    <span className="store-built-item tooltip-anchor">
-                      {previewName}
-                      <strong>{previewPrice.toLocaleString()} gp</strong>
-                      <span className="inline-tooltip" role="tooltip">
-                        {itemCategory === "Weapons" && selectedWeapon
-                          ? `${getWeaponProfile(selectedWeapon.name).damage} damage; crit ${getWeaponProfile(selectedWeapon.name).crit}; ${getWeaponSizeNote(itemSize)}. `
-                          : "Armor preview. "}
-                        {getEnchantmentDescription(enhancements[itemCategory] ?? "Normal")}{" "}
-                        {getEnchantmentDescription(specialEnchantments[itemCategory] ?? "None", true)}
-                      </span>
-                    </span>
-                  ) : null}
-                </span>
-              ) : (
-                itemSelect
-              )}
+              {itemSelect}
             </div>
           );
-            })}
+        })}
           </div>
         </>
       ) : null}
