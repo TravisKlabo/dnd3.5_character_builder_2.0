@@ -178,10 +178,8 @@
 .store-size-row > span { grid-column: 1 / -1; }
 .store-size-row select { padding: 8px; border: 1px solid #b9bbb4; background: #fff; color: #243447; font: inherit; font-size: .72rem; font-weight: 400; }
 .store-size-row small { color: #68736f; font-size: .64rem; font-weight: 400; white-space: nowrap; }
-.equipment-store-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.equipment-store-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .store-category { display: grid; gap: 5px; color: #243447; font-size: .72rem; font-weight: 700; text-align: left; }
-.store-category:nth-child(1), .store-category:nth-child(2) { grid-column: 1 / -1; }
-.shields-store-category { grid-column: 1 / -1; }
 .store-category-controls { display: grid; grid-template-columns: 360px 92px 118px minmax(180px, max-content); width: max-content; max-width: 100%; gap: 8px; align-items: center; }
 .store-category-controls > select:first-of-type { grid-column: 2; width: 92px; }
 .store-category-controls > select:nth-of-type(2) { grid-column: 3; width: 118px; }
