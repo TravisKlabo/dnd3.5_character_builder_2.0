@@ -1367,6 +1367,10 @@ const weaponProfiles: Record<string, { damage: string; crit: string }> = {
   "Heavy Crossbow": { damage: "1d10", crit: "19–20/x2" },
   "Repeating Crossbow": { damage: "1d8", crit: "19–20/x2" },
   "Hand Crossbow": { damage: "1d4", crit: "19–20/x2" },
+  "Repeating Heavy Crossbow": { damage: "1d10", crit: "19–20/x2" },
+  "Repeating Light Crossbow": { damage: "1d8", crit: "19–20/x2" },
+  "Composite Shortbow": { damage: "1d6", crit: "x3" },
+  "Composite Longbow": { damage: "1d8", crit: "x3" },
   Sap: { damage: "1d6", crit: "x2" },
   Nunchaku: { damage: "1d6", crit: "x2" },
   Sai: { damage: "1d4", crit: "x2" },
@@ -1421,7 +1425,10 @@ const weaponDamageTypes: Record<string, string> = {
 };
 
 function getWeaponProfile(name: string) {
-  return weaponProfiles[name] ?? { damage: "varies", crit: "20/x2" };
+  const baseName = name
+    .replace(/^(?:Masterwork|Cold Iron|Silver|Mithral) /, "")
+    .replace(/^Repeating (Heavy|Light) Crossbow$/, "Repeating $1 Crossbow");
+  return weaponProfiles[name] ?? weaponProfiles[baseName] ?? { damage: "varies", crit: "20/x2" };
 }
 
 const rangedWeaponNames = new Set([
