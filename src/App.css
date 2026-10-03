@@ -168,7 +168,7 @@
 .equipment-footer { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 12px 18px; border: 1px solid #202020; }
 .equipment-footer label { display: grid; gap: 6px; font-family: 'Libre Baskerville', serif; font-size: .85rem; }
 .equipment-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.equipment-store { display: grid; gap: 14px; padding: 8px; border-top: 3px solid #202020; background: #f5f2e9; text-align: left; }
+.equipment-store { display: grid; width: 100%; max-width: none; gap: 14px; padding: 8px; border-top: 3px solid #202020; background: #f5f2e9; text-align: left; }
 .equipment-store-header { display: flex; justify-content: space-between; gap: 16px; align-items: end; }
 .equipment-store-header h2 { margin: 0; color: #202020; font-family: 'Libre Baskerville', serif; font-size: 1.25rem; }
 .equipment-store-header p { margin: 3px 0 0; color: #68736f; font-size: .78rem; }
