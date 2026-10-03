@@ -1020,7 +1020,57 @@ const storeItems: StoreItem[] = [
 ];
 
 storeItems.push(
+  { name: "Club", category: "Weapons", price: 0, weight: "3 lb." },
+  { name: "Quarterstaff", category: "Weapons", price: 0, weight: "4 lb." },
+  { name: "Short Sword", category: "Weapons", price: 10, weight: "2 lb." },
+  { name: "Battleaxe", category: "Weapons", price: 10, weight: "6 lb." },
+  { name: "Warhammer", category: "Weapons", price: 12, weight: "5 lb." },
+  { name: "Heavy Mace", category: "Weapons", price: 12, weight: "8 lb." },
+  { name: "Dwarven Waraxe", category: "Weapons", price: 30, weight: "8 lb." },
+  { name: "Greataxe", category: "Weapons", price: 20, weight: "12 lb." },
+  { name: "Glaive", category: "Weapons", price: 8, weight: "10 lb." },
+  { name: "Halberd", category: "Weapons", price: 10, weight: "12 lb." },
+  { name: "Guisarme", category: "Weapons", price: 9, weight: "12 lb." },
+  { name: "Lance", category: "Weapons", price: 10, weight: "10 lb." },
+  { name: "Spear", category: "Weapons", price: 2, weight: "6 lb." },
+  { name: "Heavy Crossbow", category: "Weapons", price: 50, weight: "8 lb." },
+  { name: "Light Crossbow", category: "Weapons", price: 35, weight: "4 lb." },
+  { name: "Sling", category: "Weapons", price: 0, weight: "0 lb." },
+  { name: "Net", category: "Weapons", price: 20, weight: "6 lb." },
+  { name: "Light Mace", category: "Weapons", price: 5, weight: "4 lb." },
+  { name: "Morningstar", category: "Weapons", price: 8, weight: "6 lb." },
+  { name: "Flail", category: "Weapons", price: 8, weight: "5 lb." },
+  { name: "Sickle", category: "Weapons", price: 6, weight: "2 lb." },
+  { name: "Javelin", category: "Weapons", price: 1, weight: "2 lb." },
+  { name: "Short Spear", category: "Weapons", price: 1, weight: "3 lb." },
+  { name: "Handaxe", category: "Weapons", price: 6, weight: "3 lb." },
+  { name: "Kukri", category: "Weapons", price: 8, weight: "2 lb." },
+  { name: "Scimitar", category: "Weapons", price: 15, weight: "4 lb." },
+  { name: "Trident", category: "Weapons", price: 15, weight: "4 lb." },
+  { name: "Hand Crossbow", category: "Weapons", price: 100, weight: "2 lb." },
+  { name: "Repeating Heavy Crossbow", category: "Weapons", price: 400, weight: "12 lb." },
+  { name: "Repeating Light Crossbow", category: "Weapons", price: 250, weight: "6 lb." },
+  { name: "Composite Shortbow", category: "Weapons", price: 75, weight: "2 lb." },
+  { name: "Composite Longbow", category: "Weapons", price: 100, weight: "3 lb." },
+  { name: "Mithral Chain Shirt", category: "Armor", price: 1100, weight: "12.5 lb." },
+  { name: "Mithral Breastplate", category: "Armor", price: 4200, weight: "15 lb." },
+  { name: "Mithral Full Plate", category: "Armor", price: 10500, weight: "25 lb." },
+  { name: "Masterwork Longsword", category: "Weapons", price: 315, weight: "4 lb." },
+  { name: "Masterwork Rapier", category: "Weapons", price: 320, weight: "2 lb." },
+  { name: "Masterwork Dagger", category: "Weapons", price: 302, weight: "1 lb." },
+  { name: "Masterwork Greatsword", category: "Weapons", price: 350, weight: "8 lb." },
+  { name: "Masterwork Shortbow", category: "Weapons", price: 330, weight: "2 lb." },
+  { name: "Masterwork Longbow", category: "Weapons", price: 375, weight: "3 lb." },
+  { name: "Masterwork Chain Shirt", category: "Armor", price: 250, weight: "25 lb." },
+  { name: "Masterwork Breastplate", category: "Armor", price: 350, weight: "30 lb." },
+  { name: "Masterwork Full Plate", category: "Armor", price: 1650, weight: "50 lb." },
+  { name: "Masterwork Heavy Steel Shield", category: "Shields", price: 170, weight: "15 lb." },
+  { name: "Cold Iron Longsword", category: "Weapons", price: 315, weight: "4 lb." },
+  { name: "Silver Dagger", category: "Weapons", price: 22, weight: "1 lb." },
+  { name: "Mithral Longsword", category: "Weapons", price: 1015, weight: "4 lb." },
   { name: "Ring of Feather Falling", category: "Rings", price: 2200, weight: "—", description: "You always fall as though from 60 feet or less." },
+  { name: "Ring of Acid Resistance", category: "Rings", price: 12000, weight: "—", description: "The wearer gains resistance 10 against acid." },
+  { name: "Ring of Chameleon", category: "Rings", price: 12700, weight: "—", description: "The wearer gains a +10 competence bonus on Hide checks." },
   { name: "Ring of Swimming", category: "Rings", price: 2500, weight: "—", description: "+5 competence bonus on Swim checks." },
   { name: "Ring of Sustenance", category: "Rings", price: 2500, weight: "—", description: "Requires only 2 hours of sleep and sustains the wearer without food or water." },
   { name: "Ring of Climbing", category: "Rings", price: 2500, weight: "—", description: "+5 competence bonus on Climb checks." },
@@ -1032,6 +1082,12 @@ storeItems.push(
   { name: "Ring of Freedom of Movement", category: "Rings", price: 40000, weight: "—", description: "The wearer is continually affected by freedom of movement." },
   { name: "Ring of Spell Storing", category: "Rings", price: 50000, weight: "—", description: "Stores up to five levels of spells for later casting." },
   { name: "Ring of Regeneration", category: "Rings", price: 90000, weight: "—", description: "The wearer regains hit points over time and reattaches severed limbs." },
+  { name: "Ring of Protection +4", category: "Rings", price: 32000, weight: "—", description: "+4 deflection bonus to AC." },
+  { name: "Ring of Protection +5", category: "Rings", price: 50000, weight: "—", description: "+5 deflection bonus to AC." },
+  { name: "Ring of Shooting Stars", category: "Rings", price: 50000, weight: "—", description: "Provides several fire-based spell-like effects." },
+  { name: "Ring of X-Ray Vision", category: "Rings", price: 25000, weight: "—", description: "Allows the wearer to see through solid matter for a limited time." },
+  { name: "Ring of Spell Turning", category: "Rings", price: 100000, weight: "—", description: "Turns spells and spell-like abilities back upon their casters." },
+  { name: "Ring of Greater Energy Resistance", category: "Rings", price: 66000, weight: "—", description: "The wearer gains resistance 30 against one energy type." },
   { name: "Ring of Wizardry I", category: "Rings", price: 20000, weight: "—", description: "Doubles 1st-level arcane spells per day." },
   { name: "Ring of Wizardry II", category: "Rings", price: 40000, weight: "—", description: "Doubles 2nd-level arcane spells per day." },
   { name: "Ring of Wizardry III", category: "Rings", price: 70000, weight: "—", description: "Doubles 3rd-level arcane spells per day." },
@@ -1145,7 +1201,25 @@ function getEquipmentArmorClass(character: Character) {
   );
 }
 
-function getStoreItemDescription(item: StoreItem) {
+const weaponDamageBySize: Record<string, { smaller: string; larger: string }> = {
+  "1d2": { smaller: "1", larger: "1d3" },
+  "1d3": { smaller: "1d2", larger: "1d4" },
+  "1d4": { smaller: "1d3", larger: "1d6" },
+  "1d6": { smaller: "1d4", larger: "1d8" },
+  "1d8": { smaller: "1d6", larger: "2d6" },
+  "1d10": { smaller: "1d8", larger: "2d8" },
+  "1d12": { smaller: "1d10", larger: "3d6" },
+  "2d4": { smaller: "1d4", larger: "2d6" },
+  "2d6": { smaller: "1d8", larger: "3d6" },
+};
+
+function getSizedWeaponDamage(damage: string, size: string) {
+  if (size === "Small") return weaponDamageBySize[damage]?.smaller ?? damage;
+  if (size === "Large") return weaponDamageBySize[damage]?.larger ?? damage;
+  return damage;
+}
+
+function getStoreItemDescription(item: StoreItem, size = "Medium") {
   if (item.category === "Armor") {
     const name = Object.keys(armorBonuses)
       .sort((left, right) => right.length - left.length)
@@ -1157,13 +1231,14 @@ function getStoreItemDescription(item: StoreItem) {
     const baseDescription = item.description ? `${item.description} ` : "";
     return `${baseDescription}${armorClass} armor; armor bonus +${armorBonus}; max Dex ${maximumDexterity === Infinity ? "—" : `+${maximumDexterity}`}; armor check penalty ${checkPenalty}.`;
   }
-  if (item.description) return item.description;
   if (item.category === "Weapons") {
     const profile = getWeaponProfile(item.name);
     const damageType = weaponDamageTypes[item.name] ?? "varies";
+    const damage = getSizedWeaponDamage(profile.damage, size);
     const critical = profile.crit === "20/x2" ? "" : `; crit ${profile.crit}`;
-    return `${damageType}; ${profile.damage} damage${critical}.`;
+    return `${item.description ? `${item.description} ` : ""}${damageType}; ${damage} damage${critical}.`;
   }
+  if (item.description) return item.description;
   if (item.category === "Shields") {
     const name = Object.keys(shieldBonuses).find((entry) => item.name.includes(entry));
     const shieldBonus = name ? shieldBonuses[name] : 0;
@@ -1214,7 +1289,7 @@ function getInventoryEntryDetails(key: string) {
     name,
     size,
     weight,
-    description: item ? getStoreItemDescription(item) : "Inventory item.",
+    description: item ? getStoreItemDescription(item, size) : "Inventory item.",
     numericWeight: Number.isNaN(numericWeight) ? 0 : numericWeight,
   };
 }
@@ -1254,6 +1329,10 @@ function getEnchantmentDescription(value: string, special = false) {
 }
 
 const weaponProfiles: Record<string, { damage: string; crit: string }> = {
+  Club: { damage: "1d6", crit: "x2" },
+  "Short Sword": { damage: "1d6", crit: "19–20/x2" },
+  "Heavy Mace": { damage: "1d8", crit: "x2" },
+  "Dwarven Waraxe": { damage: "1d10", crit: "x3" },
   Longsword: { damage: "1d8", crit: "19–20/x2" },
   Dagger: { damage: "1d4", crit: "19–20/x2" },
   Handaxe: { damage: "1d6", crit: "x3" },
@@ -1478,6 +1557,7 @@ function EquipmentItemPicker({
   const [quantity, setQuantity] = useState(1);
   const [hovered, setHovered] = useState<StoreItem>();
   const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const [menuPosition, setMenuPosition] = useState<{ top: number; left: number }>();
   const pickerRef = useRef<HTMLDivElement>(null);
   const results = items.filter((item) =>
     item.name.toLowerCase().includes(query.toLowerCase().trim()),
@@ -1499,7 +1579,8 @@ function EquipmentItemPicker({
     const closeOnOutsideClick = (event: PointerEvent) => {
       if (
         !(event.target instanceof Element) ||
-        !pickerRef.current?.contains(event.target)
+          (!pickerRef.current?.contains(event.target) &&
+            !event.target.closest(".equipment-portal-menu"))
       ) {
         setOpen(false);
         setHovered(undefined);
@@ -1523,7 +1604,12 @@ function EquipmentItemPicker({
           setOpen(nextOpen);
           setQuery("");
           setHighlightedIndex(0);
-          if (nextOpen) setSelected(undefined);
+          if (nextOpen) {
+            const rect = pickerRef.current?.getBoundingClientRect();
+            if (rect) {
+              setMenuPosition({ top: rect.bottom + 4, left: rect.left });
+            }
+          }
           setHovered(nextOpen ? results[0] : undefined);
         }}
       >
@@ -1545,9 +1631,9 @@ function EquipmentItemPicker({
           <strong>{hovered.name}</strong>
           <br />
           {hovered.category === "Weapons"
-            ? `${getWeaponProfile(hovered.name).damage} damage; crit ${getWeaponProfile(hovered.name).crit}; ${getWeaponSizeNote(size)}.`
+            ? `${getSizedWeaponDamage(getWeaponProfile(hovered.name).damage, size)} damage; crit ${getWeaponProfile(hovered.name).crit}; ${getWeaponSizeNote(size)}.`
             : hovered.category === "Armor"
-              ? getStoreItemDescription(hovered)
+              ? getStoreItemDescription(hovered, size)
             : null}
           <br />
           {getSizedStoreWeight(hovered, size)} carried weight;{" "}
@@ -1561,7 +1647,17 @@ function EquipmentItemPicker({
       {open &&
         createPortal(
         <div
-          className="race-menu"
+          className="race-menu equipment-portal-menu"
+          style={
+            menuPosition
+              ? {
+                  position: "fixed",
+                  zIndex: 1000,
+                  top: menuPosition.top,
+                  left: menuPosition.left,
+                }
+              : undefined
+          }
           role="listbox"
           aria-label="Equipment choices"
         >
@@ -1760,6 +1856,8 @@ storeItems.push(
     weight: "—",
   })),
   { name: "Goggles of Night", category: "Head", price: 8000, weight: "—" },
+  { name: "Goggles of Minute Seeing", category: "Head", price: 12500, weight: "—" },
+  { name: "Goggles of the Dragon", category: "Head", price: 15000, weight: "—" },
   {
     name: "Headband of Intellect +2",
     category: "Head",
@@ -1772,6 +1870,11 @@ storeItems.push(
     price: 2000,
     weight: "—",
   },
+  { name: "Amulet of Natural Armor +2", category: "Neck", price: 8000, weight: "—" },
+  { name: "Amulet of Natural Armor +3", category: "Neck", price: 18000, weight: "—" },
+  { name: "Amulet of Mighty Fists", category: "Neck", price: 6000, weight: "—" },
+  { name: "Periapt of Proof against Poison", category: "Neck", price: 27000, weight: "—" },
+  { name: "Periapt of Wound Closure", category: "Neck", price: 15000, weight: "—" },
   { name: "Pearl of Power (1st)", category: "Neck", price: 1000, weight: "—" },
   {
     name: "Cloak of Resistance +1",
@@ -1779,6 +1882,8 @@ storeItems.push(
     price: 1000,
     weight: "1 lb.",
   },
+  { name: "Cloak of Resistance +2", category: "Shoulders", price: 4000, weight: "1 lb." },
+  { name: "Cloak of Resistance +3", category: "Shoulders", price: 9000, weight: "1 lb." },
   {
     name: "Cloak of Elvenkind",
     category: "Shoulders",
@@ -1791,6 +1896,8 @@ storeItems.push(
     price: 24000,
     weight: "1 lb.",
   },
+  { name: "Cloak of the Bat", category: "Shoulders", price: 26000, weight: "1 lb." },
+  { name: "Cloak of Arachnida", category: "Shoulders", price: 14000, weight: "1 lb." },
   {
     name: "Cloak of Displacement (Major)",
     category: "Shoulders",
@@ -1877,17 +1984,29 @@ storeItems.push(
   },
   ...[
     ["Arms", "Bracers of Armor +1", 1000, "1 lb."],
+    ["Arms", "Bracers of Armor +2", 4000, "1 lb."],
+    ["Arms", "Bracers of Armor +3", 9000, "1 lb."],
     ["Arms", "Bracers of Archery, Lesser", 5000, "1 lb."],
+    ["Arms", "Bracers of Archery, Greater", 25000, "1 lb."],
     ["Hands", "Gloves of Swimming and Climbing", 6250, "—"],
+    ["Hands", "Gloves of Dexterity +4", 16000, "—"],
     ["Hands", "Gauntlets of Ogre Power", 4000, "4 lb."],
+    ["Hands", "Gloves of Arrow Snaring", 4000, "—"],
     ["Rings", "Ring of Swimming", 2500, "—"],
     ["Rings", "Ring of Invisibility", 20000, "—"],
     ["Rings", "Ring of Feather Falling", 2200, "—"],
     ["Waist", "Belt of Dwarvenkind", 14900, "1 lb."],
+    ["Waist", "Belt of Giant Strength +4", 16000, "1 lb."],
     ["Feet", "Boots of Speed", 12000, "1 lb."],
+    ["Feet", "Boots of Striding and Springing", 5500, "1 lb."],
+    ["Feet", "Boots of Levitation", 7500, "1 lb."],
     ["Feet", "Winged Boots", 16000, "1 lb."],
     ["Body & Wondrous Items", "Portable Hole", 20000, "—"],
     ["Body & Wondrous Items", "Figurine of Wondrous Power, Silver Raven", 3800, "1 lb."],
+    ["Body & Wondrous Items", "Figurine of Wondrous Power, Ebony Fly", 10000, "1 lb."],
+    ["Body & Wondrous Items", "Figurine of Wondrous Power, Golden Lions", 16500, "1 lb."],
+    ["Body & Wondrous Items", "Figurine of Wondrous Power, Onyx Dog", 6000, "1 lb."],
+    ["Body & Wondrous Items", "Dust of Dryness", 850, "—"],
     ["Head", "Circlet of Persuasion", 4500, "—"],
     ["Head", "Helm of Telepathy", 27000, "3 lb."],
     ["Neck", "Periapt of Wisdom +2", 4000, "—"],
@@ -1911,6 +2030,183 @@ storeItems.push(
     weight: weight as string,
   })),
 );
+const srdArmorStats: Record<string, { price: number; weight: string }> = {
+  "Padded Armor": { price: 5, weight: "10 lb." },
+  "Leather Armor": { price: 10, weight: "15 lb." },
+  "Studded Leather": { price: 25, weight: "20 lb." },
+  "Hide Armor": { price: 15, weight: "25 lb." },
+  "Scale Mail": { price: 50, weight: "30 lb." },
+  Chainmail: { price: 150, weight: "40 lb." },
+  "Splint Mail": { price: 200, weight: "45 lb." },
+  "Half-Plate": { price: 600, weight: "50 lb." },
+  "Full Plate": { price: 1500, weight: "50 lb." },
+  Buckler: { price: 15, weight: "5 lb." },
+  "Light Wooden Shield": { price: 3, weight: "5 lb." },
+  "Heavy Wooden Shield": { price: 7, weight: "10 lb." },
+  "Light Steel Shield": { price: 9, weight: "6 lb." },
+  "Heavy Steel Shield": { price: 20, weight: "15 lb." },
+  "Tower Shield": { price: 30, weight: "45 lb." },
+};
+storeItems.forEach((item) => {
+  const stats = srdArmorStats[item.name];
+  if (stats) {
+    item.price = stats.price;
+    item.weight = stats.weight;
+  }
+});
+storeItems.push(
+  { name: "Candle", category: "Adventuring Gear", price: 0.01, weight: "—" },
+  { name: "Chain (10 ft.)", category: "Adventuring Gear", price: 30, weight: "2 lb." },
+  { name: "Chalk (1 piece)", category: "Adventuring Gear", price: 0.01, weight: "—" },
+  { name: "Crowbar", category: "Tools & Kits", price: 2, weight: "5 lb." },
+  { name: "Grappling Hook", category: "Adventuring Gear", price: 1, weight: "4 lb." },
+  { name: "Hooded Lantern", category: "Adventuring Gear", price: 7, weight: "2 lb." },
+  { name: "Ink (1 oz.)", category: "Tools & Kits", price: 8, weight: "—" },
+  { name: "Iron Pot", category: "Adventuring Gear", price: 0.5, weight: "2 lb." },
+  { name: "Ladder (10 ft.)", category: "Adventuring Gear", price: 5, weight: "20 lb." },
+  { name: "Lock", category: "Tools & Kits", price: 80, weight: "1 lb." },
+  { name: "Manacles", category: "Tools & Kits", price: 15, weight: "2 lb." },
+  { name: "Mirror, Steel", category: "Adventuring Gear", price: 10, weight: "0.5 lb." },
+  { name: "Piton", category: "Adventuring Gear", price: 0.1, weight: "0.5 lb." },
+  { name: "Pole (10 ft.)", category: "Adventuring Gear", price: 0.2, weight: "8 lb." },
+  { name: "Sack", category: "Adventuring Gear", price: 0.1, weight: "0.5 lb." },
+  { name: "Whetstone", category: "Tools & Kits", price: 0.02, weight: "1 lb." },
+  { name: "Acid (flask)", category: "Consumables", price: 10, weight: "1 lb." },
+  { name: "Alchemist's Fire", category: "Consumables", price: 20, weight: "1 lb." },
+  { name: "Holy Water", category: "Consumables", price: 25, weight: "1 lb." },
+  { name: "Tindertwig", category: "Consumables", price: 1, weight: "—" },
+  { name: "Sunrod", category: "Consumables", price: 2, weight: "1 lb." },
+  { name: "Tanglefoot Bag", category: "Consumables", price: 50, weight: "4 lb." },
+  { name: "Oil (1-pint flask)", category: "Consumables", price: 0.1, weight: "1 lb." },
+  { name: "Powdered Silver", category: "Consumables", price: 25, weight: "—" },
+  { name: "Donkey", category: "Mounts & Vehicles", price: 8, weight: "—" },
+  { name: "Camel", category: "Mounts & Vehicles", price: 50, weight: "—" },
+  { name: "Dog", category: "Mounts & Vehicles", price: 25, weight: "—" },
+  { name: "Mastiff", category: "Mounts & Vehicles", price: 150, weight: "—" },
+  { name: "Elephant", category: "Mounts & Vehicles", price: 2000, weight: "—" },
+  { name: "Pony", category: "Mounts & Vehicles", price: 30, weight: "—" },
+  { name: "Warpony", category: "Mounts & Vehicles", price: 100, weight: "—" },
+  { name: "Heavy Horse", category: "Mounts & Vehicles", price: 200, weight: "—" },
+  { name: "Cart", category: "Mounts & Vehicles", price: 15, weight: "200 lb." },
+  { name: "Wagon", category: "Mounts & Vehicles", price: 35, weight: "400 lb." },
+  { name: "Sled", category: "Mounts & Vehicles", price: 20, weight: "300 lb." },
+  { name: "Canoe", category: "Mounts & Vehicles", price: 50, weight: "—" },
+  { name: "Raft", category: "Mounts & Vehicles", price: 10, weight: "—" },
+  { name: "Keelboat", category: "Mounts & Vehicles", price: 3000, weight: "—" },
+  { name: "Sailing Ship", category: "Mounts & Vehicles", price: 10000, weight: "—" },
+  { name: "Warship", category: "Mounts & Vehicles", price: 25000, weight: "—" },
+  { name: "Galley", category: "Mounts & Vehicles", price: 30000, weight: "—" },
+  { name: "Potion of Cure Light Wounds", category: "Potions, Scrolls & Wands", price: 50, weight: "—" },
+  { name: "Potion of Cure Serious Wounds", category: "Potions, Scrolls & Wands", price: 750, weight: "—" },
+  { name: "Potion of Cure Critical Wounds", category: "Potions, Scrolls & Wands", price: 1050, weight: "—" },
+  { name: "Potion of Bear's Endurance", category: "Potions, Scrolls & Wands", price: 300, weight: "—" },
+  { name: "Potion of Bull's Strength", category: "Potions, Scrolls & Wands", price: 300, weight: "—" },
+  { name: "Potion of Cat's Grace", category: "Potions, Scrolls & Wands", price: 300, weight: "—" },
+  { name: "Potion of Invisibility", category: "Potions, Scrolls & Wands", price: 300, weight: "—" },
+  { name: "Potion of Fly", category: "Potions, Scrolls & Wands", price: 750, weight: "—" },
+  { name: "Potion of Barkskin", category: "Potions, Scrolls & Wands", price: 300, weight: "—" },
+  { name: "Potion of Haste", category: "Potions, Scrolls & Wands", price: 750, weight: "—" },
+  { name: "Potion of Remove Disease", category: "Potions, Scrolls & Wands", price: 750, weight: "—" },
+  { name: "Potion of Neutralize Poison", category: "Potions, Scrolls & Wands", price: 750, weight: "—" },
+  { name: "Scroll of Identify", category: "Potions, Scrolls & Wands", price: 25, weight: "—" },
+  { name: "Scroll of Knock", category: "Potions, Scrolls & Wands", price: 150, weight: "—" },
+  { name: "Scroll of Fireball", category: "Potions, Scrolls & Wands", price: 375, weight: "—" },
+  { name: "Scroll of Teleport", category: "Potions, Scrolls & Wands", price: 1125, weight: "—" },
+  { name: "Scroll of Dispel Magic", category: "Potions, Scrolls & Wands", price: 375, weight: "—" },
+  { name: "Scroll of Invisibility", category: "Potions, Scrolls & Wands", price: 150, weight: "—" },
+  { name: "Wand of Magic Missile", category: "Potions, Scrolls & Wands", price: 750, weight: "—" },
+  { name: "Wand of Cure Light Wounds", category: "Potions, Scrolls & Wands", price: 750, weight: "—" },
+  { name: "Wand of Fireball", category: "Potions, Scrolls & Wands", price: 11250, weight: "—" },
+  { name: "Wand of Acid Arrow", category: "Potions, Scrolls & Wands", price: 4500, weight: "—" },
+  { name: "Wand of Scorching Ray", category: "Potions, Scrolls & Wands", price: 4500, weight: "—" },
+  { name: "Rod of Metamagic, Empower", category: "Rings & Magic Items", price: 32500, weight: "5 lb." },
+  { name: "Rod of Metamagic, Extend", category: "Rings & Magic Items", price: 11000, weight: "5 lb." },
+  { name: "Rod of Metamagic, Maximize", category: "Rings & Magic Items", price: 73000, weight: "5 lb." },
+  { name: "Rod of Absorption", category: "Rings & Magic Items", price: 50000, weight: "5 lb." },
+  { name: "Rod of Cancellation", category: "Rings & Magic Items", price: 11000, weight: "5 lb." },
+  { name: "Rod of Metamagic, Lesser Empower", category: "Rings & Magic Items", price: 9000, weight: "5 lb." },
+  { name: "Rod of Metamagic, Lesser Extend", category: "Rings & Magic Items", price: 3000, weight: "5 lb." },
+  { name: "Rod of Metamagic, Lesser Maximize", category: "Rings & Magic Items", price: 14000, weight: "5 lb." },
+  { name: "Rod of Lordly Might", category: "Rings & Magic Items", price: 70000, weight: "10 lb." },
+  { name: "Rod of Splendor", category: "Rings & Magic Items", price: 25000, weight: "5 lb." },
+  { name: "Rod of Thunder and Lightning", category: "Rings & Magic Items", price: 33000, weight: "5 lb." },
+  { name: "Rod of Wonder", category: "Rings & Magic Items", price: 12000, weight: "5 lb." },
+  { name: "Immovable Rod", category: "Rings & Magic Items", price: 5000, weight: "8 lb." },
+  { name: "Staff of Charming", category: "Rings & Magic Items", price: 16500, weight: "4 lb." },
+  { name: "Staff of Healing", category: "Rings & Magic Items", price: 15500, weight: "4 lb." },
+  { name: "Staff of Fire", category: "Rings & Magic Items", price: 18950, weight: "5 lb." },
+  { name: "Staff of Power", category: "Rings & Magic Items", price: 211000, weight: "5 lb." },
+  { name: "Pearl of Power, 1st-level", category: "Body & Wondrous Items", price: 1000, weight: "—" },
+  { name: "Pearl of Power, 2nd-level", category: "Body & Wondrous Items", price: 4000, weight: "—" },
+  { name: "Pearl of Power, 3rd-level", category: "Body & Wondrous Items", price: 9000, weight: "—" },
+  { name: "Pearl of Power, 4th-level", category: "Body & Wondrous Items", price: 16000, weight: "—" },
+  { name: "Dimensional Anchor", category: "Body & Wondrous Items", price: 5000, weight: "—" },
+  { name: "Buckler", category: "Shields", price: 15, weight: "5 lb." },
+  { name: "Light Wooden Shield", category: "Shields", price: 3, weight: "5 lb." },
+  { name: "Heavy Wooden Shield", category: "Shields", price: 7, weight: "10 lb." },
+  { name: "Light Steel Shield", category: "Shields", price: 9, weight: "6 lb." },
+  { name: "Ring of Counterspells", category: "Rings", price: 4000, weight: "—" },
+  { name: "Ring of Force Shield", category: "Rings", price: 8500, weight: "—" },
+  { name: "Ring of Ram", category: "Rings", price: 8600, weight: "—" },
+  { name: "Ring of Major Energy Resistance", category: "Rings", price: 44000, weight: "—" },
+  { name: "Ring of Minor Energy Resistance", category: "Rings", price: 12000, weight: "—" },
+  { name: "Ring of Protection +2", category: "Rings", price: 8000, weight: "—" },
+  { name: "Ring of Protection +3", category: "Rings", price: 18000, weight: "—" },
+  { name: "Ring of Three Wishes", category: "Rings", price: 97950, weight: "—" },
+  { name: "Broom of Flying", category: "Body & Wondrous Items", price: 17000, weight: "3 lb." },
+  { name: "Carpet of Flying, 5 ft. by 5 ft.", category: "Body & Wondrous Items", price: 20000, weight: "8 lb." },
+  { name: "Hat of Disguise", category: "Body & Wondrous Items", price: 1800, weight: "—" },
+  { name: "Necklace of Fireballs I", category: "Neck", price: 1650, weight: "—" },
+  { name: "Robe of Useful Items", category: "Body & Wondrous Items", price: 7000, weight: "1 lb." },
+  { name: "Stone of Good Luck", category: "Body & Wondrous Items", price: 20000, weight: "—" },
+  { name: "Sling Bullets (10)", category: "Ammunition", price: 0.1, weight: "5 lb." },
+  { name: "Masterwork Bolts (10)", category: "Ammunition", price: 51, weight: "1 lb." },
+  { name: "Silver Arrows (20)", category: "Ammunition", price: 22, weight: "3 lb." },
+  { name: "Silver Bolts (10)", category: "Ammunition", price: 11, weight: "1 lb." },
+  { name: "Cold Iron Bolts (10)", category: "Ammunition", price: 1, weight: "1 lb." },
+  { name: "Darts (10)", category: "Ammunition", price: 0.5, weight: "5 lb." },
+  { name: "Blowgun Needles (10)", category: "Ammunition", price: 1, weight: "—" },
+  { name: "Masterwork Sling Bullets (10)", category: "Ammunition", price: 30.1, weight: "5 lb." },
+  { name: "Silver Sling Bullets (10)", category: "Ammunition", price: 20.1, weight: "5 lb." },
+  { name: "Lute", category: "Instruments", price: 35, weight: "3 lb." },
+  { name: "Lyre", category: "Instruments", price: 30, weight: "3 lb." },
+  { name: "Flute", category: "Instruments", price: 2, weight: "2 lb." },
+  { name: "Horn", category: "Instruments", price: 3, weight: "2 lb." },
+  { name: "Fiddle", category: "Instruments", price: 30, weight: "3 lb." },
+  { name: "Pan Pipes", category: "Instruments", price: 12, weight: "2 lb." },
+  { name: "Masterwork Instrument", category: "Instruments", price: 100, weight: "varies" },
+  { name: "Artisan's Tools", category: "Tools & Kits", price: 5, weight: "5 lb." },
+  { name: "Fishing Tackle", category: "Tools & Kits", price: 1, weight: "5 lb." },
+  { name: "Magnifying Glass", category: "Tools & Kits", price: 100, weight: "—" },
+  { name: "Manacles, Masterwork", category: "Tools & Kits", price: 50, weight: "2 lb." },
+  { name: "Merchant's Scale", category: "Tools & Kits", price: 2, weight: "1 lb." },
+  { name: "Mess Kit", category: "Tools & Kits", price: 0.2, weight: "1 lb." },
+  { name: "Musical Instrument, Common", category: "Tools & Kits", price: 5, weight: "3 lb." },
+  { name: "Spyglass", category: "Tools & Kits", price: 1000, weight: "1 lb." },
+  { name: "Signal Whistle", category: "Tools & Kits", price: 0.8, weight: "—" },
+  { name: "Masterwork Thieves' Tools", category: "Tools & Kits", price: 100, weight: "2 lb." },
+  { name: "Caltrops", category: "Tools & Kits", price: 1, weight: "2 lb." },
+  { name: "Block and Tackle", category: "Tools & Kits", price: 5, weight: "5 lb." },
+  { name: "Portable Ram", category: "Tools & Kits", price: 10, weight: "20 lb." },
+  { name: "Battering Ram", category: "Tools & Kits", price: 10, weight: "20 lb." },
+  { name: "Blanket, Winter", category: "Adventuring Gear", price: 0.5, weight: "3 lb." },
+  { name: "Bucket", category: "Adventuring Gear", price: 0.5, weight: "2 lb." },
+  { name: "Cooking Pot", category: "Adventuring Gear", price: 2, weight: "4 lb." },
+  { name: "Crowbar, Masterwork", category: "Tools & Kits", price: 302, weight: "5 lb." },
+  { name: "Soap", category: "Adventuring Gear", price: 0.5, weight: "1 lb." },
+  { name: "Bedroll", category: "Adventuring Gear", price: 0.1, weight: "5 lb." },
+  { name: "Waterskin", category: "Adventuring Gear", price: 1, weight: "4 lb." },
+  { name: "Scroll Case", category: "Adventuring Gear", price: 1, weight: "0.5 lb." },
+  { name: "Map Case", category: "Adventuring Gear", price: 1, weight: "0.5 lb." },
+  { name: "Tarp", category: "Adventuring Gear", price: 0.5, weight: "5 lb." },
+  { name: "Traveler's Outfit", category: "Adventuring Gear", price: 1, weight: "—" },
+  { name: "Winter Blanket", category: "Adventuring Gear", price: 0.5, weight: "3 lb." },
+);
+const uniqueStoreItems = new Map<string, StoreItem>();
+storeItems.forEach((item) => {
+  if (!uniqueStoreItems.has(item.name)) uniqueStoreItems.set(item.name, item);
+});
+storeItems.splice(0, storeItems.length, ...uniqueStoreItems.values());
 const pointBuyCosts: Record<number, number> = {
   8: 0,
   9: 1,
@@ -3254,6 +3550,7 @@ function App() {
         {[
           ["character", "Character"],
           ["equipment", "Equipment"],
+          ["store", "Store"],
           ...(hasSpellcasting ? [["spells", "Spells"]] : []),
         ].map(([id, label]) => (
           <button
@@ -3322,6 +3619,13 @@ function App() {
       {visibleSheet === "equipment" && (
         <EquipmentSheet
           key={displayedCharacter.race}
+          character={displayedCharacter}
+          onEquipmentChange={updateEquipment}
+          onInventoryChange={updateInventory}
+        />
+      )}
+      {visibleSheet === "store" && (
+        <EquipmentStore
           character={displayedCharacter}
           onEquipmentChange={updateEquipment}
           onInventoryChange={updateInventory}
@@ -5238,13 +5542,138 @@ function EquipmentSheet({
         <Stat label="Carried Weight" value="0 lb." />
         <Stat label="Armor Class" value={String(getEquipmentArmorClass(character))} />
       </div>
-      <EquipmentStore
+      <InventorySummary
         character={character}
         onEquipmentChange={onEquipmentChange}
         onInventoryChange={onInventoryChange}
       />
     </div>
   );
+}
+
+function InventorySummary({
+  character,
+  onEquipmentChange,
+  onInventoryChange,
+}: {
+  character: Character;
+  onEquipmentChange: (equipment: Record<string, string>) => void;
+  onInventoryChange: (inventory: Record<string, number>) => void;
+}) {
+  const entries = Object.entries(character.inventory ?? {}).map(([key, quantity]) => {
+    const details = getInventoryEntryDetails(key);
+    return { key, quantity, ...details, totalWeight: details.numericWeight * quantity };
+  });
+  const totalWeight = entries.reduce((total, entry) => total + entry.totalWeight, 0);
+  return (
+    <section className="equipment-inventory" aria-labelledby="equipment-summary-inventory-title">
+      <div className="equipment-inventory-header">
+        <h3 id="equipment-summary-inventory-title">Inventory</h3>
+        <strong>{totalWeight.toLocaleString()} lb. total</strong>
+      </div>
+      {entries.length ? (
+        <div className="equipment-inventory-list">
+          {entries.map((entry) => (
+            <div className="equipment-inventory-row" key={entry.key}>
+              <div className="equipment-inventory-name">
+                <strong>{entry.name} ({entry.size[0]})</strong>
+                <small>{entry.description}</small>
+              </div>
+              <span>Qty. {entry.quantity}</span>
+              <span>{entry.weight} each</span>
+              <span>{entry.totalWeight ? `${entry.totalWeight} lb. total` : "Weight varies"}</span>
+              <span className="equipment-inventory-actions">
+                {Object.values(character.equipment ?? {}).includes(entry.key) ? (
+                  <button type="button" className="is-equipped" onClick={() => unequipInventoryItem(character, entry.key, onEquipmentChange)}>Unequip</button>
+                ) : (
+                  <button type="button" onClick={() => equipInventoryItem(character, entry.key, onEquipmentChange)}>Equip</button>
+                )}
+                <button type="button" onClick={() => removeInventoryItem(character, entry.key, onInventoryChange)}>Remove</button>
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="equipment-inventory-empty">No items purchased yet.</p>
+      )}
+    </section>
+  );
+}
+
+function removeInventoryItem(
+  character: Character,
+  key: string,
+  onInventoryChange: (inventory: Record<string, number>) => void,
+) {
+  const inventory = { ...(character.inventory ?? {}) };
+  if (inventory[key] <= 1) delete inventory[key];
+  else inventory[key] -= 1;
+  onInventoryChange(inventory);
+}
+
+function equipInventoryItem(
+  character: Character,
+  key: string,
+  onEquipmentChange: (equipment: Record<string, string>) => void,
+) {
+  const itemName = getInventoryEntryDetails(key).name;
+  const item = [...storeItems]
+    .sort((left, right) => right.name.length - left.name.length)
+    .find((entry) => itemName.includes(entry.name));
+  if (item) {
+    const proficiencyWarning = getItemProficiencyWarning(character, item);
+    if (proficiencyWarning) {
+      window.alert(proficiencyWarning);
+      return;
+    }
+  }
+  let slot = "Miscellaneous";
+  const nextEquipment = { ...(character.equipment ?? {}) };
+  if (item?.category === "Shields") {
+    slot = "Shield";
+    delete nextEquipment["Off Hand Weapon"];
+  } else if (item?.category === "Armor") slot = "Armor";
+  else if (item?.name.startsWith("Ring of ")) slot = nextEquipment["Rings 1"] ? "Rings 2" : "Rings 1";
+  else if (item?.name.startsWith("Headband of ")) slot = "Head";
+  else if (item?.name.startsWith("Cloak of ")) slot = "Shoulders";
+  if (item?.category === "Weapons") {
+    if (rangedWeaponNames.has(item.name)) slot = "Ranged Weapon";
+    else if (twoHandedWeaponNames.has(item.name)) {
+      slot = "Main Weapon";
+      delete nextEquipment["Off Hand Weapon"];
+      delete nextEquipment["Ranged Weapon"];
+    } else if (!character.equipment?.["Main Weapon"]) slot = "Main Weapon";
+    else if (character.equipment?.Shield) {
+      window.alert("A shield occupies your off hand, so this weapon cannot be equipped in Off Hand Weapon. Unequip the shield first.");
+      return;
+    } else if (!lightOffHandWeaponNames.has(item.name)) {
+      window.alert("This weapon is not a light melee weapon and cannot be equipped in the Off Hand Weapon slot under D&D 3.5 rules. It will replace the Main Weapon.");
+      slot = "Main Weapon";
+    } else if (
+      character.equipment?.["Main Weapon"] === key &&
+      (character.inventory?.[key] ?? 0) < 2
+    ) {
+      window.alert("You only own one of this weapon, so it cannot be equipped in both hands.");
+      return;
+    } else {
+      slot = window.confirm("Your Main Weapon slot is occupied. Equip this light melee weapon in Off Hand Weapon?")
+        ? "Off Hand Weapon"
+        : "Main Weapon";
+    }
+  }
+  nextEquipment[slot] = key;
+  onEquipmentChange(nextEquipment);
+}
+
+function unequipInventoryItem(
+  character: Character,
+  key: string,
+  onEquipmentChange: (equipment: Record<string, string>) => void,
+) {
+  const nextEquipment = Object.fromEntries(
+    Object.entries(character.equipment ?? {}).filter(([, value]) => value !== key),
+  );
+  onEquipmentChange(nextEquipment);
 }
 
 function EquipmentStore({
@@ -5348,6 +5777,13 @@ function EquipmentStore({
         );
         slot = "Main Weapon";
       }
+      else if (
+        character.equipment?.["Main Weapon"] === key &&
+        (inventory[key] ?? 0) < 2
+      ) {
+        window.alert("You only own one of this weapon, so it cannot be equipped in both hands.");
+        return;
+      }
       else {
         const useOffHand = window.confirm(
           "Your Main Weapon slot is occupied. Equip this light melee weapon in Off Hand Weapon?",
@@ -5363,10 +5799,14 @@ function EquipmentStore({
   const weaponSpecial = specialEnchantments.Weapons ?? "None";
   const weaponPrice = selectedWeapon
     ? getSizedStorePrice(selectedWeapon, itemSize) +
-      (weaponEnhancement === "Normal"
-        ? 0
-        : Number(weaponEnhancement.slice(1)) * 2000) +
-      (weaponSpecial === "None" ? 0 : 8000)
+      (() => {
+        const enhancementBonus = weaponEnhancement === "Normal"
+          ? 0
+          : Number(weaponEnhancement.slice(1));
+        const specialBonus = weaponSpecial === "None" ? 0 : 1;
+        const effectiveBonus = enhancementBonus + specialBonus;
+        return effectiveBonus * effectiveBonus * 2000;
+      })()
     : 0;
   const weaponName = selectedWeapon
     ? `${weaponEnhancement === "Normal" ? "" : `${weaponEnhancement} `}${selectedWeapon.name}${weaponSpecial === "None" ? "" : ` ${weaponSpecial}`}`
@@ -5584,9 +6024,11 @@ function EquipmentStore({
                 <span>{entry.weight} each</span>
                 <span>{entry.totalWeight ? `${entry.totalWeight} lb. total` : "Weight varies"}</span>
                 <span className="equipment-inventory-actions">
-                  <button className={Object.values(character.equipment ?? {}).includes(entry.key) ? "is-equipped" : ""} type="button" title={Object.values(character.equipment ?? {}).includes(entry.key) ? "Equipped" : "Equip this item"} onClick={() => equipInventoryItem(entry.key)}>
-                    {Object.values(character.equipment ?? {}).includes(entry.key) ? "Equipped" : "Equip"}
-                  </button>
+                  {Object.values(character.equipment ?? {}).includes(entry.key) ? (
+                    <button className="is-equipped" type="button" title="Unequip this item" onClick={() => unequipInventoryItem(character, entry.key, onEquipmentChange)}>Unequip</button>
+                  ) : (
+                    <button type="button" title="Equip this item" onClick={() => equipInventoryItem(entry.key)}>Equip</button>
+                  )}
                   <button type="button" onClick={() => removeInventoryItem(entry.key)}>Remove</button>
                 </span>
               </div>

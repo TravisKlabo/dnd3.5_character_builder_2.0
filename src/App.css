@@ -205,9 +205,10 @@
 .equipment-item-picker .race-trigger { flex: 1; min-width: 0; }
 .equipment-item-picker .race-menu { direction: rtl; }
 .equipment-item-picker .race-menu > * { direction: ltr; }
-.equipment-item-picker.menu-on-left .feat-picker-tooltip { top: 0; right: calc(100% + min(360px, 42vw) + 27px); left: auto; transform: none; }
+.equipment-portal-menu { width: min(360px, calc(100vw - 24px)); max-width: calc(100vw - 24px); }
+.equipment-item-picker.menu-on-left .feat-picker-tooltip { top: 0; right: calc(100% + 18px); left: auto; transform: none; }
 .equipment-item-picker.menu-on-left .feat-picker-tooltip::before { top: 10px; right: -6px; left: auto; border: 0; border-top: 1px solid #243447; border-right: 1px solid #243447; }
-.equipment-item-picker:not(.menu-on-left) .feat-picker-tooltip { top: 0; right: auto; left: calc(100% + min(360px, 42vw) + 27px); transform: none; }
+.equipment-item-picker:not(.menu-on-left) .feat-picker-tooltip { top: 0; right: auto; left: calc(100% + 18px); transform: none; }
 .equipment-item-picker:not(.menu-on-left) .feat-picker-tooltip::before { top: 10px; right: auto; left: -6px; border: 0; border-bottom: 1px solid #243447; border-left: 1px solid #243447; }
 .equipment-item-picker.tooltip-on-left .feat-picker-tooltip { top: 0; right: -9px; left: auto; transform: none; }
 .equipment-item-picker.tooltip-on-left .feat-picker-tooltip::before { top: 10px; right: -6px; left: auto; border: 0; border-top: 1px solid #243447; border-right: 1px solid #243447; }
