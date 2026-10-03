@@ -460,6 +460,18 @@ const classSkills: Partial<Record<ClassId, string[]>> = {
 };
 const featCatalog: FeatDefinition[] = [
   {
+    id: "scribe-scroll",
+    name: "Scribe Scroll",
+    source: "core-35-srd",
+    description: "Create magic scrolls containing spells you can cast.",
+  },
+  {
+    id: "craft-wand",
+    name: "Craft Wand",
+    source: "core-35-srd",
+    description: "Create wands containing spells of 4th level or lower.",
+  },
+  {
     id: "alertness",
     name: "Alertness",
     source: "core-35-srd",
@@ -772,7 +784,7 @@ const fullCasterProgression = `3 1|4 2|4 2 1|4 3 2|4 3 2 1|4 3 3 2|4 4 3 2 1|4 4
 const sorcererProgression = `5 3|6 4|6 5|6 6 3|6 6 4|6 6 5 3|6 6 6 4|6 6 6 5 3|6 6 6 6 4|6 6 6 6 5 3|6 6 6 6 6 4|6 6 6 6 6 5 3|6 6 6 6 6 6 4|6 6 6 6 6 6 5 3|6 6 6 6 6 6 6 4|6 6 6 6 6 6 6 5 3|6 6 6 6 6 6 6 6 4|6 6 6 6 6 6 6 6 5 3|6 6 6 6 6 6 6 6 6 4|6 6 6 6 6 6 6 6 6 6`.split("|").map((row) => row.split(" ").map(Number));
 const bardProgression = `2|3|3 1|3 2|3 3 1|3 3 2|3 3 2 1|3 3 3 1|3 3 3 2|3 3 3 2 1|3 3 3 3 1|3 3 3 3 2|3 3 3 3 2 1|3 3 3 3 3 1|3 3 3 3 3 2|3 3 3 3 3 2 1|3 3 3 3 3 3 1|3 3 3 3 3 3 2|3 3 3 3 3 3 3|4 4 4 4 4 4 4`.split("|").map((row) => row.split(" ").map(Number));
 const partialCasterProgression = `| | |0|0|1|1|1 0|1 0|1 1|1 1 0|1 1 1|1 1 1|2 1 1 0|2 1 1 1|2 2 1 1|2 2 2 1|3 2 2 1|3 3 3 2|3 3 3 3`.split("|").map((row) => row.trim() ? row.trim().split(" ").map(Number) : []);
-const bardKnownProgression = `2|3 1|4 2|4 3|4 3 1|4 3 2|4 3 2|4 3 3 1|4 3 3 2|4 3 3 2|4 3 3 3 1|4 3 3 3 2|4 3 3 3 2|4 3 3 3 3 1|4 3 3 3 3 2|4 3 3 3 3 2|4 3 3 3 3 3 1|4 3 3 3 3 3 2|4 3 3 3 3 3 3|4 4 4 4 4 4 4`.split("|").map((row) => row.split(" ").map(Number));
+const bardKnownProgression = `4 2|5 2|6 3|6 3 2|6 4 3|6 4 3 2|6 4 4 3|6 4 4 3 2|6 4 4 4 3|6 4 4 4 3 2|6 4 4 4 4 3|6 4 4 4 4 3 2|6 4 4 4 4 4 3|6 4 4 4 4 4 3 2|6 4 4 4 4 4 4 3|6 4 4 4 4 4 4 3 2|6 4 4 4 4 4 4 4 3|6 4 4 4 4 4 4 4 3 2|6 4 4 4 4 4 4 4 4 3|6 4 4 4 4 4 4 4 4 4`.split("|").map((row) => row.split(" ").map(Number));
 const sorcererKnownProgression = `4 2|5 3|6 4|6 5 2|6 6 3|6 6 4 2|6 6 5 3|6 6 6 4|6 6 6 5 2|6 6 6 6 3|6 6 6 6 4 2|6 6 6 6 5 3|6 6 6 6 6 4|6 6 6 6 6 5 2|6 6 6 6 6 6 3|6 6 6 6 6 6 4 2|6 6 6 6 6 6 5 3|6 6 6 6 6 6 6 4|6 6 6 6 6 6 6 5 2|6 6 6 6 6 6 6 6 3`.split("|").map((row) => row.split(" ").map(Number));
 const spellProgressions: Partial<Record<ClassId, number[][]>> = {
   bard: bardProgression,
@@ -784,70 +796,6 @@ const spellProgressions: Partial<Record<ClassId, number[][]>> = {
   sorcerer: sorcererProgression,
   wizard: fullCasterProgression,
 };
-const spellSlots: Partial<Record<ClassId, number[][]>> = {
-  bard: [[2], [1], [0], [0], [0], [0], [0], [0], [0], [0]],
-    cleric: [[3], [1], [0], [0], [0], [0], [0], [0], [0], [0]],
-    druid: [[3], [1], [0], [0], [0], [0], [0], [0], [0], [0]],
-    mystic: [[3], [1], [0], [0], [0], [0], [0], [0], [0], [0]],
-  paladin: [
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-  ],
-  ranger: [
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-  ],
-  sorcerer: [[5], [3], [1]],
-  wizard: [
-    [3],
-    [1],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-    [0],
-  ],
-};
-
 function baseSpellSlots(classId: ClassId, classLevel: number, spellLevel: number) {
   return spellProgressions[classId]?.[Math.max(0, classLevel - 1)]?.[spellLevel] ?? 0;
 }
@@ -856,9 +804,10 @@ function hasSpellLevelAtClassLevel(
   classLevel: number,
   spellLevel: number,
 ) {
-  if (spellLevel === 0) return true;
+  if (spellLevel === 0) return !["paladin", "ranger"].includes(classId);
   if (classId === "paladin" || classId === "ranger") return classLevel >= 4;
-  if (classId === "bard") return classLevel >= spellLevel * 2;
+  if (classId === "bard")
+    return bardKnownProgression[classLevel - 1]?.[spellLevel] !== undefined;
   return classLevel >= spellLevel * 2 - 1;
 }
 const abilityNames: AbilityName[] = ["str", "dex", "con", "int", "wis", "cha"];
@@ -872,7 +821,13 @@ const abilityLabels: Record<AbilityName, string> = {
 };
 const startingClassFeatures: Partial<Record<ClassId, string[]>> = {
   barbarian: ["Rage", "Fast Movement"],
-  bard: ["Bardic Music", "Countersong", "Fascinate", "Inspire Courage"],
+  bard: [
+    "Bardic Knowledge",
+    "Bardic Music",
+    "Countersong",
+    "Fascinate",
+    "Inspire Courage",
+  ],
   cleric: ["Turn or Rebuke Undead", "Domains"],
   druid: ["Animal Companion", "Nature Sense", "Wild Empathy"],
   fighter: ["Bonus Feat"],
@@ -884,6 +839,18 @@ const startingClassFeatures: Partial<Record<ClassId, string[]>> = {
   wizard: ["Spellbook", "Summon Familiar"],
   mystic: ["Divine Spellcasting"],
   noble: ["Coordinate"],
+};
+const classFeatureDescriptions: Record<string, string> = {
+  "Bardic Knowledge":
+    "Make a special check to recall legends, notable people, and obscure information.",
+  "Bardic Music":
+    "Use performance to create magical effects while meeting the required ranks and level.",
+  Countersong:
+    "Grant nearby allies a new saving throw against sonic or language-dependent effects.",
+  Fascinate:
+    "Use performance to captivate creatures that can see and hear you.",
+  "Inspire Courage":
+    "Grant allies a morale bonus on saves against fear and charm and on weapon damage rolls.",
 };
 type StoreCategory =
   | "Weapons"
@@ -1310,13 +1277,20 @@ function getInventoryEntryDetails(key: string) {
   const item = [...storeItems]
     .sort((left, right) => right.name.length - left.name.length)
     .find((entry) => name.includes(entry.name));
+  const spellName = name.match(/^(?:Wand|Scroll) of (.+?) \(CL /)?.[1];
+  const spell = spellName
+    ? srdSpells.find((entry) => entry.name === spellName)
+    : undefined;
   const weight = item ? getSizedStoreWeight(item, size) : "—";
   const numericWeight = Number.parseFloat(weight);
   return {
     name,
     size,
     weight,
+    category: item?.category ?? "Crafted item",
+    price: item ? getSizedStorePrice(item, size) : undefined,
     description: item ? getStoreItemDescription(item, size) : "Inventory item.",
+    spell,
     numericWeight: Number.isNaN(numericWeight) ? 0 : numericWeight,
   };
 }
@@ -1528,20 +1502,27 @@ const twoHandedWeaponNames = new Set([
 ]);
 
 const simpleWeaponNames = new Set([
+  "Club",
   "Dagger",
   "Light Mace",
   "Light Hammer",
   "Morningstar",
   "Quarterstaff",
+  "Sickle",
   "Light Crossbow",
   "Heavy Crossbow",
   "Sling",
   "Javelin",
   "Dart",
   "Shuriken",
+  "Unarmed Strike",
 ]);
 
 const martialWeaponNames = new Set([
+  "Battleaxe",
+  "Flail",
+  "Heavy Flail",
+  "Short Sword",
   "Longsword",
   "Rapier",
   "Greatsword",
@@ -1562,10 +1543,13 @@ const martialWeaponNames = new Set([
   "Lance",
   "Repeating Crossbow",
   "Hand Crossbow",
+  "Morningstar",
+  "Scimitar",
+  "Spear",
+  "Warhammer",
 ]);
 
 const martialWeaponClasses = new Set(["barbarian", "fighter", "paladin", "ranger"]);
-const armorCategories = new Set(["Armor", "Shields"]);
 
 function getBaseEquipmentName(name: string) {
   return name.replace(/^(?:Masterwork|Cold Iron|Silver|Mithral) /, "");
@@ -1578,24 +1562,47 @@ function getItemProficiencyWarning(character: Character, item: StoreItem) {
     const baseName = getBaseEquipmentName(item.name);
     const simple = simpleWeaponNames.has(baseName);
     const martial = martialWeaponNames.has(baseName);
+    const race = raceDefinitions[character.race.toLowerCase().replaceAll(" ", "-")];
+    const racialWeapons = race?.id === "dwarf"
+      ? ["Dwarven Waraxe", "Warhammer"]
+      : race?.id === "elf" || race?.id?.includes("elf")
+        ? ["Longsword", "Rapier", "Longbow", "Shortbow"]
+        : race?.id === "gnome"
+          ? ["Gnome Hooked Hammer"]
+          : [];
     const proficient = classIds.some((classId) =>
       simple || (martial && martialWeaponClasses.has(classId)) ||
       (classId === "bard" && ["Longsword", "Rapier", "Shortbow", "Whip"].includes(baseName)) ||
-      (classId === "rogue" && ["Rapier", "Hand Crossbow", "Shortbow", "Shortsword", "Sap"].includes(baseName)),
+      (classId === "rogue" && ["Rapier", "Hand Crossbow", "Shortbow", "Short Sword", "Sap"].includes(baseName)) ||
+      (classId === "monk" && ["Kama", "Nunchaku", "Sai", "Shuriken", "Siangham"].includes(baseName)) ||
+      racialWeapons.includes(baseName),
     );
     return proficient ? null : `${item.name}: this character is not proficient with this weapon and will take the normal nonproficiency penalties.`;
   }
-  if (armorCategories.has(item.category)) {
+  if (item.category === "Shields") {
+    const baseName = getBaseEquipmentName(item.name);
+    const towerShield = baseName === "Tower Shield";
+    const metalShield = /steel|mithral|metal/i.test(baseName);
+    const proficient = classIds.some((classId) =>
+      ["barbarian", "bard", "cleric", "druid", "fighter", "paladin", "ranger"].includes(classId) &&
+      (!towerShield || ["fighter", "paladin"].includes(classId)) &&
+      !(classId === "druid" && metalShield),
+    );
+    return proficient ? null : `${item.name}: this character is not proficient with this shield and will take the normal nonproficiency penalties.`;
+  }
+  if (item.category === "Armor") {
     const baseName = getBaseEquipmentName(item.name);
     const mediumArmor = ["Hide Armor", "Scale Mail", "Chainmail", "Mithral Breastplate"].includes(baseName);
     const lightArmor = ["Padded Armor", "Leather Armor", "Studded Leather", "Mithral Chain Shirt"].includes(baseName);
+    const metalArmor = /chain|scale|breastplate|full plate|steel|mithral/i.test(baseName);
     const proficient = classIds.some((classId) => {
+      if (classId === "druid") return !metalArmor && (lightArmor || mediumArmor);
       if (["fighter", "paladin", "cleric", "barbarian"].includes(classId)) return true;
       if (classId === "ranger") return lightArmor || mediumArmor;
       if (["bard", "rogue", "noble"].includes(classId)) return lightArmor;
       return false;
     });
-    return proficient ? null : `${item.name}: this character is not proficient with this armor or shield and will take the normal nonproficiency penalties.`;
+    return proficient ? null : `${item.name}: this character is not proficient with this armor and will take the normal nonproficiency penalties.`;
   }
   return null;
 }
@@ -2388,11 +2395,15 @@ function getLevelUpSpellWarnings(original: Character, proposed: Character) {
       const base = classId === "bard"
         ? bardKnownProgression[proposedLevel - 1]?.[level] ?? 0
         : sorcererKnownProgression[proposedLevel - 1]?.[level] ?? 0;
-      const required = base;
+      const originalBase = classId === "bard"
+        ? bardKnownProgression[originalLevel - 1]?.[level] ?? 0
+        : sorcererKnownProgression[originalLevel - 1]?.[level] ?? 0;
+      const required = Math.max(0, base - originalBase);
+      const originalSelected = selectedCount(original, level);
       const proposedSelected = selectedCount(proposed, level);
       const missing = Math.max(
         0,
-        required - proposedSelected,
+        required - Math.max(0, proposedSelected - originalSelected),
       );
       if (missing) warnings.push(`Learn ${missing} additional ${spellLevelName(level)} ${classDefinitions[classId].name} spell${missing === 1 ? "" : "s"}.`);
     }
@@ -2415,41 +2426,7 @@ function getLevelUpSpellWarnings(original: Character, proposed: Character) {
       if (missing) warnings.push(`Add ${missing} ${spellLevelName(level)} Wizard spell${missing === 1 ? "" : "s"} to the spellbook.`);
     }
   } else {
-    const castingAbility: Partial<Record<ClassId, AbilityName>> = {
-      cleric: "wis",
-      druid: "wis",
-      mystic: "wis",
-      paladin: "cha",
-      ranger: "wis",
-    };
-    const modifier = abilityModifier(
-      proposed.abilities[castingAbility[classId] ?? "wis"],
-    );
-    const originalPrepared = new Set(
-      original.preparedSpellsByClass?.[classId] ?? original.preparedSpells,
-    );
-    const proposedPrepared = new Set(
-      proposed.preparedSpellsByClass?.[classId] ?? proposed.preparedSpells,
-    );
-    for (let level = 0; level <= 9; level += 1) {
-      const baseSlots = baseSpellSlots(classId, proposedLevel, level);
-      if (!baseSlots) continue;
-      const required = baseSlots +
-        (level > 0 && modifier >= level
-          ? Math.floor((modifier - level) / 4) + 1
-          : 0);
-      const originalSelected = classSpells.filter(
-        (spell) => spell.level === level && originalPrepared.has(spell.name),
-      ).length;
-      const proposedSelected = classSpells.filter(
-        (spell) => spell.level === level && proposedPrepared.has(spell.name),
-      ).length;
-      const missing = Math.max(
-        0,
-        required - Math.max(0, proposedSelected - originalSelected),
-      );
-      if (missing) warnings.push(`Prepare ${missing} additional ${spellLevelName(level)} ${classDefinitions[classId].name} spell${missing === 1 ? "" : "s"}.`);
-    }
+    return warnings;
   }
   return warnings;
 }
@@ -2529,6 +2506,17 @@ function getBaseAttackBonus(character: Character) {
           ? Math.floor(entry.level * 0.75)
           : Math.floor(entry.level * 0.5))
     );
+  }, 0);
+}
+
+function getBaseSave(
+  character: Character,
+  save: "fortitude" | "reflex" | "will",
+) {
+  return character.classLevels.reduce((total, entry) => {
+    const progression = classDefinitions[entry.classId]?.[save];
+    if (!progression) return total;
+    return total + (progression === "good" ? 2 + Math.floor(entry.level / 2) : Math.floor(entry.level / 3));
   }, 0);
 }
 
@@ -3278,8 +3266,19 @@ function App() {
   }, [abilityMethod, rolledScores, rolledAssignments]);
   const createCharacter = () => {
     const classId = creationDraft.classLevels[0].classId;
+    const nextCharacter = cloneCharacter(creationDraft);
+    if (classId === "wizard") {
+      const cantrips = srdSpells
+        .filter((spell) => spell.level === 0 && spell.classes.includes("wizard"))
+        .map((spell) => spell.name);
+      nextCharacter.knownSpells = [...new Set([...nextCharacter.knownSpells, ...cantrips])];
+      nextCharacter.knownSpellsByClass = {
+        ...(nextCharacter.knownSpellsByClass ?? {}),
+        wizard: [...new Set([...(nextCharacter.knownSpellsByClass?.wizard ?? []), ...cantrips])],
+      };
+    }
     setCharacter({
-      ...cloneCharacter(creationDraft),
+      ...nextCharacter,
       abilities: getCreationAbilities(),
       classFeatures: startingClassFeatures[classId] ?? [],
       hitPoints: Math.max(
@@ -3634,6 +3633,7 @@ function App() {
           ["equipment", "Equipment"],
           ["store", "Store"],
           ["forge", "Forge"],
+          ["crafting", "Wands & Scrolls"],
           ...(hasSpellcasting ? [["spells", "Spells"]] : []),
         ].map(([id, label]) => (
           <button
@@ -3721,6 +3721,12 @@ function App() {
           onInventoryChange={updateInventory}
         />
       )}
+      {visibleSheet === "crafting" && (
+        <WandsScrollPanel
+          character={displayedCharacter}
+          onInventoryChange={updateInventory}
+        />
+      )}
       {visibleSheet === "spells" && (
         displayedCharacter.classLevels
           .filter(
@@ -3730,7 +3736,11 @@ function App() {
             <SpellSheet
               key={level.classId}
               character={displayedCharacter}
-              levelUpOriginal={levelUpDraft?.original}
+              levelUpOriginal={
+                levelUpDraft?.classId === level.classId
+                  ? levelUpDraft.original
+                  : undefined
+              }
               levelUpClassId={
                 levelUpDraft?.classId === level.classId
                   ? levelUpDraft.classId
@@ -4029,10 +4039,6 @@ function CreationPanel({
       level < 1 || castingModifier < level
         ? 0
         : Math.floor((castingModifier - level) / 4) + 1;
-    const knownLimits: Partial<Record<ClassId, number[]>> = {
-      bard: [4, 2],
-      sorcerer: [4, 2],
-    };
     const learningMode =
       spellcastingClass.id === "wizard"
         ? "Spellbook"
@@ -4049,16 +4055,20 @@ function CreationPanel({
     availableLevels.forEach((level) => {
       const required =
         learningMode === "Spells Known"
-          ? (knownLimits[spellcastingClass.id]?.[level] ?? 0) +
-            0
+          ? (spellcastingClass.id === "bard"
+              ? bardKnownProgression[draft.classLevels[0]?.level - 1]?.[level] ?? 0
+              : sorcererKnownProgression[draft.classLevels[0]?.level - 1]?.[level] ?? 0)
           : learningMode === "Spellbook"
             ? level === 0
-              ? classSpells.filter((spell) => spell.level === 0).length
+                ? 0
               : level === 1
                 ? 3 + Math.max(0, castingModifier)
                 : 2
-            : (spellSlots[spellcastingClass.id]?.[level]?.[0] ?? 0) +
-              bonusSpells(level);
+            : baseSpellSlots(
+                spellcastingClass.id,
+                draft.classLevels[0]?.level ?? 1,
+                level,
+              ) + bonusSpells(level);
       const selected = classSpells.filter(
         (spell) => spell.level === level && selectedSpells.has(spell.name),
       ).length;
@@ -5126,6 +5136,10 @@ function CharacterSheet({
   const characterRace =
     raceDefinitions[character.race.toLowerCase().replaceAll(" ", "-")] ??
     raceDefinitions.human;
+  const classFeatureDisplay = [
+    ...(startingClassFeatures[classId] ?? []),
+    ...(character.classFeatures ?? []),
+  ].filter((feature, index, features) => features.indexOf(feature) === index);
   const specialAbilities = [
     ...(characterRace.traits ?? []).map((ability) => ({
       source: characterRace.name,
@@ -5159,7 +5173,7 @@ function CharacterSheet({
         ];
       })
       .flat(),
-    ...(character.classFeatures ?? []).map((ability) => ({
+    ...classFeatureDisplay.map((ability) => ({
       source: classDefinitions[classId].name,
       ability,
     })),
@@ -5296,8 +5310,30 @@ function CharacterSheet({
             value={`${(raceDefinitions[character.race.toLowerCase().replaceAll(" ", "-")] ?? raceDefinitions.human).speed ?? 30} ft.`}
           />
           <Stat label="Hit Points" value={String(character.hitPoints)} />
-          <Stat label="Base Attack" value="+1" />
-          <Stat label="Fort / Ref / Will" value="+2 / +0 / +0" />
+          <Stat label="Base Attack" value={formatModifier(getBaseAttackBonus(character))} />
+          <Stat
+            label="Fort / Ref / Will"
+            value={`${formatModifier(getBaseSave(character, "fortitude") + abilityModifier(character.abilities.con))} / ${formatModifier(getBaseSave(character, "reflex") + abilityModifier(character.abilities.dex))} / ${formatModifier(getBaseSave(character, "will") + abilityModifier(character.abilities.wis))}`}
+          />
+        </div>
+        <div className="combat-weapon-row">
+          {(["Main Weapon", "Off Hand Weapon", "Ranged Weapon"] as const).map((slot) => {
+            const attackPenalty =
+              slot === "Main Weapon" || slot === "Off Hand Weapon"
+                ? getTwoWeaponAttackPenalty(character, slot)
+                : 0;
+            const stats = character.equipment?.[slot]
+              ? getEquippedWeaponStats(character, character.equipment[slot], attackPenalty)
+              : null;
+            return (
+              <div className="combat-weapon-stat" key={slot}>
+                <small>{slot.replace(" Weapon", "")}</small>
+                <strong>Attack {stats ? formatModifier(stats.attack) : "—"}</strong>
+                <span>Damage {stats?.damage ?? "—"}</span>
+                <span>Crit {stats?.critical ?? "—"}</span>
+              </div>
+            );
+          })}
         </div>
         <p className="combat-note">
           Size:{" "}
@@ -5539,6 +5575,9 @@ function CharacterSheet({
                   key={`${source}-${ability}-${index}`}
                 >
                   <strong>{ability}</strong>
+                  {classFeatureDescriptions[ability] && (
+                    <span> - {classFeatureDescriptions[ability]}</span>
+                  )}
                   <span>({source})</span>
                 </div>
               ))}
@@ -5700,10 +5739,42 @@ function InventorySummary({
           {entries.map((entry) => (
             <div className="equipment-inventory-row" key={entry.key}>
               <div className="equipment-inventory-name">
-                <strong>{entry.name} ({entry.size[0]})</strong>
+                <span className="tooltip-anchor">
+                  <strong tabIndex={0}>{entry.name} ({entry.size[0]})</strong>
+                  <span className="inline-tooltip" role="tooltip">
+                    <strong>{entry.name}</strong>
+                    <br />
+                    {entry.spell ? <>{entry.spell.description}<br />Spell level: {entry.spell.level}; school: {formatSpellSchool(entry.spell.school)}.</> : entry.description}
+                    <br />
+                    Category: {entry.category}; size: {entry.size}; weight: {entry.weight}.
+                    {entry.price !== undefined && <><br />Store price: {entry.price.toLocaleString()} gp.</>}
+                    {entry.name.startsWith("Wand of ") && entry.key.match(/\(CL \d+, (\d+) charges\)$/) && <><br />Remaining charges: {entry.key.match(/\(CL \d+, (\d+) charges\)$/)?.[1]} of 50.</>}
+                  </span>
+                </span>
                 <small>{entry.description}</small>
               </div>
-              <span>Qty. {entry.quantity}</span>
+              {entry.name.startsWith("Wand of ") && entry.key.match(/\(CL \d+, (\d+) charges\)$/) ? (
+                <span className="wand-charge-control">
+                  <small>Charges</small>
+                  <button
+                    type="button"
+                    aria-label="Use one wand charge"
+                    disabled={Number(entry.key.match(/\(CL \d+, (\d+) charges\)$/)?.[1] ?? 0) <= 0}
+                    onClick={() => adjustWandCharges(character, entry.key, -1, onEquipmentAndInventoryChange)}
+                  >
+                    −
+                  </button>
+                  <strong>{entry.key.match(/\(CL \d+, (\d+) charges\)$/)?.[1] ?? 0}</strong>
+                  <button
+                    type="button"
+                    aria-label="Restore one wand charge"
+                    disabled={Number(entry.key.match(/\(CL \d+, (\d+) charges\)$/)?.[1] ?? 0) >= 50}
+                    onClick={() => adjustWandCharges(character, entry.key, 1, onEquipmentAndInventoryChange)}
+                  >
+                    +
+                  </button>
+                </span>
+              ) : <span>Qty. {entry.quantity}</span>}
               <span>{entry.weight} each</span>
               <span>{entry.totalWeight ? `${entry.totalWeight} lb. total` : "Weight varies"}</span>
               <span className="equipment-inventory-actions">
@@ -5722,6 +5793,33 @@ function InventorySummary({
       )}
     </section>
   );
+}
+
+function adjustWandCharges(
+  character: Character,
+  key: string,
+  change: number,
+  onEquipmentAndInventoryChange: (
+    equipment: Record<string, string>,
+    inventory: Record<string, number>,
+  ) => void,
+) {
+  const match = key.match(/^(.*\(CL \d+, )(\d+)( charges\))$/);
+  if (!match) return;
+  const nextCharges = Math.max(0, Math.min(50, Number(match[2]) + change));
+  if (nextCharges === Number(match[2])) return;
+  const nextKey = `${match[1]}${nextCharges}${match[3]}`;
+  const inventory = { ...(character.inventory ?? {}) };
+  const quantity = inventory[key] ?? 0;
+  delete inventory[key];
+  inventory[nextKey] = (inventory[nextKey] ?? 0) + quantity;
+  const equipment = Object.fromEntries(
+    Object.entries(character.equipment ?? {}).map(([slot, value]) => [
+      slot,
+      value === key ? nextKey : value,
+    ]),
+  );
+  onEquipmentAndInventoryChange(equipment, inventory);
 }
 
 function removeInventoryItem(
@@ -5916,6 +6014,126 @@ function ForgePanel({
         </div>
         <div className="forge-preview"><strong>{forgedShieldName}</strong><span>Base shield: {(selectedShield?.price ?? 0).toLocaleString()} gp</span><span>Enhancement: +{shieldEnhancementCost.toLocaleString()} gp</span>{selectedShieldProperties.map((entry) => <span key={entry.name}>{entry.name}: equivalent +{entry.bonus}</span>)}<strong>Total price: {((selectedShield?.price ?? 0) + shieldEnhancementCost + shieldPropertyCost).toLocaleString()} gp</strong></div>
         <button className="level-button" type="button" onClick={forgeShield} disabled={!selectedShield}>Forge Shield</button>
+      </div>
+    </section>
+  );
+}
+
+function WandsScrollPanel({
+  character,
+  onInventoryChange,
+}: {
+  character: Character;
+  onInventoryChange: (inventory: Record<string, number>) => void;
+}) {
+  const chosenFeats = getChosenFeats(character);
+  const hasScribeScroll = chosenFeats.includes("scribe-scroll");
+  const hasCraftWand = chosenFeats.includes("craft-wand");
+  const [purchaseInstead, setPurchaseInstead] = useState(false);
+  const spellcastingLevels = character.classLevels.filter((level) =>
+    classDefinitions[level.classId]?.spellcasting,
+  );
+  const minimumCasterLevel = (spell: (typeof srdSpells)[number], classId: ClassId) => {
+    if (spell.level === 0) return 1;
+    return ["paladin", "ranger"].includes(classId)
+      ? spell.level * 2 + 2
+      : spell.level * 2 - 1;
+  };
+  const craftableSpells = srdSpells.filter((spell) =>
+    spellcastingLevels.some((classLevel) =>
+      spell.classes.includes(classLevel.classId) &&
+      classLevel.level >= minimumCasterLevel(spell, classLevel.classId),
+    ),
+  );
+  const availableScrollSpells = purchaseInstead ? srdSpells : craftableSpells;
+  const wandSpells = (purchaseInstead ? srdSpells : craftableSpells).filter((spell) => spell.level <= 4);
+  const [scrollSpellName, setScrollSpellName] = useState(availableScrollSpells[0]?.name ?? "");
+  const [scrollCasterLevel, setScrollCasterLevel] = useState(1);
+  const [wandSpellName, setWandSpellName] = useState(wandSpells[0]?.name ?? "");
+  const [wandCasterLevel, setWandCasterLevel] = useState(1);
+  const scrollSpell = availableScrollSpells.find((spell) => spell.name === scrollSpellName) ?? availableScrollSpells[0];
+  const wandSpell = wandSpells.find((spell) => spell.name === wandSpellName) ?? wandSpells[0];
+  const scrollMinimumCasterLevel = scrollSpell
+    ? purchaseInstead
+      ? (scrollSpell.level === 0 ? 1 : scrollSpell.level * 2 - 1)
+      : Math.min(...spellcastingLevels.filter((classLevel) => scrollSpell.classes.includes(classLevel.classId)).map((classLevel) => minimumCasterLevel(scrollSpell, classLevel.classId)))
+    : 1;
+  const wandMinimumCasterLevel = wandSpell
+    ? purchaseInstead
+      ? (wandSpell.level === 0 ? 1 : wandSpell.level * 2 - 1)
+      : Math.min(...spellcastingLevels.filter((classLevel) => wandSpell.classes.includes(classLevel.classId)).map((classLevel) => minimumCasterLevel(wandSpell, classLevel.classId)))
+    : 1;
+  const scrollLevel = scrollSpell?.level || 0.5;
+  const wandLevel = wandSpell?.level || 0.5;
+  const scrollPrice = 25 * scrollLevel * scrollCasterLevel;
+  const wandPrice = 750 * wandLevel * wandCasterLevel;
+  const scrollCreationCost = scrollPrice / 2;
+  const wandCreationCost = wandPrice / 2;
+  const scrollXpCost = scrollPrice / 25;
+  const wandXpCost = wandPrice / 25;
+  const scrollCraftingDays = Math.max(1, Math.ceil(scrollPrice / 1000));
+  const wandCraftingDays = Math.max(1, Math.ceil(wandPrice / 1000));
+  const addCraftedItem = (name: string) => {
+    const inventory = { ...(character.inventory ?? {}) };
+    inventory[name] = (inventory[name] ?? 0) + 1;
+    onInventoryChange(inventory);
+  };
+  const forgeScroll = () => {
+    if (!scrollSpell) return;
+    if ((!hasScribeScroll && !purchaseInstead) || !scrollSpell || scrollCasterLevel < scrollMinimumCasterLevel) return;
+    addCraftedItem(`Scroll of ${scrollSpell.name} (CL ${scrollCasterLevel})`);
+    const nextSpell = availableScrollSpells[0];
+    setScrollSpellName(nextSpell?.name ?? "");
+    setScrollCasterLevel(nextSpell ? (purchaseInstead ? (nextSpell.level === 0 ? 1 : nextSpell.level * 2 - 1) : scrollMinimumCasterLevel) : 1);
+  };
+  const forgeWand = () => {
+    if (!wandSpell) return;
+    if ((!hasCraftWand && !purchaseInstead) || !wandSpell || wandCasterLevel < wandMinimumCasterLevel) return;
+    addCraftedItem(`Wand of ${wandSpell.name} (CL ${wandCasterLevel}, 50 charges)`);
+    const nextSpell = wandSpells[0];
+    setWandSpellName(nextSpell?.name ?? "");
+    setWandCasterLevel(nextSpell ? (purchaseInstead ? (nextSpell.level === 0 ? 1 : nextSpell.level * 2 - 1) : wandMinimumCasterLevel) : 1);
+  };
+  return (
+    <section className="forge-panel panel">
+      <div className="panel-title">
+        <h2>Wands &amp; Scrolls</h2>
+        <span className="rule-status">Spell completion items</span>
+      </div>
+      <div className="forge-content">
+        <p className="forge-intro">Create a scroll or wand from a spell and add it to the character&apos;s inventory.</p>
+        <label className="forge-purchase-toggle">
+          <input type="checkbox" checked={purchaseInstead} onChange={(event) => setPurchaseInstead(event.target.checked)} />
+          Purchase instead of craft
+        </label>
+        {!purchaseInstead && !hasScribeScroll && !hasCraftWand && <p className="validation-error">Select Scribe Scroll or Craft Wand before creating magical items.</p>}
+        <h3>Make a Scroll</h3>
+        <div className="forge-grid">
+          <label>Spell<SpellPicker spells={availableScrollSpells} selected={scrollSpell?.name} onChange={setScrollSpellName} placeholder="Choose a scroll spell" disabled={(!hasScribeScroll && !purchaseInstead) || !availableScrollSpells.length} /></label>
+          <label>Caster level<select value={scrollCasterLevel} onChange={(event) => setScrollCasterLevel(Number(event.target.value))} disabled={!scrollSpell || (!hasScribeScroll && !purchaseInstead)}>{Array.from({ length: Math.max(0, 20 - scrollMinimumCasterLevel + 1) }, (_, index) => index + scrollMinimumCasterLevel).map((level) => <option key={level} value={level}>CL {level}</option>)}</select></label>
+        </div>
+        <div className="forge-preview">
+          <strong>Scroll of {scrollSpell?.name} (CL {scrollCasterLevel})</strong>
+          <span>{scrollSpell?.description || "No spell description available."}</span>
+          <span>Spell level: {scrollSpell?.level ?? 0}; school: {formatSpellSchool(scrollSpell?.school)}</span>
+          <span>{purchaseInstead ? "Purchase cost" : "Market price"}: {scrollPrice.toLocaleString()} gp{purchaseInstead ? "" : `; creation cost: ${scrollCreationCost.toLocaleString()} gp`}</span>
+          {!purchaseInstead && <span>XP cost: {scrollXpCost.toLocaleString()}; crafting time: {scrollCraftingDays} day{scrollCraftingDays === 1 ? "" : "s"}</span>}
+        </div>
+        <button className="level-button" type="button" onClick={forgeScroll} disabled={(!hasScribeScroll && !purchaseInstead) || !scrollSpell || scrollCasterLevel < scrollMinimumCasterLevel}>{purchaseInstead ? "Purchase Scroll" : "Make Scroll"}</button>
+        <div className="forge-divider" />
+        <h3>Make a Wand</h3>
+        <div className="forge-grid">
+          <label>Spell<SpellPicker spells={wandSpells} selected={wandSpell?.name} onChange={setWandSpellName} placeholder="Choose a wand spell" disabled={(!hasCraftWand && !purchaseInstead) || !wandSpells.length} /></label>
+          <label>Caster level<select value={wandCasterLevel} onChange={(event) => setWandCasterLevel(Number(event.target.value))} disabled={!wandSpell || (!hasCraftWand && !purchaseInstead)}>{Array.from({ length: Math.max(0, 20 - wandMinimumCasterLevel + 1) }, (_, index) => index + wandMinimumCasterLevel).map((level) => <option key={level} value={level}>CL {level}</option>)}</select></label>
+        </div>
+        <div className="forge-preview">
+          <strong>Wand of {wandSpell?.name} (CL {wandCasterLevel}, 50 charges)</strong>
+          <span>{wandSpell?.description || "No spell description available."}</span>
+          <span>Spell level: {wandSpell?.level ?? 0}; school: {formatSpellSchool(wandSpell?.school)}</span>
+          <span>{purchaseInstead ? "Purchase cost" : "Market price"}: {wandPrice.toLocaleString()} gp{purchaseInstead ? "" : `; creation cost: ${wandCreationCost.toLocaleString()} gp`}</span>
+          {!purchaseInstead && <span>XP cost: {wandXpCost.toLocaleString()}; crafting time: {wandCraftingDays} day{wandCraftingDays === 1 ? "" : "s"}</span>}
+        </div>
+        <button className="level-button" type="button" onClick={forgeWand} disabled={(!hasCraftWand && !purchaseInstead) || !wandSpell || wandCasterLevel < wandMinimumCasterLevel}>{purchaseInstead ? "Purchase Wand" : "Make Wand"}</button>
       </div>
     </section>
   );
@@ -6290,6 +6508,7 @@ function SpellPicker({
   const filteredSpells = spells.filter((spell) =>
     spell.name.toLowerCase().includes(query.toLowerCase().trim()),
   );
+  const selectedSpell = spells.find((spell) => spell.name === selected);
   useEffect(() => {
     if (!open) return;
     const firstPicker = document.querySelector<HTMLElement>(
@@ -6347,7 +6566,7 @@ function SpellPicker({
           if (open) setHoveredSpell(undefined);
         }}
       >
-        {selected || placeholder}
+        {selectedSpell ? `${selectedSpell.name} (Level ${selectedSpell.level})` : placeholder}
         <span aria-hidden="true">▾</span>
       </button>
       {hoveredSpell && (
@@ -6425,7 +6644,7 @@ function SpellPicker({
                 setHoveredSpell(undefined);
               }}
             >
-              {spell.name}
+              {spell.name} (Level {spell.level})
             </button>
           ))}
           {!filteredSpells.length && (
@@ -6435,6 +6654,21 @@ function SpellPicker({
       )}
     </div>
   );
+}
+
+function formatSpellSchool(school?: string) {
+  const abbreviations: Record<string, string> = {
+    Abjuration: "Abj",
+    Conjuration: "Conj",
+    Divination: "Div",
+    Enchantment: "Ench",
+    Evocation: "Evoc",
+    Illusion: "Ill",
+    Necromancy: "Necro",
+    Transmutation: "Trans",
+    Universal: "Univ",
+  };
+  return school ? abbreviations[school] ?? school : "";
 }
 
 function formatSpellDuration(duration: string) {
@@ -6566,7 +6800,9 @@ function SpellSheet({
         ? level === 0
           ? classSpells.filter((spell) => spell.level === 0).length
           : level === 1
-            ? 3
+            ? levelUpOriginal
+              ? 2
+              : 3 + Math.max(0, castingModifier)
             : 2
         : baseSpellSlots(spellcastingClass.id, classLevel, level) +
           bonusSpells(level);
@@ -6636,19 +6872,17 @@ function SpellSheet({
           value={`${spellcastingClass.name} ${spellcastingLevel?.level ?? 0}`}
         />
         <Stat
-          label="Prepared Spells Available"
+          label="Spells per Day"
           value={
-            learningMode === "Prepared Spells"
-              ? availableLevels
-                  .map(
-                    (level) =>
-                      `L${level}: ${
-                        baseSpellSlots(spellcastingClass.id, classLevel, level) +
-                        bonusSpells(level)
-                      }`,
-                  )
-                  .join(" · ") || "None"
-              : "N/A"
+            availableLevels
+              .map(
+                (level) =>
+                  `L${level}: ${
+                    baseSpellSlots(spellcastingClass.id, classLevel, level) +
+                    bonusSpells(level)
+                  }`,
+              )
+              .join(" · ") || "None"
           }
         />
         <Stat label="Selection" value={learningMode} />
@@ -6659,6 +6893,9 @@ function SpellSheet({
           (spell) => spell.level === level,
         );
         const limit = levelLimit(level);
+        const dailySlotCount =
+          baseSpellSlots(spellcastingClass.id, classLevel, level) +
+          bonusSpells(level);
         const selectedForLevel = levelSpells
           .filter(
             (spell) =>
@@ -6740,7 +6977,7 @@ function SpellSheet({
                 {level === 0 ? "CANTRIPS" : `LEVEL ${level} SPELLS`}
               </strong>
               <span>EXPENDED SLOTS</span>
-              {Array.from({ length: Math.max(4, limit) }, (_, index) => (
+              {Array.from({ length: dailySlotCount }, (_, index) => (
                 <input
                   className="slot-box"
                   type="checkbox"
@@ -6973,7 +7210,7 @@ function SpellSheet({
                       <td>{spell?.castingTime || ""}</td>
                       <td>{spell?.components || ""}</td>
                       <td>{formatSpellDuration(spell?.duration || "")}</td>
-                      <td>{spell?.school || ""}</td>
+                      <td>{formatSpellSchool(spell?.school)}</td>
                     </tr>
                     </>
                   );

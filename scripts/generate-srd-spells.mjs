@@ -25,8 +25,9 @@ const detail = async (href) => {
     const match = html.match(new RegExp(`<th[^>]*>\\s*<a[^>]*>${label}[^<]*</a>:\\s*</th>\\s*<td[^>]*>([\\s\\S]*?)</td>`, "i"));
     return match ? decodeHtml(match[1]) : "";
   };
-  const school = html.match(/<h4[^>]*>\\s*<a[^>]*>([^<]+)<\/a>/i);
-  return { school: school ? decodeHtml(school[1]) : "", components: field("Components"), castingTime: field("Casting Time"), range: field("Range"), duration: field("Duration"), savingThrow: field("Saving Throw") };
+    const schoolBlock = html.match(/<h4[^>]*>[\s\S]*?<a[^>]*>([^<]+)<\/a>/i);
+    const school = schoolBlock ? decodeHtml(schoolBlock[1]) : "";
+  return { school, components: field("Components"), castingTime: field("Casting Time"), range: field("Range"), duration: field("Duration"), savingThrow: field("Saving Throw") };
 };
 
 const spells = new Map();
