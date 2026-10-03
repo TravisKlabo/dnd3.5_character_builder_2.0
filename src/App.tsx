@@ -1556,22 +1556,28 @@ const martialWeaponNames = new Set([
 const martialWeaponClasses = new Set(["barbarian", "fighter", "paladin", "ranger"]);
 const armorCategories = new Set(["Armor", "Shields"]);
 
+function getBaseEquipmentName(name: string) {
+  return name.replace(/^(?:Masterwork|Cold Iron|Silver|Mithral) /, "");
+}
+
 function getItemProficiencyWarning(character: Character, item: StoreItem) {
   if (item.category === "Instruments" || item.category === "Adventuring Gear") return null;
   const classIds = character.classLevels.map((entry) => entry.classId);
   if (item.category === "Weapons") {
-    const simple = simpleWeaponNames.has(item.name);
-    const martial = martialWeaponNames.has(item.name);
+    const baseName = getBaseEquipmentName(item.name);
+    const simple = simpleWeaponNames.has(baseName);
+    const martial = martialWeaponNames.has(baseName);
     const proficient = classIds.some((classId) =>
       simple || (martial && martialWeaponClasses.has(classId)) ||
-      (classId === "bard" && ["Longsword", "Rapier", "Shortbow", "Whip"].includes(item.name)) ||
-      (classId === "rogue" && ["Rapier", "Hand Crossbow", "Shortbow", "Shortsword", "Sap"].includes(item.name)),
+      (classId === "bard" && ["Longsword", "Rapier", "Shortbow", "Whip"].includes(baseName)) ||
+      (classId === "rogue" && ["Rapier", "Hand Crossbow", "Shortbow", "Shortsword", "Sap"].includes(baseName)),
     );
     return proficient ? null : `${item.name}: this character is not proficient with this weapon and will take the normal nonproficiency penalties.`;
   }
   if (armorCategories.has(item.category)) {
-    const mediumArmor = ["Hide Armor", "Scale Mail", "Chainmail", "Mithral Breastplate"].includes(item.name);
-    const lightArmor = ["Padded Armor", "Leather Armor", "Studded Leather", "Mithral Chain Shirt"].includes(item.name);
+    const baseName = getBaseEquipmentName(item.name);
+    const mediumArmor = ["Hide Armor", "Scale Mail", "Chainmail", "Mithral Breastplate"].includes(baseName);
+    const lightArmor = ["Padded Armor", "Leather Armor", "Studded Leather", "Mithral Chain Shirt"].includes(baseName);
     const proficient = classIds.some((classId) => {
       if (["fighter", "paladin", "cleric", "barbarian"].includes(classId)) return true;
       if (classId === "ranger") return lightArmor || mediumArmor;
