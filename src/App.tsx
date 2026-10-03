@@ -1453,6 +1453,28 @@ function getWeaponProfile(name: string) {
   return weaponProfiles[name] ?? weaponProfiles[baseName] ?? { damage: "varies", crit: "20/x2" };
 }
 
+function getEquippedWeaponStats(character: Character, key: string) {
+  const name = key.replace(/ \((Small|Medium|Large)\)$/, "");
+  const size = key.match(/ \((Small|Medium|Large)\)$/)?.[1] ?? "Medium";
+  const item = [...storeItems]
+    .sort((left, right) => right.name.length - left.name.length)
+    .find((entry) => name.includes(entry.name));
+  if (!item || item.category !== "Weapons") return null;
+  const profile = getWeaponProfile(item.name);
+  const isRanged = rangedWeaponNames.has(item.name);
+  const ability = isRanged ? character.abilities.dex : character.abilities.str;
+  const enhancement = Number(name.match(/\+(\d+)/)?.[1] ?? 0);
+  const masterwork = name.startsWith("Masterwork ") ? 1 : 0;
+  const attack = getBaseAttackBonus(character) + abilityModifier(ability) + enhancement + masterwork;
+  const damageAbility = isRanged ? 0 : abilityModifier(ability);
+  return {
+    name,
+    attack,
+    damage: `${getSizedWeaponDamage(profile.damage, size)}${damageAbility >= 0 ? `+${damageAbility}` : damageAbility}`,
+    critical: profile.crit,
+  };
+}
+
 const rangedWeaponNames = new Set([
   "Shortbow",
   "Longbow",
@@ -5570,6 +5592,24 @@ function EquipmentSheet({
         <Stat label="Load" value="Light" />
         <Stat label="Carried Weight" value="0 lb." />
         <Stat label="Armor Class" value={String(getEquipmentArmorClass(character))} />
+      </div>
+      <div className="equipment-combat-summary">
+        <h3>Weapon Attacks</h3>
+        {(["Main Weapon", "Off Hand Weapon", "Ranged Weapon"] as const).map((slot) => {
+          const stats = equipment[slot]
+            ? getEquippedWeaponStats(character, equipment[slot])
+            : null;
+          return (
+            <div className="equipment-weapon-stat" key={slot}>
+              <strong>{slot}</strong>
+              {stats ? (
+                <span>{stats.name}: {formatModifier(stats.attack)} attack, {stats.damage} damage, crit {stats.critical}</span>
+              ) : (
+                <span>Not equipped</span>
+              )}
+            </div>
+          );
+        })}
       </div>
       <InventorySummary
         character={character}
