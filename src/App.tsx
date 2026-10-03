@@ -5699,7 +5699,6 @@ function equipInventoryItem(
     const proficiencyWarning = getItemProficiencyWarning(character, item);
     if (proficiencyWarning) {
       window.alert(proficiencyWarning);
-      return;
     }
   }
   let slot = "Miscellaneous";
@@ -5817,7 +5816,6 @@ function EquipmentStore({
       const proficiencyWarning = getItemProficiencyWarning(character, item);
       if (proficiencyWarning) {
         window.alert(proficiencyWarning);
-        return;
       }
     }
     let slot = "Miscellaneous";
