@@ -56,9 +56,9 @@
 .race-option-tooltip { position: absolute; z-index: 20; top: calc(100% + 8px); left: 0; width: max-content; max-width: min(360px, 70vw); padding: 9px 11px; border: 1px solid #243447; background: #243447; color: #fff; font-size: .74rem; font-weight: 400; line-height: 1.4; text-transform: none; box-shadow: 0 6px 16px #39444c2b; opacity: 0; pointer-events: none; }
 .race-option-tooltip::before { content: ""; position: absolute; top: -6px; left: 14px; width: 10px; height: 10px; border-top: 1px solid #243447; border-left: 1px solid #243447; background: #243447; transform: rotate(45deg); }
 .race-option:hover .race-option-tooltip, .race-option:focus .race-option-tooltip { opacity: 1; }
-.creation-menu-tooltip { position: absolute; z-index: 20; top: calc(100% + 4px); right: calc(100% + 9px); width: max-content; max-width: min(360px, 42vw); padding: 9px 11px; border: 1px solid #243447; background: #243447; color: #fff; font-size: .74rem; font-weight: 400; line-height: 1.4; text-transform: none; box-shadow: 0 6px 16px #39444c2b; }
-.creation-menu-tooltip::after { content: ""; position: absolute; top: 10px; right: -6px; width: 10px; height: 10px; border-top: 1px solid #243447; border-right: 1px solid #243447; background: #243447; transform: rotate(45deg); }
-.menu-right .creation-menu-tooltip { right: auto; left: calc(100% + 9px); }
+.creation-menu-tooltip { position: absolute; z-index: 20; top: calc(100% + 4px); left: calc(100% + 9px); width: max-content; max-width: min(360px, 42vw); padding: 9px 11px; border: 1px solid #243447; background: #243447; color: #fff; font-size: .74rem; font-weight: 400; line-height: 1.4; text-transform: none; box-shadow: 0 6px 16px #39444c2b; }
+.creation-menu-tooltip::after { content: ""; position: absolute; top: 10px; left: -6px; width: 10px; height: 10px; border-bottom: 1px solid #243447; border-left: 1px solid #243447; background: #243447; transform: rotate(45deg); }
+.menu-right .creation-menu-tooltip { left: calc(100% + 9px); }
 .menu-right .creation-menu-tooltip::after { right: auto; left: -6px; border: 0; border-bottom: 1px solid #243447; border-left: 1px solid #243447; }
 .race-field .race-option, .creation-grid > label:not(.race-field) .class-field .race-option { position: static; }
 .race-field .race-option-tooltip, .creation-grid > label:not(.race-field) .class-field .race-option-tooltip { top: 0; right: calc(100% + 9px); left: auto; background: #243447; color: #fff; }
@@ -198,18 +198,34 @@
 .equipment-inventory-actions button { padding: 4px 7px; border: 1px solid #477454; background: #fff; color: #477454; cursor: pointer; font: inherit; font-size: .68rem; }
 .equipment-inventory-actions button.is-equipped { border-color: #6f9f78; background: #dceedd; color: #315d3b; }
 .equipment-inventory-empty { margin: 0; color: #68736f; font-size: .72rem; }
+.equipment-weapon-details { display: grid; gap: 3px; margin-top: 4px; color: #68736f; font-size: .78rem; }
+.equipment-weapon-details > strong { color: #243447; font-size: .85rem; }
+.forge-panel { margin-top: 18px; }
+.forge-content { padding: 18px; }
+.forge-intro { margin: 0 0 18px; color: #68736f; }
+.forge-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.forge-grid label { display: grid; gap: 5px; color: #68736f; font-size: .76rem; font-weight: 700; }
+.forge-grid select { min-width: 0; padding: 9px; border: 1px solid #b9bbb4; background: #fff; color: #243447; font: inherit; font-size: .8rem; font-weight: 400; }
+.forge-property-control { display: flex; align-items: stretch; gap: 6px; }
+.forge-property-control select { flex: 1; min-width: 0; }
+.forge-add-property-button { display: grid; place-items: center; width: 38px; min-width: 38px; border: 1px solid #477454; background: #477454; color: #fff; font-size: 1.15rem; font-weight: 700; cursor: pointer; }
+.forge-add-property-button:disabled { border-color: #b9bbb4; background: #e7e5df; color: #9a9d97; cursor: not-allowed; }
+.forge-grid small { color: #98734d; font-size: .7rem; font-weight: 400; }
+.forge-preview { display: grid; gap: 4px; margin: 18px 0; padding: 13px 15px; border-left: 4px solid #b16d38; background: #f8f1df; color: #68736f; font-size: .8rem; }
+.forge-preview strong { color: #243447; font-size: .9rem; }
+@media (max-width: 700px) { .forge-grid { grid-template-columns: 1fr; } }
 .store-category select { min-width: 0; padding: 8px; border: 1px solid #b9bbb4; background: #fff; color: #243447; font: inherit; font-size: .72rem; font-weight: 400; }
 .equipment-item-picker { display: flex; width: 100%; min-width: 0; align-items: start; gap: 6px; }
 .equipment-item-picker .race-trigger { flex: 1; min-width: 0; }
 .equipment-item-picker .race-menu { direction: rtl; }
 .equipment-item-picker .race-menu > * { direction: ltr; }
 .equipment-portal-menu { width: min(360px, calc(100vw - 24px)); max-width: calc(100vw - 24px); }
-.equipment-item-picker.menu-on-left .feat-picker-tooltip { top: 0; right: calc(100% + 18px); left: auto; transform: none; }
+.equipment-item-picker.menu-on-left .feat-picker-tooltip { top: calc(100% + 4px); right: calc(100% + 18px); left: auto; transform: none; }
 .equipment-item-picker.menu-on-left .feat-picker-tooltip::before { top: 10px; right: -6px; left: auto; border: 0; border-top: 1px solid #243447; border-right: 1px solid #243447; }
-.equipment-item-picker:not(.menu-on-left) .feat-picker-tooltip { top: 0; right: auto; left: calc(100% + 18px); transform: none; }
+.equipment-item-picker:not(.menu-on-left) .feat-picker-tooltip { top: calc(100% + 4px); right: auto; left: calc(min(360px, calc(100vw - 24px)) + 18px); transform: none; }
 .equipment-item-picker:not(.menu-on-left) .feat-picker-tooltip::before { top: 10px; right: auto; left: -6px; border: 0; border-bottom: 1px solid #243447; border-left: 1px solid #243447; }
-.equipment-item-picker.tooltip-on-left .feat-picker-tooltip { top: 0; right: -9px; left: auto; transform: none; }
-.equipment-item-picker.tooltip-on-left .feat-picker-tooltip::before { top: 10px; right: -6px; left: auto; border: 0; border-top: 1px solid #243447; border-right: 1px solid #243447; }
+.equipment-item-picker.tooltip-on-left .feat-picker-tooltip { top: calc(100% + 4px); right: auto; left: calc(min(360px, calc(100vw - 24px)) + 18px); transform: none; }
+.equipment-item-picker.tooltip-on-left .feat-picker-tooltip::before { top: 10px; right: auto; left: -6px; border: 0; border-bottom: 1px solid #243447; border-left: 1px solid #243447; }
 .equipment-item-picker .race-option.is-highlighted { background: #e7eee7; }
 .equipment-purchase-button { display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid #477454; background: #477454; color: #fff; font-size: 1rem; font-weight: 700; }
 .equipment-purchase-button:disabled { border-color: #b9bbb4; background: #ebe9e1; color: #9da39e; cursor: not-allowed; }
