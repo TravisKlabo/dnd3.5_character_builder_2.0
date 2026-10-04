@@ -4,7 +4,6 @@ import "./App.css";
 import {
   abilityModifier,
   armorClass,
-  carryingCapacity,
   beginLevelUp,
   classDefinitions,
   changeRace,
@@ -1013,6 +1012,25 @@ const storeItems: StoreItem[] = [
   },
 ];
 const customStoreItemsStorageKey = "dnd35-character-builder.custom-store-items";
+const savedCharacterStorageKey = "dnd35-character-builder-character";
+
+function loadSavedCharacter() {
+  if (typeof window === "undefined") return initialCharacter;
+  try {
+    const stored = window.localStorage.getItem(savedCharacterStorageKey);
+    if (!stored) return initialCharacter;
+    const character = JSON.parse(stored) as Character;
+    return {
+      ...character,
+      classLevels: character.classLevels.filter(
+        (level) =>
+          !("prestigeClassId" in level && level.prestigeClassId === "wizard-of-high-sorcery"),
+      ),
+    };
+  } catch {
+    return initialCharacter;
+  }
+}
 
 function loadCustomStoreItems() {
   try {
@@ -1370,8 +1388,8 @@ function getInventoryEntryDetails(key: string) {
     name,
     size,
     weight,
-    category: item?.category ?? "Crafted item",
     price: item ? getSizedStorePrice(item, size) : undefined,
+    category: item?.category ?? "Crafted item",
     description: item ? getStoreItemDescription(item, size) : "Inventory item.",
     spell,
     numericWeight: Number.isNaN(numericWeight) ? 0 : numericWeight,
@@ -2719,6 +2737,7 @@ function canIncreaseSkillRank(
   skill: string,
   levelUpOriginal?: Character,
   levelUpClassId?: ClassId,
+  creationMode = false,
 ) {
   const currentRanks = Number(character.skills[skill] || 0);
   const activeLevelUpClassId = levelUpOriginal
@@ -2736,8 +2755,11 @@ function canIncreaseSkillRank(
         activeLevelUpClassId ?? "fighter",
       )
     : getSpentSkillPoints(character);
+  const maximumRanks = creationMode
+    ? (isClassSkill(character, skill, activeLevelUpClassId) ? 4 : 2)
+    : getSkillMaximum(character, skill);
   return (
-    currentRanks < getSkillMaximum(character, skill) &&
+    currentRanks < maximumRanks &&
     spentSkillPoints + pointCost <=
       availableSkillPoints
   );
@@ -2969,14 +2991,22 @@ function alignmentDistance(first: string, second: string) {
   return Math.max(Math.abs(left.law - right.law), Math.abs(left.moral - right.moral));
 }
 
+function heightToTotalInches(height: string | undefined) {
+  const match = (height ?? "").match(/^(\d+)\s*ft\.?\s*(\d+)\s*in\.?$/i);
+  if (match) return Number(match[1]) * 12 + Math.min(11, Number(match[2]));
+  const legacyInches = Number(height);
+  return Number.isFinite(legacyInches) ? Math.max(0, legacyInches) : 0;
+}
+
 function App() {
   const [activeSheet, setActiveSheet] = useState("character");
-  const [character, setCharacter] = useState<Character>(initialCharacter);
+  const [character, setCharacter] = useState<Character>(() => loadSavedCharacter());
   const [creationDraft, setCreationDraft] = useState<Character>(() =>
-    cloneCharacter(initialCharacter),
+    cloneCharacter(loadSavedCharacter()),
   );
-  const [creationOpen, setCreationOpen] = useState(true);
-  const [creationLocked, setCreationLocked] = useState(false);
+  const hasSavedCharacter = typeof window !== "undefined" && Boolean(window.localStorage.getItem(savedCharacterStorageKey));
+  const [creationOpen, setCreationOpen] = useState(!hasSavedCharacter);
+  const [creationLocked, setCreationLocked] = useState(hasSavedCharacter);
   const [printPreviewHtml, setPrintPreviewHtml] = useState<string | null>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
   const [ruleset, setRuleset] = useState<
@@ -2994,6 +3024,9 @@ function App() {
     initialCharacter.classLevels.at(-1)?.classId ?? "fighter",
   );
   const levelUpMode = levelUpDraft !== null;
+  const printVariant = typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search).get("print")
+    : null;
 
   const changeAbilityMethod = (method: "roll" | "pointBuy" | "manual") => {
     setAbilityMethod(method);
@@ -3083,7 +3116,7 @@ function App() {
       const classLevels = current.classLevels.filter(
         (level) => !("prestigeClassId" in level),
       );
-      if (prestigeClass) {
+      if (prestigeClass && prestigeClass !== "wizard-of-high-sorcery") {
         classLevels.push({
           classId: current.classLevels[0].classId,
           prestigeClassId: prestigeClass,
@@ -3107,7 +3140,9 @@ function App() {
       const minimumRanks = levelUpDraft
         ? Number(levelUpDraft.original.skills[skill] || 0)
         : 0;
-      const maxRanks = getSkillMaximum(current, skill);
+      const maxRanks = creationOpen
+        ? (classSkill ? 4 : 2)
+        : getSkillMaximum(current, skill);
       const nextRanks = Math.max(
         minimumRanks,
         Math.min(maxRanks, currentRanks + change),
@@ -3403,7 +3438,9 @@ function App() {
   const showPrintPreview = () => {
     const appShell = document.querySelector<HTMLElement>(".app-shell");
     if (!appShell) return;
+    localStorage.setItem(savedCharacterStorageKey, JSON.stringify(displayedCharacter));
     const preview = appShell.cloneNode(true) as HTMLElement;
+    preview.classList.add("current-character-print");
     preview
       .querySelectorAll(
         ".app-header, .sheet-tabs, .creation-area, .equipment-store-header, .equipment-store-grid, .store-size-row, .equipment-inventory-actions",
@@ -3473,7 +3510,7 @@ function App() {
   const gainsAbilityIncrease =
     levelUpTotalLevel !== undefined && levelUpTotalLevel % 4 === 0;
   const saveCharacter = () => {
-    localStorage.setItem("dnd35-character-builder-character", JSON.stringify(displayedCharacter));
+    localStorage.setItem(savedCharacterStorageKey, JSON.stringify(displayedCharacter));
     window.alert("Character saved.");
   };
   const exportCharacter = () => {
@@ -3548,7 +3585,7 @@ function App() {
     !hasSpellcasting && activeSheet === "spells" ? "character" : activeSheet;
 
   return (
-    <main className="app-shell">
+    <main className={`app-shell ${printVariant === "reference" ? "reference-print" : "modern-print"}`}>
       <header className="app-header">
         <div className="app-title">
           <p className="eyebrow">D&D 3.5 rules workspace</p>
@@ -3562,7 +3599,7 @@ function App() {
             type="button"
             onClick={showPrintPreview}
           >
-            Print
+            Print Current Character
           </button>
           <button className="quiet-button" type="button" onClick={saveCharacter}>
             Save
@@ -3809,7 +3846,7 @@ function App() {
             character={displayedCharacter}
             levelUpOriginal={levelUpDraft?.original}
             levelUpClassId={levelUpDraft?.classId}
-            levelDisplayCharacter={levelUpDraft ? character : undefined}
+            creationMode={creationOpen && !creationLocked}
             onSkillRankChange={updateSkillRanks}
             onFeatChange={updateFeatSelection}
             onLanguagesChange={updateLanguages}
@@ -3818,6 +3855,9 @@ function App() {
             editable={!creationLocked && !levelUpMode}
             onCharacterNameChange={(name) => updateCreationDraft("name", name)}
             onPlayerNameChange={(player) => updateCreationDraft("player", player)}
+            onCharacterAgeChange={(age) => setCharacter((current) => ({ ...current, age }))}
+            onCharacterWeightChange={(weight) => setCharacter((current) => ({ ...current, weight }))}
+            onCharacterHeightChange={(height) => setCharacter((current) => ({ ...current, height }))}
           />
         </>
       )}
@@ -3943,6 +3983,21 @@ function CreationPanel({
     field: "",
     description: "",
   });
+  const heightParts = (draft.height ?? "").match(/^(\d+)\s*ft\.?\s*(\d+)\s*in\.?$/i);
+  const legacyHeightInches = Number(draft.height);
+  const heightFeet = heightParts
+    ? Number(heightParts[1])
+    : Number.isFinite(legacyHeightInches)
+      ? Math.floor(legacyHeightInches / 12)
+      : 5;
+  const heightInches = heightParts
+    ? Number(heightParts[2])
+    : Number.isFinite(legacyHeightInches)
+      ? legacyHeightInches % 12
+      : 7;
+  const updateHeight = (feet: number, inches: number) => {
+    onChange("height", `${Math.max(0, feet)} ft. ${Math.min(11, Math.max(0, inches))} in.`);
+  };
   const toggleMenu = (menu: "race" | "class" | "prestige" | "alignment" | "deity") => {
     const nextOpen =
       menu === "race"
@@ -4262,6 +4317,30 @@ function CreationPanel({
                 onChange={(event) => onChange("player", event.target.value)}
               />
             </label>
+            <label>
+              Gender
+              <select value={draft.gender ?? ""} onChange={(event) => onChange("gender", event.target.value as Character["gender"])}>
+                <option value="">Not specified</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <label>Age (years)<input inputMode="numeric" pattern="[0-9]*" value={draft.age ?? ""} onChange={(event) => onChange("age", event.target.value.replace(/[^0-9]/g, ""))} placeholder="Years" /></label>
+            <label>
+              Height
+              <span className="height-control">
+                <input inputMode="numeric" pattern="[0-9]*" value={heightFeet} aria-label="Height in feet" onChange={(event) => updateHeight(Number(event.target.value.replace(/[^0-9]/g, "")) || 0, heightInches)} />
+                <span>ft.</span>
+                <input inputMode="numeric" pattern="[0-9]*" value={heightInches} aria-label="Height in inches" onChange={(event) => updateHeight(heightFeet, Number(event.target.value.replace(/[^0-9]/g, "")) || 0)} />
+                <span>in.</span>
+              </span>
+            </label>
+            <label>Weight (lb.)<input inputMode="numeric" pattern="[0-9]*" value={draft.weight ?? ""} onChange={(event) => onChange("weight", event.target.value.replace(/[^0-9]/g, ""))} placeholder="Pounds" /></label>
+            <label>Hair color<input value={draft.hairColor ?? ""} onChange={(event) => onChange("hairColor", event.target.value)} /></label>
+            <label>Eye color<input value={draft.eyeColor ?? ""} onChange={(event) => onChange("eyeColor", event.target.value)} /></label>
+            <label>Skin color<input value={draft.skinColor ?? ""} onChange={(event) => onChange("skinColor", event.target.value)} /></label>
+            <label className="creation-notes-field">Character notes<textarea value={draft.notes ?? ""} onChange={(event) => onChange("notes", event.target.value)} placeholder="Background, goals, allies, and other details." /></label>
             <label className="race-field">
               Race
               <button
@@ -4922,18 +5001,25 @@ function CreationPanel({
 
 function Panel({
   title,
+  headerLabel,
   children,
   className = "",
+  showStatus = false,
+  statusText = "Calculated",
 }: {
   title: string;
+  headerLabel?: string;
   children: React.ReactNode;
   className?: string;
+  showStatus?: boolean;
+  statusText?: string;
 }) {
   return (
     <section className={`panel ${className}`}>
       <div className="panel-title">
         <h2>{title}</h2>
-        <span className="rule-status">Calculated</span>
+        {headerLabel && <span className="panel-header-label">{headerLabel}</span>}
+        {showStatus && <span className="rule-status">{statusText}</span>}
       </div>
       {children}
     </section>
@@ -5215,7 +5301,7 @@ function CharacterSheet({
   character,
   levelUpOriginal,
   levelUpClassId,
-  levelDisplayCharacter,
+  creationMode,
   onSkillRankChange,
   onFeatChange,
   onLanguagesChange,
@@ -5224,11 +5310,14 @@ function CharacterSheet({
   editable,
   onCharacterNameChange,
   onPlayerNameChange,
+  onCharacterAgeChange,
+  onCharacterHeightChange,
+  onCharacterWeightChange,
 }: {
   character: Character;
   levelUpOriginal?: Character;
   levelUpClassId?: ClassId;
-  levelDisplayCharacter?: Character;
+  creationMode: boolean;
   onSkillRankChange: (skill: string, change: number) => void;
   onFeatChange: (slotId: string, featId: string) => void;
   onLanguagesChange: (languages: string[]) => void;
@@ -5237,12 +5326,19 @@ function CharacterSheet({
   editable: boolean;
   onCharacterNameChange: (name: string) => void;
   onPlayerNameChange: (player: string) => void;
+  onCharacterAgeChange: (age: string) => void;
+  onCharacterHeightChange: (height: string) => void;
+  onCharacterWeightChange: (weight: string) => void;
 }) {
   const classId = character.classLevels.at(-1)?.classId ?? "fighter";
   const skillDisplayClassId = levelUpOriginal
     ? levelUpClassId ?? getLevelUpClassId(levelUpOriginal, character)
     : undefined;
   const classSummary = character.classLevels
+    .filter(
+      (level) =>
+        !("prestigeClassId" in level && level.prestigeClassId === "wizard-of-high-sorcery"),
+    )
     .map(
       (level) => "prestigeClassId" in level
         ? `${dragonlancePrestigeClasses[level.prestigeClassId]?.name ?? level.prestigeClassId} ${level.level}`
@@ -5250,6 +5346,7 @@ function CharacterSheet({
     )
     .concat(
       character.prestigeClass &&
+        character.prestigeClass !== "wizard-of-high-sorcery" &&
         !character.classLevels.some((level) => "prestigeClassId" in level)
         ? `${dragonlancePrestigeClasses[character.prestigeClass]?.name ?? "Prestige Class"} 1`
         : [],
@@ -5310,22 +5407,49 @@ function CharacterSheet({
   ];
   return (
     <div className="sheet-grid">
-      <Panel title="Identity" className="identity-panel">
+      <Panel title={`${character.name || "Unnamed Character"}${character.player ? ` (${character.player})` : ""}`} headerLabel="Character Info" className={`identity-panel${finalized ? " finalized" : ""}`} showStatus statusText={`Level: ${character.classLevels.filter((entry) => !("prestigeClassId" in entry && entry.prestigeClassId === "wizard-of-high-sorcery")).reduce((total, entry) => total + entry.level, 0)}`}>
         <div className="identity-grid">
-          <label>
+          {!finalized && <label>
             Character name
-            {finalized ? <span className="sheet-value">{character.name}</span> : <input value={character.name} readOnly={!editable} onChange={(event) => onCharacterNameChange(event.target.value)} />}
-          </label>
-          <label>
+            <input value={character.name} readOnly={!editable} onChange={(event) => onCharacterNameChange(event.target.value)} />
+          </label>}
+          {!finalized && <label>
             Player
-            {finalized ? <span className="sheet-value">{character.player}</span> : <input value={character.player} readOnly={!editable} onChange={(event) => onPlayerNameChange(event.target.value)} />}
-          </label>
-          <label>
-            Race
+            <input value={character.player} readOnly={!editable} onChange={(event) => onPlayerNameChange(event.target.value)} />
+          </label>}
+          <label>Gender:<span className="sheet-value">{character.gender || "Not specified"}</span></label>
+          <label>Hair Color:<span className="sheet-value">{character.hairColor || "Not specified"}</span></label>
+          <label>Eye Color:<span className="sheet-value">{character.eyeColor || "Not specified"}</span></label>
+          <label>Skin Color:<span className="sheet-value">{character.skinColor || "Not specified"}</span></label>
+          <label className="finalized-race-field">
+            Race:
             {finalized ? <span className="sheet-value">{character.race}</span> : <input value={character.race} readOnly />}
           </label>
-          <label>
-            Class
+          <label className="finalized-alignment-field">
+            Alignment:
+            {finalized ? <span className="sheet-value">{character.alignment}</span> : <input value={character.alignment} readOnly />}
+          </label>
+          <label className="finalized-deity-field">
+            Deity:
+            {finalized ? (
+              <span className="sheet-value">
+                {character.deity
+                  ? deityDefinitions.find((deity) => deity.id === character.deity)?.name ?? character.deity
+                  : "Not specified"}
+              </span>
+            ) : (
+              <input
+                value={character.deity ? deityDefinitions.find((deity) => deity.id === character.deity)?.name ?? character.deity : "Not specified"}
+                readOnly
+              />
+            )}
+          </label>
+            <label className="print-age-field">Age:{finalized ? <span className="age-stepper"><button type="button" aria-label="Decrease age" onClick={() => onCharacterAgeChange(String(Math.max(0, Number(character.age) - 1 || 0)))}>-</button><span className="sheet-value">{character.age || "0"}</span><button type="button" aria-label="Increase age" onClick={() => onCharacterAgeChange(String((Number(character.age) || 0) + 1))}>+</button></span> : <span className="sheet-value">{character.age || "Not specified"}</span>}</label>
+            <label>Height:{finalized ? <span className="age-stepper"><button type="button" aria-label="Decrease height" onClick={() => { const totalInches = Math.max(0, heightToTotalInches(character.height) - 1); onCharacterHeightChange(`${Math.floor(totalInches / 12)} ft. ${totalInches % 12} in.`); }}>-</button><span className="sheet-value">{character.height || "0 ft. 0 in."}</span><button type="button" aria-label="Increase height" onClick={() => { const totalInches = heightToTotalInches(character.height) + 1; onCharacterHeightChange(`${Math.floor(totalInches / 12)} ft. ${totalInches % 12} in.`); }}>+</button></span> : <span className="sheet-value">{character.height || "Not specified"}</span>}</label>
+            <label>Weight:{finalized ? <span className="age-stepper"><button type="button" aria-label="Decrease weight" onClick={() => onCharacterWeightChange(String(Math.max(0, Number(character.weight) - 1 || 0)))}>-</button><span className="sheet-value">{character.weight || "0"}</span><button type="button" aria-label="Increase weight" onClick={() => onCharacterWeightChange(String((Number(character.weight) || 0) + 1))}>+</button></span> : <span className="sheet-value">{character.weight || "Not specified"}</span>}</label>
+
+          <label className="finalized-class-field">
+            Class:
             {finalized ? (
               <span className="sheet-value">{classSummary}</span>
             ) : (
@@ -5333,41 +5457,11 @@ function CharacterSheet({
             )}
           </label>
           {character.prestigeClass && (
-            <label className="prestige-identity-field">
-              Prestige Class
-              {finalized ? (
-                <span className="sheet-value">
-                  {dragonlancePrestigeClasses[character.prestigeClass]?.name ?? "Prestige Class"}
-                </span>
-              ) : (
-                <input
-                  value={dragonlancePrestigeClasses[character.prestigeClass]?.name ?? "Prestige Class"}
-                  readOnly
-                />
-              )}
-            </label>
-          )}
-          <label>
-            Level
-            {finalized ? <span className="sheet-value">{(levelDisplayCharacter ?? character).classLevels.reduce((total, entry) => total + entry.level, 0)}</span> : <input value={(levelDisplayCharacter ?? character).classLevels.reduce((total, entry) => total + entry.level, 0)} readOnly />}
-          </label>
-          <label>
-            Alignment
-            {finalized ? <span className="sheet-value">{character.alignment}</span> : <input value={character.alignment} readOnly />}
-          </label>
-          {character.deity && (
-            <label>
-              Deity
-              {finalized ? (
-                <span className="sheet-value">
-                  {deityDefinitions.find((deity) => deity.id === character.deity)?.name ?? character.deity}
-                </span>
-              ) : (
-                <input
-                  value={deityDefinitions.find((deity) => deity.id === character.deity)?.name ?? character.deity}
-                  readOnly
-                />
-              )}
+            <label className="finalized-prestige-field">
+              Prestige Class:
+              <span className="sheet-value">
+                {dragonlancePrestigeClasses[character.prestigeClass]?.name ?? "Prestige Class"}
+              </span>
             </label>
           )}
           {(character.highSorceryOrder ||
@@ -5375,8 +5469,8 @@ function CharacterSheet({
             character.prestigeClass === "white-robed-wizard" ||
             character.prestigeClass === "red-robed-wizard" ||
             character.prestigeClass === "black-robed-wizard") && (
-            <label>
-              High Sorcery
+            <label className="finalized-high-sorcery-field">
+              High Sorcery:
               <span className="sheet-value">
                 {character.highSorceryOrder
                   ? `${character.highSorceryOrder[0].toUpperCase()}${character.highSorceryOrder.slice(1)} Robes`
@@ -5386,6 +5480,7 @@ function CharacterSheet({
           )}
         </div>
       </Panel>
+      <div className="top-combat-layout">
       <Panel title="Ability Scores" className="ability-panel">
         <div className="ability-grid">
           {abilities.map(([short, name]) => {
@@ -5432,12 +5527,15 @@ function CharacterSheet({
             value={`${(raceDefinitions[character.race.toLowerCase().replaceAll(" ", "-")] ?? raceDefinitions.human).speed ?? 30} ft.`}
           />
           <Stat label="Hit Points" value={String(character.hitPoints)} />
+          <Stat label="Temporary HP" value={String(character.temporaryHitPoints ?? 0)} />
+          <Stat label="Nonlethal Damage" value={String(character.nonlethalDamage ?? 0)} />
+          <Stat label="Damage Reduction" value={character.damageReduction || "—"} />
+          <Stat label="Spell Resistance" value={character.spellResistance || "—"} />
           <Stat label="Base Attack" value={formatModifier(getBaseAttackBonus(character))} />
-          <Stat
-            label="Fort / Ref / Will"
-            value={`${formatModifier(getBaseSave(character, "fortitude") + abilityModifier(character.abilities.con))} / ${formatModifier(getBaseSave(character, "reflex") + abilityModifier(character.abilities.dex))} / ${formatModifier(getBaseSave(character, "will") + abilityModifier(character.abilities.wis))}`}
-          />
         </div>
+        </Panel>
+      <div className="combat-panels-row attacks-saves-row">
+      <Panel title="Attacks & Weapons" className="attacks-panel">
         <div className="combat-weapon-row">
           {(["Main Weapon", "Off Hand Weapon", "Ranged Weapon"] as const).map((slot) => {
             const attackPenalty =
@@ -5457,18 +5555,25 @@ function CharacterSheet({
             );
           })}
         </div>
-        <p className="combat-note">
-          Size:{" "}
-          {(
-            raceDefinitions[
-              character.race.toLowerCase().replaceAll(" ", "-")
-            ] ?? raceDefinitions.human
-          ).size ?? "Medium"}
-          {(() => {
-            const capacity = carryingCapacity(character);
-            return ` | Carry: ${capacity.light}/${capacity.medium}/${capacity.heavy} lb. (light/medium/heavy)`;
-          })()}
-        </p>
+      </Panel>
+      <Panel title="Saving Throws" className="saving-throws-panel">
+        <div className="stat-grid saving-throws-grid">
+          <Stat
+            label="Fortitude"
+            value={formatModifier(getBaseSave(character, "fortitude") + abilityModifier(character.abilities.con))}
+            detail={[`Base ${formatModifier(getBaseSave(character, "fortitude"))}`, `CON ${formatModifier(abilityModifier(character.abilities.con))}`]}
+          />
+          <Stat
+            label="Reflex"
+            value={formatModifier(getBaseSave(character, "reflex") + abilityModifier(character.abilities.dex))}
+            detail={[`Base ${formatModifier(getBaseSave(character, "reflex"))}`, `DEX ${formatModifier(abilityModifier(character.abilities.dex))}`]}
+          />
+          <Stat
+            label="Will"
+            value={formatModifier(getBaseSave(character, "will") + abilityModifier(character.abilities.wis))}
+            detail={[`Base ${formatModifier(getBaseSave(character, "will"))}`, `WIS ${formatModifier(abilityModifier(character.abilities.wis))}`]}
+          />
+        </div>
       </Panel>
       <Panel title="Languages" className="languages-panel">
         <div className="languages-display">
@@ -5520,6 +5625,8 @@ function CharacterSheet({
           </div>
         )}
       </Panel>
+      </div>
+      </div>
       <Panel
         title={`Skills (${levelUpOriginal
           ? getLevelUpSpentSkillPoints(
@@ -5560,17 +5667,19 @@ function CharacterSheet({
                 </span>
                 <span className="tooltip-anchor">
                   {skill}
-                  <span
-                    className={`skill-cost-indicator ${
-                      isClassSkill(character, skill, skillDisplayClassId)
-                        ? "class-skill"
-                        : "cross-class-skill"
-                    }`}
-                  >
-                    {isClassSkill(character, skill, skillDisplayClassId)
-                      ? "Class skill - 1 pt"
-                      : "Cross-class - 2 pts"}
-                  </span>
+                  {!finalized && (
+                    <span
+                      className={`skill-cost-indicator ${
+                        isClassSkill(character, skill, skillDisplayClassId)
+                          ? "class-skill"
+                          : "cross-class-skill"
+                      }`}
+                    >
+                      {isClassSkill(character, skill, skillDisplayClassId)
+                        ? "Class skill - 1 pt"
+                        : "Cross-class - 2 pts"}
+                    </span>
+                  )}
                   <span className="inline-tooltip" role="tooltip">
                     {skillDescriptions[skill]}
                   </span>
@@ -5612,6 +5721,7 @@ function CharacterSheet({
                       skill,
                       levelUpOriginal,
                       levelUpClassId,
+                      creationMode,
                     )
                   }
                   aria-label={`Add rank to ${skill}`}
@@ -5706,6 +5816,9 @@ function CharacterSheet({
             </div>
           </div>
         </div>
+      </Panel>
+      <Panel title="Character Notes" className="notes-panel">
+        <p className="character-notes">{character.notes || "No notes recorded."}</p>
       </Panel>
     </div>
   );
@@ -7555,11 +7668,12 @@ function SpellSheet({
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Stat({ label, value, detail }: { label: string; value: string; detail?: string[] }) {
   return (
     <div className="stat">
       <small>{label}</small>
       <strong>{value}</strong>
+      {detail?.map((line) => <span className="stat-detail" key={line}>{line}</span>)}
     </div>
   );
 }

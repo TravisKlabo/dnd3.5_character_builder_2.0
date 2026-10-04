@@ -119,6 +119,18 @@ export interface FeatDefinition {
 export interface Character {
   name: string
   player: string
+  gender?: 'Male' | 'Female' | 'Other' | ''
+  age?: string
+  height?: string
+  weight?: string
+  hairColor?: string
+  eyeColor?: string
+  skinColor?: string
+  temporaryHitPoints?: number
+  nonlethalDamage?: number
+  damageReduction?: string
+  spellResistance?: string
+  notes?: string
   race: string
   alignment: string
   abilities: AbilityScores
@@ -219,7 +231,7 @@ export const dragonlancePrestigeClasses: Record<PrestigeClassId, PrestigeClassDe
 }
 
 export const initialCharacter: Character = {
-  name: 'Unnamed Hero', player: 'Player', race: 'Human', alignment: 'Neutral Good',
+  name: 'Unnamed Hero', player: 'Player', gender: '', age: '', height: '5 ft. 7 in.', weight: '', hairColor: '', eyeColor: '', skinColor: '', temporaryHitPoints: 0, nonlethalDamage: 0, damageReduction: '', spellResistance: '', notes: '', race: 'Human', alignment: 'Neutral Good',
   abilities: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
   classLevels: [{ classId: 'fighter', level: 1 }], hitPoints: 10, feats: [], featSelections: {}, skills: {}, skillRanksByClass: {}, knownSpells: [], knownSpellClasses: {}, knownSpellsByClass: {}, spellAcquisitionByClass: {}, preparedSpells: [], preparedSpellsByClass: {}, equipment: {}, inventory: {}, languages: ['Common'], prestigeClass: undefined, deity: undefined, highSorceryOrder: undefined,
 }

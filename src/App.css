@@ -14,7 +14,7 @@
 .creation-validation-errors { flex: 1; margin: 0; padding-left: 18px; color: #914b3d; font-size: .75rem; }
 .sheet-value { display: block; min-height: 18px; padding: 9px 0; border-bottom: 1px solid #555; color: #202020; font-size: .82rem; font-weight: 400; text-transform: none; }
 .creation-area { margin-bottom: 18px; border: 1px solid #b9bbb4; background: #f8f7f2; } .creation-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 17px 18px; } .creation-heading h2 { margin: 0 0 5px; color: #243447; font-size: 1.15rem; } .creation-heading span { color: #68736f; font-size: .86rem; } .creation-heading .eyebrow { margin-bottom: 5px; } .ruleset-control { min-width: 180px; margin-left: auto; } .ruleset-value { display: block; padding: 9px 10px; border: 1px solid #c6c9c2; background: #ebe9e1; color: #243447; font-size: .86rem; font-weight: 500; text-transform: none; } .creation-area > .creation-panel { margin: 0; border-width: 1px 0 0; box-shadow: none; } .ability-methods { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 15px 18px; border-top: 1px solid #d6d7d1; border-bottom: 1px solid #d6d7d1; } .ability-methods button { border: 1px solid #b9bbb4; padding: 8px 12px; background: #fff; color: #243447; } .ability-methods button.selected { border-color: #243447; background: #243447; color: #fff; } .ability-methods span { margin-left: auto; color: #68736f; font-size: .85rem; } .creation-locked { background: #ebe9e1; }
-.identity-panel, .skills-panel, .feats-panel { grid-column: 1 / -1; } .identity-grid { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr .6fr 1.1fr; gap: 12px; padding: 18px; } label { display: grid; gap: 6px; color: #68736f; font-size: .76rem; font-weight: 700; text-transform: uppercase; } input, select { width: 100%; border: 1px solid #b9bbb4; padding: 9px 10px; color: #243447; background: #fff; }
+.identity-panel, .skills-panel, .feats-panel { grid-column: 1 / -1; } .identity-grid { display: grid; grid-template-columns: 2fr 1.4fr repeat(4, minmax(0, 1fr)); gap: 12px; padding: 18px; } .identity-grid > label { min-width: 0; } label { display: grid; gap: 6px; color: #68736f; font-size: .76rem; font-weight: 700; text-transform: uppercase; } input, select { width: 100%; border: 1px solid #b9bbb4; padding: 9px 10px; color: #243447; background: #fff; }
 .prestige-identity-field { grid-column: span 2; }
 .prestige-creation-field { grid-column: span 2; }
 .prestige-creation-field .race-trigger { white-space: nowrap; }
@@ -299,4 +299,17 @@
 .special-ability strong { color: #243447; }
 .special-ability span { margin-left: 4px; color: #98734d; font-size: .68rem; text-transform: none; }
 .equipment-table { padding: 18px; } .table-head, .table-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; padding: 11px 12px; border-bottom: 1px solid #d6d7d1; } .table-head { color: #68736f; font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; } .table-row { background: #fff; } .good { color: #477454; font-weight: 700; }
+.sheet-grid { display: flex; flex-direction: column; gap: 18px; }
+.sheet-grid > .identity-panel { order: 1; }
+.sheet-grid > .top-combat-layout { order: 2; }
+.sheet-grid > .feats-panel { order: 3; }
+.sheet-grid > .skills-panel { order: 4; }
+.sheet-grid > .notes-panel { order: 5; }
+.top-combat-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr); gap: 18px; align-items: start; }
+.top-combat-layout > .ability-panel { grid-column: 1; grid-row: 1; }
+.top-combat-layout > .combat-panel { grid-column: 2; grid-row: 1 / span 2; }
+.top-combat-layout > .attacks-saves-row { display: grid; grid-column: 1 / -1; grid-row: 2; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 18px; }
+.attacks-saves-row > .attacks-panel { grid-column: 1; grid-row: 1; }
+.attacks-saves-row > .saving-throws-panel { grid-column: 2; grid-row: 1; }
+.attacks-saves-row > .languages-panel { grid-column: 1 / -1; grid-row: 2; }
 @media (max-width: 900px) { .app-shell { padding: 24px 18px 50px; } .app-header, .level-banner { align-items: stretch; flex-direction: column; } .identity-grid, .creation-grid { grid-template-columns: repeat(2, 1fr); } .creation-abilities { grid-template-columns: repeat(3, 1fr); } .sheet-grid { grid-template-columns: 1fr; } .identity-panel, .skills-panel, .feats-panel { grid-column: auto; } .feat-picker { width: 100%; } .feat-picker .race-menu { left: 0; top: calc(100% + 4px); width: 100%; min-width: 0; } } @media (max-width: 560px) { .ability-grid, .creation-abilities { grid-template-columns: repeat(3, 1fr); } .identity-grid, .creation-grid { grid-template-columns: 1fr; } .creation-actions { align-items: stretch; flex-direction: column; } .sheet-tabs { overflow-x: auto; } .sheet-tabs button { flex: 1 0 auto; } .list-row, .spell-row { grid-template-columns: 1fr auto; } .list-row small, .spell-row small { grid-column: 1 / -1; } .feats-abilities-grid { grid-template-columns: 1fr; } .abilities-column { border-top: 1px solid #b9bbb4; border-left: 0; } }
